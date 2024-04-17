@@ -1,16 +1,18 @@
+<!-- drawable/price.xml -->
 <vector
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="364dp"
-    android:height="77dp"
+    android:height="99dp"
     android:viewportWidth="364"
-    android:viewportHeight="77"
+    android:viewportHeight="99"
     >
     <group>
         <clip-path
-            android:pathData="M10 0H354C359.523 0 364 4.47715 364 10V67C364 72.5228 359.523 77 354 77H10C4.47715 77 0 72.5228 0 67V10C0 4.47715 4.47715 0 10 0Z"
+            android:pathData="M10 0H354C359.523 0 364 4.47715 364 10V89C364 94.5228 359.523 99 354 99H10C4.47715 99 0 94.5228 0 89V10C0 4.47715 4.47715 0 10 0Z"
             />
         <path
-            android:pathData="M0 0V77H364V0"
+            android:pathData="M0 0V99H364V0"
             android:fillColor="#FFFFFF"
             />
     </group>

@@ -1,38 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="3">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/membershipLayout"
+        android:layout_width="364dp"
+        android:layout_height="99dp"
+        android:background="@drawable/price"
+        android:clipToPadding="false"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
-        <TextView
-            android:id="@+id/textViewTitle"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/membershipContents"
+            android:layout_width="300dp"
+            android:layout_height="51dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/membershipName"
+                android:layout_width="300dp"
+                android:layout_height="29dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textViewMembershipTitle"
+                    android:layout_width="226dp"
+                    android:layout_height="29dp"
+                    android:height="29sp"
+                    android:fontFamily="@font/pretendard"
+                    android:gravity="top"
+                    android:text="@string/stringMembershipTitle"
+                    android:textAppearance="@style/styleMembershipTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewMembershipPrice"
+                    android:layout_width="70dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:gravity="right|bottom"
+                    android:lineSpacingExtra="5sp"
+                    android:text="@string/stringMembershipPrice"
+                    android:textAppearance="@style/styleMembershipPrice"
+                    android:translationY="2.4sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textViewMembershipTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textViewMembershipMonthPrice"
+                android:layout_width="61dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="4dp"
+                android:gravity="right|bottom"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/stringMembershipMonthPrice"
+                android:textAppearance="@style/styleMembershipMonthPrice"
+                android:translationY="1.8sp"
+                app:layout_constraintTop_toBottomOf="@+id/membershipName"
+                tools:layout_editor_absoluteX="239dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/membershipMore"
             android:layout_width="0dp"
-            android:layout_weight="2"
-        android:layout_height="wrap_content"
-        android:text="회원권" />
+            android:layout_height="24dp"
+            tools:layout_editor_absoluteX="338dp"
+            tools:layout_editor_absoluteY="32dp">
 
-        <TextView
-            android:id="@+id/textViewPrice"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="가격" />
+            <ImageView
+                android:id="@+id/imageViewMore"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/more"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="-16dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/textViewMonthPrice"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:text="월 가격" />
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

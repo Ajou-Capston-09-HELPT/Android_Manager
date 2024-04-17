@@ -11,9 +11,9 @@ class MembershipAdapter(private val membershipList: List<Membership>) :
     RecyclerView.Adapter<MembershipAdapter.MembershipViewHolder>() {
 
     class MembershipViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.textViewTitle)
-        val price: TextView = view.findViewById(R.id.textViewPrice)
-        val month_price: TextView = view.findViewById(R.id.textViewMonthPrice)
+        val title: TextView = view.findViewById(R.id.textViewMembershipTitle)
+        val price: TextView = view.findViewById(R.id.textViewMembershipPrice)
+        val month_price: TextView = view.findViewById(R.id.textViewMembershipMonthPrice)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MembershipViewHolder {

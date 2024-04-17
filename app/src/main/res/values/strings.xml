@@ -2,4 +2,17 @@
     <string name="app_name">HELPTManager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="stringMembershipTitle">
+    3\u00ea\u00b0\u009c\u00ec\u009b\u0094 \u00ed\u009a\u008c\u00ec\u009b\u0090\u00ea\u00b6\u008c
+    </string>
+
+    <string name="stringMembershipPrice">
+    120,000\u00ec\u009b\u0090
+    </string>
+
+    <string name="stringMembershipMonthPrice">
+    \u00ec\u009b\u0094 40,000\u00ec\u009b\u0090
+    </string>
+
 </resources>
