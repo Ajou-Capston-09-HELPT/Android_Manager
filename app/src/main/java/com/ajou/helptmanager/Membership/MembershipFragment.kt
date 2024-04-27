@@ -26,11 +26,20 @@ class MembershipFragment : Fragment() {
 
     private fun setupRecyclerView(view: View) {
         // RecyclerView 초기화
-        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView = view.findViewById(R.id.recyclerViewMembership)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         // 샘플 데이터 추가
-        membershipList.add(Membership("1개월 회원권", "50,000원", "10,000"))
+        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
+        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
+        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
+        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
+        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
+        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
+        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
+        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
+        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
+        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
 
         // 어댑터 초기화 및 설정
         membershipAdapter = MembershipAdapter(membershipList)

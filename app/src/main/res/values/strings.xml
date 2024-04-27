@@ -15,4 +15,12 @@
     \u00ec\u009b\u0094 40,000\u00ec\u009b\u0090
     </string>
 
+    <string name="stringMembershipTitleText">
+    회원권 관리
+    </string>
+
+    <string name="stringMembershipRegisterButton">
+    회원권 등록하기
+    </string>
+
 </resources>
