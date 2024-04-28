@@ -3,28 +3,58 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+
+    <!-- Membership String -->
+    <string name="monthly_price">월 %,d 원</string>
+
     <string name="stringMembershipTitle">
-        회원권
+        개월 회원권
     </string>
     <string name="stringMembershipPrice">
         원
     </string>
     <string name="stringMembershipMonthPrice">
-        월 원
+        원
     </string>
-    <string name="stringMembershipRegisterButton">
-        회원권 등록하기
+    <string name="stringRegisterMembershipButton">
+        등록 완료
     </string>
     <string name="stringMembershipTitleText">
         회원권 관리
     </string>
-
+    <string name="stringRegisterMembershipTitle">
+        회원권 등록하기
+    </string>
     <string name="descriptionMembershipBackButton">
         뒤로가기 버튼
     </string>
-
     <string name="descriptionMembershipHamburgerButton">
         햄버거 버튼 (더보기)
     </string>
+    <string name="stringEtRegisterMembershipTitle">
+        1
+    </string>
+    <string name="stringEtRegisterMembershipPrice">
+        50,000
+    </string>
+    <string name="stringMembershipModify">
+        수정하기
+    </string>
+    <string name="stringMembershipDelete">
+        삭제하기
+    </string>
+    <string name="stringModifyMembershipTitle">
+        회원권 수정하기
+    </string>
+    <string name="stringModifyMembershipButton">
+        수정 완료
+    </string>
+
+    <!-- Membership String -->
+
+
+
+
 
 </resources>

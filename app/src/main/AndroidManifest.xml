@@ -12,7 +12,7 @@
         android:theme="@style/Theme.HELPTManager"
         tools:targetApi="31">
         <activity
-            android:name=".Membership.TestActivity"
+            android:name=".Membership.TestMembershipActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

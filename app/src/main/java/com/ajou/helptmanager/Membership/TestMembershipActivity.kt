@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.commit
 import com.ajou.helptmanager.R
 
-class TestActivity : AppCompatActivity() {
+class TestMembershipActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
