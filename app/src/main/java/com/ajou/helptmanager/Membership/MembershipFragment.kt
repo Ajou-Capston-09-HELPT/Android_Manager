@@ -33,13 +33,7 @@ class MembershipFragment : Fragment() {
         membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
         membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
         membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
-        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
-        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
-        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
-        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
-        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
-        membershipList.add(Membership("1개월 회원권", "50,000원", "50,000원"))
-        membershipList.add(Membership("2개월 회원권", "100,000원", "50,000원"))
+
 
         // 어댑터 초기화 및 설정
         membershipAdapter = MembershipAdapter(membershipList)

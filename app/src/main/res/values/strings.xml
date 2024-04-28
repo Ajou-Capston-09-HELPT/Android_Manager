@@ -4,23 +4,27 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="stringMembershipTitle">
-    3\u00ea\u00b0\u009c\u00ec\u009b\u0094 \u00ed\u009a\u008c\u00ec\u009b\u0090\u00ea\u00b6\u008c
+        회원권
     </string>
-
     <string name="stringMembershipPrice">
-    120,000\u00ec\u009b\u0090
+        원
     </string>
-
     <string name="stringMembershipMonthPrice">
-    \u00ec\u009b\u0094 40,000\u00ec\u009b\u0090
+        월 원
     </string>
-
-    <string name="stringMembershipTitleText">
-    회원권 관리
-    </string>
-
     <string name="stringMembershipRegisterButton">
-    회원권 등록하기
+        회원권 등록하기
+    </string>
+    <string name="stringMembershipTitleText">
+        회원권 관리
+    </string>
+
+    <string name="descriptionMembershipBackButton">
+        뒤로가기 버튼
+    </string>
+
+    <string name="descriptionMembershipHamburgerButton">
+        햄버거 버튼 (더보기)
     </string>
 
 </resources>
