@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="windowNoTitle">true</item>
+
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
     <style name="PretendardTextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/pretendard</item>
@@ -27,6 +29,8 @@
     <style name="PretendardCheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
         <item name="android:fontFamily">@font/pretendard</item>
     </style>
+
+
     <style name="Widget.My.Spinner" parent="Widget.AppCompat.Spinner">
         <item name="android:overlapAnchor">false</item>
         <item name="overlapAnchor"> false</item>
