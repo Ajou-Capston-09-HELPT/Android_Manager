@@ -3,7 +3,7 @@ package com.ajou.helptmanager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ajou.helptmanager.auth.AuthActivity
+import com.ajou.helptmanager.auth.view.AuthActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

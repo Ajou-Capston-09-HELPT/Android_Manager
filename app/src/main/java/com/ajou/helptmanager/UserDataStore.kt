@@ -19,8 +19,10 @@ class UserDataStore() {
 
     private object PreferencesKeys {
         val ACCESS_TOKEN = stringPreferencesKey("access_token")
+        val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         val HAS_TICKET = booleanPreferencesKey("has_ticket")
         val USER_NAME = stringPreferencesKey("user_name")
+        val KAKAO_ID = stringPreferencesKey("kakao_id")
     }
 
     suspend fun saveAccessToken(token : String) {
@@ -37,6 +39,20 @@ class UserDataStore() {
         }
     }
 
+    suspend fun saveRefreshToken(token : String) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.REFRESH_TOKEN] = token
+            }
+        }
+    }
+
+    suspend fun getRefreshToken():String? {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.REFRESH_TOKEN]
+        }
+    }
+
     suspend fun saveUserName(name : String) {
         withContext(Dispatchers.IO){
             dataStore.edit { pref ->
@@ -45,11 +61,40 @@ class UserDataStore() {
         }
     }
 
+    suspend fun saveHasTicket(hasTicket : Boolean) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.HAS_TICKET] = hasTicket
+            }
+        }
+    }
+
+    suspend fun getHasTicket() : Boolean {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.HAS_TICKET] ?: false
+        }
+    }
+
     suspend fun getUserName():String? {
         return withContext(Dispatchers.IO) {
             dataStore.data.first()[PreferencesKeys.USER_NAME]
         }
     }
+
+    suspend fun saveKakaoId(id:String) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.KAKAO_ID] = id
+            }
+        }
+    }
+
+    suspend fun getKakaoId():String? {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.KAKAO_ID]
+        }
+    }
+
     suspend fun deleteAll() {
         withContext(Dispatchers.IO) {
             dataStore.edit { pref ->

@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">HELPTManager</string>
+    <string name="menu_ticket">이용권 등록 및 수정</string>
+    <string name="menu_qr">입장용 QR 스캔</string>
+    <string name="menu_fitness">기구 등록 및 조회</string>
+    <string name="menu_user">회원 등록 및 조회</string>
+    <string name="menu_notice">공지사항 관리</string>
+    <string name="menu_chat">채팅방 등록</string>
+    <string name="auth_set_biz">사업자 정보를 입력해주세요</string>
+    <string name="auth_set_gym">운동시설 정보를 입력해주세요</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
