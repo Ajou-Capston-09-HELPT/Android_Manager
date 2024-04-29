@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.auth
+package com.ajou.helptmanager.auth.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

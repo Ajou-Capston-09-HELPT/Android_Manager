@@ -1,7 +1,10 @@
-package com.ajou.helptmanager.auth
+package com.ajou.helptmanager.auth.view
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,9 +13,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
+import com.ajou.helpt.auth.view.LogOutDialog
+import com.ajou.helptmanager.MainActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentLoginBinding
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.ManagerService
+import com.google.gson.JsonObject
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -25,6 +33,8 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private var mContext: Context? = null
     private val dataStore = UserDataStore()
+    private val managerService = RetrofitInstance.getInstance().create(ManagerService::class.java)
+    private lateinit var logOutDialog : LogOutDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,6 +56,17 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.imageView3.setOnClickListener {
+            logOutDialog = LogOutDialog(mContext!!)
+            logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            logOutDialog.show()
+//            CoroutineScope(Dispatchers.IO).launch {
+//                val token = dataStore.getAccessToken()
+//                Log.d("userToken",token.toString())
+//                dataStore.deleteAll()
+//            }
+        }
         binding.nextBtn.setOnClickListener {
             // 카카오톡 설치 확인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext!!)) {
@@ -82,9 +103,13 @@ class LoginFragment : Fragment() {
                                     "${user?.kakaoAccount?.email} ${user?.kakaoAccount?.profile?.nickname}"
                                 )
 
-                                dataStore.saveAccessToken(token.accessToken)
                                 dataStore.saveUserName(user?.kakaoAccount?.profile?.nickname.toString())
                                 withContext(Dispatchers.Main) {
+                                    Log.d("user Id",user?.id.toString())
+//                                    callLoginApi(user?.id.toString())
+                                    findNavController().navigate(R.id.action_loginFragment_to_setBizInfoFragment)
+//                                    val intent = Intent(mContext!!, MainActivity::class.java)
+//                                    startActivity(intent)
                                     // TODO 추후에 페이지 이동
                                 }
                             }
@@ -137,4 +162,26 @@ class LoginFragment : Fragment() {
             }
         }
     } // TODO 구체적인 오류 메세지로 변경하기
+
+//    private fun callLoginApi(id:String) {
+//        val jsonObject = JsonObject().apply {
+//            addProperty("kakaoId", id)
+//        }
+//        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+//        Log.d("로그인 시도",jsonObject.toString())
+//        CoroutineScope(Dispatchers.IO).launch{
+//            val loginDeferred = async {managerService.login(requestBody) }
+//            val loginResponse = loginDeferred.await()
+//            if (loginResponse.isSuccessful) {
+//                val tokenBody = JSONObject(loginResponse.body()?.string())
+//                Log.d("tokenBody",tokenBody.toString())
+//                dataStore.saveAccessToken("Bearer "+tokenBody.get("accessToken").toString())
+//                dataStore.saveRefreshToken("Bearer "+tokenBody.get("refreshToken").toString())
+//                val intent = Intent(mContext, MainActivity::class.java)
+//                startActivity(intent)
+//            }else{
+//                Log.d("fail",loginResponse.errorBody()?.string().toString())
+//            }
+//        }
+//    }
 }

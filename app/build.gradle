@@ -9,6 +9,7 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('apikey.properties').newDataInputStream())
 def native_api_key = properties.getProperty('native_api_key')
 def redirect_uri = properties.getProperty('redirect_uri')
+def tmap_api_key = properties.getProperty('tmap_api_key')
 
 android {
     namespace 'com.ajou.helptmanager'
@@ -25,6 +26,7 @@ android {
 
         buildConfigField "String", "NATIVE_API_KEY", native_api_key
         buildConfigField "String", "REDIRECT_URI", redirect_uri
+        buildConfigField "String", "TMAP_API_KEY", tmap_api_key
 
         manifestPlaceholders = [NATIVE_API_KEY : native_api_key]
     }
@@ -53,6 +55,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation files('libs/com.skt.Tmap_1.75.jar')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
@@ -71,7 +74,6 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
-    implementation files('libs/com.skt.Tmap_1.75.jar') //build 오류로 임시 주석처리
 
     //Retrofit
     def retrofit_version = "2.9.0"
