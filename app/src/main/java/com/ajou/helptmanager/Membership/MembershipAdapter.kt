@@ -15,7 +15,7 @@ import com.ajou.helptmanager.R
 class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(MembershipDiffCallback) {
 
     interface OnItemClickListener {
-        fun onItemClick(v:View, position: Int)
+        fun onMoreButtonClicked(id: Int)
     }
 
     class MembershipViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -38,7 +38,7 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
         holder.price.text = membership.price
         holder.month_price.text = membership.month_price
         holder.moreButton.setOnClickListener{
-            listener.onItemClick(holder.itemView, position)
+            listener.onMoreButtonClicked(position)
         }
 
 
@@ -47,7 +47,7 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
     companion object MembershipDiffCallback : DiffUtil.ItemCallback<Membership>() {
         override fun areItemsTheSame(oldItem: Membership, newItem: Membership): Boolean {
             // 아이템 동일성 검사 코드
-            return oldItem.title == newItem.title
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Membership, newItem: Membership): Boolean {

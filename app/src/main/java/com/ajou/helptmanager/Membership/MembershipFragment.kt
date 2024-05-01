@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,13 +61,13 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         membershipAdapter = MembershipAdapter(this)
         recyclerView.adapter = membershipAdapter
     }
-    override fun onItemClick(v: View, position: Int) {
-        showMoreDialog()
+    override fun onMoreButtonClicked(id: Int) {
+        showMoreDialog(id, viewModel)
     }
 
 
-    private fun showMoreDialog() {
-        val dialog = RegisterMoreDialog()
+    private fun showMoreDialog(id: Int, viewModel: MembershipViewModel) {
+        val dialog = RegisterMoreDialog(id, viewModel)
         dialog.show(parentFragmentManager, "RegisterMoreDialog")
     }
 

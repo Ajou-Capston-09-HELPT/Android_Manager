@@ -38,8 +38,8 @@ class RegisterMembershipDialog : DialogFragment() {
         etMembershipTitle.addTextChangedListener(titleTextWatcher)
         etMembershipPrice.addTextChangedListener(priceTextWatcher)
 
-        val registerMembershipLayout = view.findViewById<ConstraintLayout>(R.id.registerMembershipRegisterButton)
-        registerMembershipLayout.setOnClickListener {
+        val registerMembership = view.findViewById<ConstraintLayout>(R.id.registerMembershipRegisterButton)
+        registerMembership.setOnClickListener {
             registerMembership()
         }
 
@@ -48,6 +48,16 @@ class RegisterMembershipDialog : DialogFragment() {
             dismiss() // 다이얼로그 닫기
         }
 
+    }
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog
+        if (dialog != null) {
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val width = (388 * density).toInt()
+            val height = (294 * density).toInt()
+            dialog.window?.setLayout(width, height)
+        }
     }
 
     private val titleTextWatcher = object : TextWatcher {
@@ -109,18 +119,4 @@ class RegisterMembershipDialog : DialogFragment() {
             dismiss()
         }
     }
-
-
-
-    override fun onStart() {
-        super.onStart()
-        val dialog = dialog
-        if (dialog != null) {
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val width = (388 * density).toInt()
-            val height = (294 * density).toInt()
-            dialog.window?.setLayout(width, height)
-        }
-    }
-
 }

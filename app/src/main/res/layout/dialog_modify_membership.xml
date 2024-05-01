@@ -28,7 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageButton
-            android:id="@+id/btnRegisterClose"
+            android:id="@+id/btnModifyClose"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="24dp"
@@ -88,7 +88,7 @@
                     >
 
                     <EditText
-                        android:id="@+id/etRegisterMembershipTitle"
+                        android:id="@+id/etModifyMembershipTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:gravity="center"
@@ -122,7 +122,7 @@
                     >
 
                     <EditText
-                        android:id="@+id/etRegisterMembershipPrice"
+                        android:id="@+id/etModifyMembershipPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:gravity="center"
@@ -175,7 +175,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/registerMembershipRegisterButton"
+        android:id="@+id/modifyMembershipRegisterButton"
         android:layout_width="340dp"
         android:layout_height="56dp"
         android:background="@drawable/long_button"

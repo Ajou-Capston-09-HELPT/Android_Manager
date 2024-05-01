@@ -8,8 +8,7 @@ import android.widget.TextView
 import com.ajou.helptmanager.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class RegisterMoreDialog() : BottomSheetDialogFragment() {
-
+class RegisterMoreDialog(private val id: Int, private val viewModel: MembershipViewModel) : BottomSheetDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,18 +21,33 @@ class RegisterMoreDialog() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupViewClickListeners()
+        modifyClick()
+        deleteClick()
     }
 
-    private fun setupViewClickListeners() {
+    private fun modifyClick() {
         view?.findViewById<TextView>(R.id.btnMembershipModify)?.setOnClickListener {
             modifyMembership()
         }
     }
 
+    private fun deleteClick() {
+        view?.findViewById<TextView>(R.id.btnMembershipDelete)?.setOnClickListener {
+            deleteMembership()
+        }
+    }
+
     private fun modifyMembership(){
         dismiss()
-        val dialog = ModifyMembershipDialog()
+        val dialog = ModifyMembershipDialog(id)
         dialog.show(parentFragmentManager, "ModifyMembershipDialog")
     }
+
+    private fun deleteMembership()
+    {
+        viewModel.deleteMembership(id)
+        //회원권 삭제 로직 추가
+        dismiss()
+    }
+
 }
