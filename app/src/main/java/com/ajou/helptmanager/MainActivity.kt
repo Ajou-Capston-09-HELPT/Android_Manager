@@ -32,23 +32,27 @@ class MainActivity : AppCompatActivity() {
             Log.d("datasore",accessToken.toString())
         }
 
-        binding.quitBtn.setOnClickListener {
-            quitDialog = QuitDialog(this)
-            quitDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            quitDialog.show()
-//            CoroutineScope(Dispatchers.IO).launch {
-////                val refreshToken = dataStore.getRefreshToken()
-//                dataStore.deleteAll()
-//                Log.d("탈퇴하기",accessToken.toString())
-//                val quitDeferred = async { managerService.quit(accessToken!!) }
-//                val quitResponse = quitDeferred.await()
-//                if (quitResponse.isSuccessful){
-//                    Log.d("탈퇴하기 성공","탈퇴하기")
-//                }else{
-//                    Log.d("탈퇴하기 실패",quitResponse.errorBody()?.string().toString())
-//                }
-//            }
+        binding.hamburger.setOnClickListener {
+            binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
+
+//        binding.quitBtn.setOnClickListener {
+//            quitDialog = QuitDialog(this)
+//            quitDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            quitDialog.show()
+////            CoroutineScope(Dispatchers.IO).launch {
+//////                val refreshToken = dataStore.getRefreshToken()
+////                dataStore.deleteAll()
+////                Log.d("탈퇴하기",accessToken.toString())
+////                val quitDeferred = async { managerService.quit(accessToken!!) }
+////                val quitResponse = quitDeferred.await()
+////                if (quitResponse.isSuccessful){
+////                    Log.d("탈퇴하기 성공","탈퇴하기")
+////                }else{
+////                    Log.d("탈퇴하기 실패",quitResponse.errorBody()?.string().toString())
+////                }
+////            }
+//        }
         binding.drawer.closeBtn.setOnClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
         }

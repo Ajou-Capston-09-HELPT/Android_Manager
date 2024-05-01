@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import com.ajou.helpt.auth.view.LogOutDialog
+import com.ajou.helptmanager.HomeActivity
 import com.ajou.helptmanager.MainActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
@@ -58,9 +59,11 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.imageView3.setOnClickListener {
-            logOutDialog = LogOutDialog(mContext!!)
-            logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            logOutDialog.show()
+            val intent = Intent(mContext, HomeActivity::class.java)
+            startActivity(intent)
+//            logOutDialog = LogOutDialog(mContext!!)
+//            logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            logOutDialog.show()
 //            CoroutineScope(Dispatchers.IO).launch {
 //                val token = dataStore.getAccessToken()
 //                Log.d("userToken",token.toString())

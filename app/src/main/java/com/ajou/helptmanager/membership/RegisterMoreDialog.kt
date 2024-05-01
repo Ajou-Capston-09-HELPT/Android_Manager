@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.Membership
+package com.ajou.helptmanager.membership
 
 import android.os.Bundle
 import android.view.LayoutInflater

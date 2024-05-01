@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="start"
+    android:layout_gravity="end"
     android:padding="24dp">
 
     <ImageView
@@ -75,7 +75,7 @@
         android:id="@+id/ticketIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/menu_ticket_on"
+        android:src="@drawable/menu_ticket"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/frame1"
         app:layout_constraintTop_toTopOf="@+id/frame1" />
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/menu_ticket"
-        android:textColor="@color/primary"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         android:paddingStart="10dp"
@@ -138,7 +138,7 @@
         android:id="@+id/trainIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/menu_fitness"
+        android:src="@drawable/menu_machine"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frame3" />

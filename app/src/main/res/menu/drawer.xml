@@ -9,7 +9,7 @@
         android:id="@+id/menuitem2"
         android:title="입장용 QR스캔" />
     <item
-        android:icon="@drawable/menu_fitness"
+        android:icon="@drawable/menu_machine"
         android:id="@+id/menuitem3"
         android:title="기구 등록 및 조회" />
     <item

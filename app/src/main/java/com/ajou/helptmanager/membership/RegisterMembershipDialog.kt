@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.Membership
+package com.ajou.helptmanager.membership
 
 import android.content.res.Resources
 import android.graphics.Color
@@ -16,35 +16,38 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import com.ajou.helptmanager.R
 
-class ModifyMembershipDialog(private val index: Int) : DialogFragment() {
+class RegisterMembershipDialog : DialogFragment() {
 
     private lateinit var etMembershipTitle: EditText
     private lateinit var etMembershipPrice: EditText
     private lateinit var tvMonthlyPrice: TextView
 
     private val density = Resources.getSystem().displayMetrics.density
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_modify_membership, container, false)
+        return inflater.inflate(R.layout.dialog_register_membership, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        etMembershipTitle = view.findViewById(R.id.etModifyMembershipTitle)
-        etMembershipPrice = view.findViewById(R.id.etModifyMembershipPrice)
+        etMembershipTitle = view.findViewById(R.id.etRegisterMembershipTitle)
+        etMembershipPrice = view.findViewById(R.id.etRegisterMembershipPrice)
         tvMonthlyPrice = view.findViewById(R.id.tvMonthlyPrice)
 
         etMembershipTitle.addTextChangedListener(titleTextWatcher)
         etMembershipPrice.addTextChangedListener(priceTextWatcher)
 
-        val modifyMembership = view.findViewById<ConstraintLayout>(R.id.modifyMembershipRegisterButton)
-        modifyMembership.setOnClickListener{
-            modifyMembership()
+        val registerMembership = view.findViewById<ConstraintLayout>(R.id.registerMembershipRegisterButton)
+        registerMembership.setOnClickListener {
+            registerMembership()
         }
 
-        val btnModifyClose = view.findViewById<ImageButton>(R.id.btnModifyClose)
-        btnModifyClose.setOnClickListener{
-            dismiss()
+        val btnRegisterClose = view.findViewById<ImageButton>(R.id.btnRegisterClose)
+        btnRegisterClose.setOnClickListener {
+            dismiss() // 다이얼로그 닫기
         }
+
     }
     override fun onStart() {
         super.onStart()
@@ -56,7 +59,6 @@ class ModifyMembershipDialog(private val index: Int) : DialogFragment() {
             dialog.window?.setLayout(width, height)
         }
     }
-
 
     private val titleTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -105,18 +107,16 @@ class ModifyMembershipDialog(private val index: Int) : DialogFragment() {
             tvMonthlyPrice.text = ""
         }
     }
-
-    private fun modifyMembership() {
+    private fun registerMembership() {
         val membershipTitle = etMembershipTitle.text.toString().trim()
         val membershipPrice = etMembershipPrice.text.toString().trim().replace(",".toRegex(), "").toIntOrNull()
 
         if (membershipTitle.isNotEmpty() && membershipPrice != null) {
-            // 회원권 수정 로직 구현예정
+            // 회원권 등록 로직 구현예정
             dismiss()
         } else {
             // 입력값 오류 처리예정
             dismiss()
         }
     }
-
 }
