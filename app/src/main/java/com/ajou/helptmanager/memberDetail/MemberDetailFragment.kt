@@ -1,5 +1,6 @@
 package com.ajou.helptmanager.memberDetail
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,15 +9,17 @@ import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
+import java.util.Calendar
 
 
-class MemberDetailFragment : Fragment() {
+class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -29,17 +32,7 @@ class MemberDetailFragment : Fragment() {
 
         val showExerciseRecord: ConstraintLayout = view.findViewById(R.id.btnShowExerciseRecord)
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
-        val genderSpinner: Spinner = view.findViewById(R.id.genderSpinner)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
-
-        val genderSpinnerAdapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.gender_array,
-            R.layout.spinner_gender_item
-        )
-        genderSpinnerAdapter.setDropDownViewResource(R.layout.spinner_gender_dropdown_item)
-        genderSpinner.adapter = genderSpinnerAdapter
-
 
         showExerciseRecord.setOnClickListener{
             showExerciseRecord.alpha = 0.5f
@@ -57,21 +50,6 @@ class MemberDetailFragment : Fragment() {
             editMemberMembershipPeriod()
         }
 
-        genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedGender = parent?.getItemAtPosition(position).toString()
-                // TODO 선택된 성별에 따른 처리 로직 구현
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // TODO 아무것도 안골랐을때
-            }
-        }
-
         backButton.setOnClickListener {
             backButton.alpha = 0.5f
             backButton.postDelayed({
@@ -85,10 +63,32 @@ class MemberDetailFragment : Fragment() {
 
 
     private fun showMemberExerciseRecord(){
-        // TODO 운동기록 보기
         findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment)
     }
     private fun editMemberMembershipPeriod(){
         //TODO 회원권 기간 수정
+        showDatePicker()
+    }
+
+
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            this,
+            year, month, day
+        )
+        datePickerDialog.show()
+    }
+
+    override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
+        val selectedDate = Calendar.getInstance().apply {
+            set(year, month, dayOfMonth)
+        }.time
+
     }
 }
