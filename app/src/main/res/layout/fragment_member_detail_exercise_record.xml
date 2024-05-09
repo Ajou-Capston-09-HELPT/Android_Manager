@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".memberDetail.MemberDetailExerciseRecordFragment">
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/memberDetailExerciseRecordTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/membership_title_bar"
+        android:clipToOutline="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/memberDetailExerciseRecordBackButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center|start|top"
+            android:layout_margin="24dp"
+            android:contentDescription="@string/descriptionMembershipBackButton"
+            android:src="@drawable/arrow"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="24dp" />
+
+        <TextView
+            android:id="@+id/memberDetailExerciseRecordTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal|center_vertical"
+            android:lineSpacingExtra="5sp"
+            android:text="@string/stringMemberDetailTitleText"
+            android:textAppearance="@style/styleMembershipPrice" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/memberDetailExerciseRecordName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="-5sp"
+        android:text="@string/stringMemberDetailExerciseRecordName"
+        android:textAppearance="@style/styleMembershipTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memberDetailExerciseRecordTitleBar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="-5sp"
+        android:text="@string/stringMemberDetailExerciseRecordName_2"
+        android:textAppearance="@style/styleMembershipTitle"
+        app:layout_constraintStart_toEndOf="@id/memberDetailExerciseRecordName"
+        app:layout_constraintTop_toBottomOf="@id/memberDetailExerciseRecordTitleBar" />
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/memberDetailExerciseRecordDate"
+        android:layout_width="364dp"
+        android:layout_height="364dp"
+        android:layout_marginTop="184dp"
+        app:mcv_tileSize="45dp"
+        app:mcv_selectionColor="#3BB9B6"
+        app:mcv_showOtherDates="all"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/exerciseRecordDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="25dp"
+        android:layout_alignParentTop="true"
+        android:text="@string/stringExerciseRecordDate"
+        android:textAppearance="@style/styleExerciseRecordDate"
+        android:lineSpacingExtra="6sp"
+        android:translationY="-3.07sp"
+        android:gravity="top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memberDetailExerciseRecordDate" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExerciseRecords"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exerciseRecordDate"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

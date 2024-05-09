@@ -11,14 +11,14 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
 
 
 class MemberDetailFragment : Fragment() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -30,6 +30,7 @@ class MemberDetailFragment : Fragment() {
         val showExerciseRecord: ConstraintLayout = view.findViewById(R.id.btnShowExerciseRecord)
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val genderSpinner: Spinner = view.findViewById(R.id.genderSpinner)
+        val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
         val genderSpinnerAdapter = ArrayAdapter.createFromResource(
             requireContext(),
@@ -71,18 +72,22 @@ class MemberDetailFragment : Fragment() {
             }
         }
 
+        backButton.setOnClickListener {
+            backButton.alpha = 0.5f
+            backButton.postDelayed({
+                backButton.alpha = 1.0f
+            }, 100)
+            findNavController().popBackStack()
+        }
+
         return view
     }
 
 
     private fun showMemberExerciseRecord(){
         // TODO 운동기록 보기
+        findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment)
     }
-
-    private fun showMemberGenderList(){
-        //TODO 멤버 성별 고르기
-    }
-
     private fun editMemberMembershipPeriod(){
         //TODO 회원권 기간 수정
     }

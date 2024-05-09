@@ -86,11 +86,34 @@
     <string name="stringMemberDetailMembershipContent">
         2023.11.20 ~ 2024.04.20
     </string>
-
-
     <string name="stringMemberDetailShowExerciseRecord">
         운동기록
     </string>
+    <string name="stringMemberDetailExerciseRecordName">
+        최윤서
+    </string>
+    <string name="stringMemberDetailExerciseRecordName_2">
+        님의 운동기록
+    </string>
+    <string name="stringExerciseRecordDate">
+        %1$d월 %2$d일 운동기록
+    </string>
+    <string name="stringExerciseRecordName">
+        랫 풀 다운
+    </string>
+    <string name="stringExerciseRecordPart">
+        상체 어깨
+    </string>
+    <string name="stringExerciseRecordReps">
+        30회
+    </string>
+    <string name="stringExerciseRecordSets">
+        5세트
+    </string>
+    <string name="stringExerciseRecordTime">
+        00:10:10
+    </string>
+
 
 
 
