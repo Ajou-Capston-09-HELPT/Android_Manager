@@ -5,4 +5,10 @@
         <item>법인 사업자</item>
         <item>구분 선택</item>
     </string-array>
+
+    <string-array name="gender_array">
+        <item>남성</item>
+        <item>여성</item>
+    </string-array>
+
 </resources>
