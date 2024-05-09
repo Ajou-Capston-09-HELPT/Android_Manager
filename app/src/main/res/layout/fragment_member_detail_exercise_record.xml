@@ -75,10 +75,10 @@
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/memberDetailExerciseRecordDate"
-        android:layout_width="364dp"
-        android:layout_height="364dp"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:layout_marginTop="184dp"
-        app:mcv_tileSize="45dp"
+        app:mcv_tileSize="40dp"
         app:mcv_selectionColor="#3BB9B6"
         app:mcv_showOtherDates="all"
         app:layout_constraintEnd_toEndOf="parent"
