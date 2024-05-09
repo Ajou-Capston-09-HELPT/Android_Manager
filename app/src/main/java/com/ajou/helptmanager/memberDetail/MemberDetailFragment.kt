@@ -6,14 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.ImageView
-import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
 import java.util.Calendar
