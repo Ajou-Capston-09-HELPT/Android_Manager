@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.net.Uri
 import android.os.SystemClock
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.view.View
+import android.view.WindowManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentActivity
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -95,4 +98,15 @@ fun resizeImage(imageUri: Uri, context: Context): Uri {
     fileOutputStream.close()
 
     return Uri.fromFile(tempFile)
+}
+
+fun getWindowSize(context: Context): Point{
+    val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val display = windowManager.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+
+//    size.x  디바이스 가로 길이
+//    size.y  디바이스 세로 길이
+    return size
 }

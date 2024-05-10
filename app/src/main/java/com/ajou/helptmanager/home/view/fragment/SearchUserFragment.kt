@@ -67,17 +67,17 @@ class SearchUserFragment : Fragment(){
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
         binding.drawer.ticket.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
+            findNavController().navigate(R.id.action_searchUserFragment_to_membershipFragment)
             // 이용권으로 이동
         }
         binding.drawer.qr.setOnClickListener {
             // TODO QR스캔으로 이동
         }
         binding.drawer.train.setOnClickListener {
-            // TODO 기구로 이동
+            findNavController().navigate(R.id.action_searchUserFragment_to_equipmentListFragment)
         }
         binding.drawer.user.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
+            findNavController().navigate(R.id.action_searchUserFragment_self)
             // 회원으로 이동
         }
         binding.drawer.notice.setOnClickListener {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.view.fragment.SearchUserFragment">
+    tools:context=".home.view.fragment.EquipmentListFragment">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -13,14 +13,24 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/gray_bg">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="회원 조회"
+                android:text="기구 조회"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -60,27 +70,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/title" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:tabRippleColor="@color/black"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@color/primary"
-                app:tabIndicatorHeight="5dp"
-                app:tabIndicatorGravity="bottom"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line"/>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/list"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/equipRV"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn"
+                app:layout_constraintEnd_toEndOf="@+id/hamburger"
+                app:layout_constraintStart_toStartOf="@+id/backBtn"
+                app:layout_constraintTop_toBottomOf="@+id/line" />
+
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/auth_btn"
+                android:text="기구 등록"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tabLayout"/>
+                app:layout_constraintEnd_toEndOf="@+id/equipRV"
+                app:layout_constraintStart_toStartOf="@+id/equipRV" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include

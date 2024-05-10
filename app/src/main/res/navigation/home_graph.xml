@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_membershipFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_membershipFragment_to_equipmentListFragment"
+            app:destination="@id/equipmentListFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -25,6 +28,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchUserFragment"
             app:destination="@id/searchUserFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_equipmentListFragment"
+            app:destination="@id/equipmentListFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchUserFragment"
@@ -37,6 +43,15 @@
         <action
             android:id="@+id/action_searchUserFragment_to_addUserFragment"
             app:destination="@id/addUserFragment" />
+        <action
+            android:id="@+id/action_searchUserFragment_to_equipmentListFragment"
+            app:destination="@id/equipmentListFragment" />
+        <action
+            android:id="@+id/action_searchUserFragment_self"
+            app:destination="@id/searchUserFragment" />
+        <action
+            android:id="@+id/action_searchUserFragment_to_membershipFragment"
+            app:destination="@id/membershipFragment" />
     </fragment>
     <fragment
         android:id="@+id/addUserFragment"
@@ -47,4 +62,30 @@
             android:id="@+id/action_addUserFragment_to_searchUserFragment"
             app:destination="@id/searchUserFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/equipmentListFragment"
+        android:name="com.ajou.helptmanager.home.view.fragment.EquipmentListFragment"
+        android:label="fragment_equipment_list"
+        tools:layout="@layout/fragment_equipment_list" >
+        <action
+            android:id="@+id/action_equipmentListFragment_to_searchUserFragment"
+            app:destination="@id/searchUserFragment" />
+        <action
+            android:id="@+id/action_equipmentListFragment_to_membershipFragment"
+            app:destination="@id/membershipFragment" />
+        <action
+            android:id="@+id/action_equipmentListFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_equipmentListFragment_self"
+            app:destination="@id/equipmentListFragment" />
+        <action
+            android:id="@+id/action_equipmentListFragment_to_addEquipmentFragment"
+            app:destination="@id/addEquipmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEquipmentFragment"
+        android:name="com.ajou.helptmanager.home.view.fragment.AddEquipmentFragment"
+        android:label="fragment_add_equipment"
+        tools:layout="@layout/fragment_add_equipment" />
 </navigation>

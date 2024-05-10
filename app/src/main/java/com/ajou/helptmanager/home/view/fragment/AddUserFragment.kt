@@ -72,7 +72,7 @@ class AddUserFragment : Fragment() {
         }
         binding.removeBtn.setOnClickListener {
             // TODO 승인거절 api 연동
-동       }
+      }
         viewModel.setUserInfo(null)
     }
 }

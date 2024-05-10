@@ -9,27 +9,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.R
-import com.ajou.helptmanager.databinding.FragmentPendingUserBinding
-import com.ajou.helptmanager.home.adapter.UserInfoRVAdapter
+import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
+import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.UserInfo
-import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 
-class PendingUserFragment : Fragment(), AdapterToFragment {
-    private var _binding : FragmentPendingUserBinding? = null
+class AddEquipmentFragment : Fragment(), AdapterToFragment {
+    private var _binding: FragmentAddEquipmentBinding? = null
     private val binding get() = _binding!!
-    private var mContext : Context? = null
-    private lateinit var viewModel : UserInfoViewModel
-    private val TAG = PendingUserFragment::class.java.simpleName
+    private var mContext: Context? = null
+    private lateinit var adapter : EquipmentRVAdapter
+    private var list = emptyList<Equipment>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -39,32 +38,28 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
-        _binding = FragmentPendingUserBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentAddEquipmentBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val list = listOf<UserInfo>(
-            UserInfo("최윤서",null,null,null),
-            UserInfo("최서",null,null,null),
-            UserInfo("최윤",null,null,null),
-            UserInfo("최윤서",null,null,null),
-            UserInfo("윤서",null,null,null)
+        list = listOf<Equipment>(Equipment(0,"name",4,3,20),
+            Equipment(1,"ame",4,3,20),
+            Equipment(2,"name",4,3,20),
+            Equipment(3,"nae",4,3,20)
         )
 
-        var adapter : UserInfoRVAdapter = UserInfoRVAdapter(mContext!!, list, this)
+        adapter = EquipmentRVAdapter(mContext!!, list, "add", this)
+        binding.equipRV.adapter = adapter
+        binding.equipRV.layoutManager = LinearLayoutManager(mContext)
 
-        binding.userRV.adapter = adapter
-        binding.userRV.layoutManager = LinearLayoutManager(mContext)
-
-        binding.user.setOnEditorActionListener { view, i, keyEvent ->
+        binding.equip.setOnEditorActionListener { view, i, keyEvent ->
             if (i == EditorInfo.IME_ACTION_SEARCH){
                 val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(requireActivity().window.decorView.applicationWindowToken, 0)
-                adapter.updateList(list.filter { it.name.contains(binding.user.text)  })
+                adapter.updateList(list.filter { it.equipmentName.contains(binding.equip.text)  })
                 return@setOnEditorActionListener true
             }else return@setOnEditorActionListener false
         }
@@ -72,10 +67,10 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
     }
 
     override fun getSelectedItem(data: UserInfo) {
-        viewModel.setUserInfo(data)
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {
-    }
+        Log.d("selectedItem in add",data.toString())
 
+    }
 }

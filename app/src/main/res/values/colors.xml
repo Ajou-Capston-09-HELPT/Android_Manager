@@ -11,5 +11,6 @@
     <color name="gray_off">#C9C9C9</color>
     <color name="gray_text">#828282</color>
     <color name="gray_bg">#F5F5F5</color>
+    <color name="semantic_error">#FF3433</color>
 
 </resources>

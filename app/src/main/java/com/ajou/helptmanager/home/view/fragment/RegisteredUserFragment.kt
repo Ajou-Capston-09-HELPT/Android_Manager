@@ -15,6 +15,7 @@ import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.databinding.FragmentRegisteredUserBinding
 import com.ajou.helptmanager.home.adapter.UserInfoRVAdapter
+import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 
@@ -72,5 +73,8 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
 
     override fun getSelectedItem(data: UserInfo) {
         viewModel.setUserInfo(data)
+    }
+
+    override fun getSelectedItem(data: Equipment, position: Int) {
     }
 }

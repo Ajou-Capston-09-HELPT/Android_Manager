@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
             // TODO QR스캔으로 이동
         }
         binding.drawer.train.setOnClickListener {
-            // TODO 기구로 이동
+            findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
         }
         binding.drawer.user.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
@@ -90,5 +90,10 @@ class HomeFragment : Fragment() {
         binding.userBg.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
         }
+
+        binding.machineBg.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
+        }
+
     }
 }
