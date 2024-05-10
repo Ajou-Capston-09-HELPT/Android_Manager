@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="biz_division">
-        <item>개인 사업자</item>
-        <item>법인 사업자</item>
+        <item>개인사업자</item>
+        <item>법인사업자</item>
         <item>구분 선택</item>
     </string-array>
 </resources>

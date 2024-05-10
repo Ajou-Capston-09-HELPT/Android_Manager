@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.home.view.dialog
 
 import android.content.res.Resources
 import android.graphics.Color

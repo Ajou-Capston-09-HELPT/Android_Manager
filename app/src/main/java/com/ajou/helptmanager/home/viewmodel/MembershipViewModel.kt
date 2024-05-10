@@ -1,8 +1,10 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.home.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ajou.helptmanager.home.model.Membership
+
 class MembershipViewModel : ViewModel(){
     private val _membershipList = MutableLiveData<List<Membership>>()
     val membershipList: LiveData<List<Membership>> = _membershipList

@@ -110,7 +110,6 @@ class SearchGymDialog(private val callback: (Gym) -> Unit) : DialogFragment() {
     }
     inner class AdapterToFragment {
         fun getSelectedItem(data : Gym) {
-            Log.d("선택된 데이터", data.toString())
              callback(data)
             dialog?.dismiss()
         }

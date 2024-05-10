@@ -22,6 +22,11 @@ interface ManagerService {
         @Body kakaoId : RequestBody
     ) : Response<ResponseBody>
 
+    @POST("managers/register")
+    suspend fun register(
+        @Body kakaoId : RequestBody
+    ) : Response<ResponseBody>
+
     @DELETE("managers")
     suspend fun quit(
         @Header("Authorization") accessToken : String

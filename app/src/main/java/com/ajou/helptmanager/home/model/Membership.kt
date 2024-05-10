@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.home.model
 
 data class Membership(
     val id: Int,

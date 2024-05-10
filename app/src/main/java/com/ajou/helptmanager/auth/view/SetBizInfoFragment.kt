@@ -2,7 +2,6 @@ package com.ajou.helptmanager.auth.view
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,8 +10,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,7 +28,7 @@ class SetBizInfoFragment : Fragment() {
     private var _binding: FragmentSetBizInfoBinding? = null
     private val binding get() = _binding!!
     private var mContext: Context? = null
-    private lateinit var viewModel: UserInfoViewModel
+    private lateinit var viewModel: AuthInfoViewModel
     private val dataStore = UserDataStore()
     private var userName : String? = null
     private var kakaoId : String? = null
@@ -69,7 +66,7 @@ class SetBizInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[AuthInfoViewModel::class.java]
         _binding = FragmentSetBizInfoBinding.inflate(inflater, container, false)
         CoroutineScope(Dispatchers.IO).launch {
             userName = dataStore.getUserName()
@@ -178,7 +175,6 @@ class SetBizInfoFragment : Fragment() {
         })
 
         viewModel.done.observe(viewLifecycleOwner) {
-            Log.d("data","${viewModel.bizImg.value}  ${viewModel.bizName.value}  ${viewModel.bizNum.value}  ${viewModel.division.value}")
             binding.nextBtn.isEnabled = viewModel.bizImg.value != null && viewModel.bizName.value != null && viewModel.bizNum.value != null && viewModel.division.value != null
         }
 
@@ -187,7 +183,6 @@ class SetBizInfoFragment : Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
-            Log.d("btn is enabled?",binding.nextBtn.isEnabled.toString())
             findNavController().navigate(R.id.action_setBizInfoFragment_to_setGymInfoFragment)
         }
     }

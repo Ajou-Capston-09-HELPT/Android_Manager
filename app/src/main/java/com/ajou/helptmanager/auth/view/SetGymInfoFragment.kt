@@ -11,24 +11,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.ajou.helptmanager.BuildConfig
-import com.ajou.helptmanager.R
-import com.ajou.helptmanager.auth.adapter.SearchGymRVAdapter
+import com.ajou.helptmanager.*
 import com.ajou.helptmanager.databinding.FragmentSetGymInfoBinding
-import com.skt.Tmap.TMapData
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.GymService
+import com.ajou.helptmanager.network.model.GymAddress
+import com.ajou.helptmanager.network.model.RegisterGymInfo
 import com.skt.Tmap.TMapTapi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 class SetGymInfoFragment : Fragment() {
     private var _binding : FragmentSetGymInfoBinding? = null
     private val binding get() = _binding!!
     private var mContext: Context? = null
-    private lateinit var viewModel: UserInfoViewModel
+    private lateinit var viewModel: AuthInfoViewModel
     private var tmapTApi : TMapTapi? = null
     private lateinit var dialog : SearchGymDialog
+    private val gymService = RetrofitInstance.getInstance().create(GymService::class.java)
+    private val dataStore = UserDataStore()
+    private var accessToken : String? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,18 +51,28 @@ class SetGymInfoFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentSetGymInfoBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[AuthInfoViewModel::class.java]
+        CoroutineScope(Dispatchers.IO).launch {
+            accessToken = dataStore.getAccessToken()
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        val resizeUri = resizeImage(viewModel.bizImg.value!!, mContext!!)
+//        Log.d("resizeUri",resizeUri.toString()) // TODO 이미지 리사이징 작업 혹은 이미지 사이즈 제한 작업 필요
+        val img = getMultipartFile(viewModel.bizImg.value!!, requireActivity(),"businessFile")
+        Log.d(":imgUri",img.toString())
+        var latitude : String? = null
+        var longitude : String? = null
 
         binding.gymAddress.setOnClickListener {
             dialog = SearchGymDialog() { value ->
-                Log.d("data value",value.toString())
                 binding.gymAddress.text = value.address
                 binding.gymAddress.isSelected = true
+                latitude = value.latitude
+                longitude = value.longitude
             }
             dialog.show(requireActivity().supportFragmentManager,"search")
         }
@@ -125,7 +141,19 @@ class SetGymInfoFragment : Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_setGymInfoFragment_to_pendingFragment)
+            CoroutineScope(Dispatchers.IO).launch {
+                val address = GymAddress(binding.gymAddress.text.toString(), binding.gymAddressDetail.text.toString(), latitude!!, longitude!!)
+                val gymInfo = RegisterGymInfo(address, binding.gymName.text.toString(), binding.gymNum.text.toString(), viewModel.bizNum.value.toString(), viewModel.division.value.toString(), viewModel.bizName.value.toString())
+                dataStore.saveUserName(binding.gymName.text.toString())
+                val registerDeferred = async{ gymService.register(accessToken!!,gymInfo, img) }
+                val registerResponse = registerDeferred.await()
+                if (registerResponse.isSuccessful) {
+                    Log.d("registerResponse",registerResponse.toString())
+                    findNavController().navigate(R.id.action_setGymInfoFragment_to_pendingFragment)
+                }else{
+                    Log.d("registerResponse Fail",registerResponse.errorBody()?.string().toString())
+                }
+            }
         }
     }
 

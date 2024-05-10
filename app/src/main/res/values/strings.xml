@@ -4,7 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-
     <!-- Membership String -->
     <string name="monthly_price">월 %,d 원</string>
 
@@ -66,8 +65,6 @@
 
 
     <string name="home_greet_msg">안녕하세요!\n%s 사장님</string>
-
-
 
 
 </resources>

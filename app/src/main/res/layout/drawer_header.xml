@@ -87,7 +87,6 @@
         android:text="@string/menu_ticket"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:textStyle="bold"
         android:paddingStart="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/ticketIcon"
         app:layout_constraintStart_toEndOf="@+id/ticketIcon"

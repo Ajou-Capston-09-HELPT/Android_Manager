@@ -7,5 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Gym(
     val name : String,
     val address : String,
-    val equipList : List<String>?
+    val equipList : List<String>?,
+    val latitude: String,
+    val longitude: String
 ) : Parcelable
