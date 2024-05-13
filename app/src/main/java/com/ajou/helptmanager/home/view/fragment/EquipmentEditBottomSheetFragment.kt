@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class EquipmentEditBottomSheetFragment(private val callback: (List<Int>) -> Unit) : BottomSheetDialogFragment() {
+class EquipmentEditBottomSheetFragment(val setting: List<Int>,private val callback: (List<Int>) -> Unit) : BottomSheetDialogFragment() {
     private var mContext : Context? = null
     private var _binding : FragmentEquipmentEditBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -52,7 +52,7 @@ class EquipmentEditBottomSheetFragment(private val callback: (List<Int>) -> Unit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var setting = listOf<Int>(5,5,5) // 운동 초기값 설정
+        var setting = listOf<Int>(setting[0],setting[1],setting[2]) // 운동 초기값 설정
 
         binding.edit.setOnClickListener {
                 dialog = TrainSettingDialog(setting) { value ->

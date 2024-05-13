@@ -112,10 +112,11 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {
-        val dialog = EquipmentEditBottomSheetFragment(){value ->
-            list[position].defaultWeight = value[0]
-            list[position].defaultCount = value[1]
-            list[position].defaultSet = value[2]
+        val setting = listOf<Int>(data.customWeight, data.customCount, data.customSet)
+        val dialog = EquipmentEditBottomSheetFragment(setting){value ->
+            list[position].customWeight = value[0]
+            list[position].customCount = value[1]
+            list[position].customSet = value[2]
             adapter.notifyItemChanged(position)
         }
         dialog.show(parentFragmentManager,dialog.tag)

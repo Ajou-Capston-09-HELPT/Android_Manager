@@ -23,7 +23,7 @@ class EquipmentRVAdapter(val context: Context, var list: List<Equipment>, val ty
                     binding.more.visibility = View.VISIBLE
                     binding.exerciseInfo.visibility = View.VISIBLE
                     binding.name.text = item.equipmentName
-                    val exerciseInfo = String.format(context.resources.getString(R.string.equip_set),item.defaultWeight,item.defaultCount,item.defaultSet)
+                    val exerciseInfo = String.format(context.resources.getString(R.string.equip_set),item.customWeight,item.customCount,item.customSet)
                     binding.exerciseInfo.text = exerciseInfo
 
                     binding.more.setOnClickListener {

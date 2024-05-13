@@ -1,8 +1,8 @@
 package com.ajou.helptmanager.home.model
 
-data class Equipment(
+data class GymEquipment(
     val equipmentId: Int,
-    val equipmentName: String,
+    val gymId: Int,
     var customCount: Int,
     var customSet: Int,
     var customWeight: Int

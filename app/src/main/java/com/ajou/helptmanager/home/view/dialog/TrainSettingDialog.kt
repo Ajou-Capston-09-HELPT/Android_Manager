@@ -50,21 +50,21 @@ class TrainSettingDialog(val setting: List<Int>, private val callback: (List<Int
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.set.minValue = 1
-        binding.set.maxValue = 2010
+        binding.set.minValue = 0
+        binding.set.maxValue = 100
         binding.set.value = setting[0]
 
         binding.set.wrapSelectorWheel = false
         binding.set.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
-        binding.weight.minValue = 1
-        binding.weight.maxValue = 60
+        binding.weight.minValue = 0
+        binding.weight.maxValue = 100
         binding.weight.value = setting[1]
 
         binding.weight.wrapSelectorWheel = false
         binding.weight.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
-        binding.count.minValue = 1
+        binding.count.minValue = 0
         binding.count.maxValue = 100
         binding.count.value = setting[2]
 

@@ -16,6 +16,7 @@ import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
+import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.network.RetrofitInstance
@@ -31,6 +32,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
     private val dataStore = UserDataStore()
     private lateinit var accessToken: String
+    private var gymId : Int? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,6 +51,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
         _binding = FragmentAddEquipmentBinding.inflate(layoutInflater, container, false)
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken().toString()
+            gymId = dataStore.getGymId()
             val equipDeferred = async { equipmentService.getAllEquipments(accessToken!!) }
             val equipResponse = equipDeferred.await()
             if (equipResponse.isSuccessful) {
@@ -84,12 +87,12 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {
-        var setting = listOf<Int>(data.defaultWeight, data.defaultCount, data.defaultSet)
+        var setting = listOf<Int>(data.customWeight, data.customCount, data.customSet)
         val dialog = TrainSettingDialog(setting) { value ->
             setting = value
-            data.defaultSet = value[2]
-            data.defaultCount = value[1]
-            data.defaultWeight = value[0]
+            data.customSet = value[2]
+            data.customCount = value[1]
+            data.customWeight = value[0]
             Log.d("before data","data  $data  value $value")
             // TODO data랑 value 값 조합해서 기구 등록 api 던지기
             postEquipmentApi(data)
@@ -100,7 +103,8 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
 
     private fun postEquipmentApi(data: Equipment){
         CoroutineScope(Dispatchers.IO).launch {
-            val postEquipDeferred = async { equipmentService.postEquipment(accessToken, data) }
+            val equipment = GymEquipment(data.equipmentId, gymId!!, data.customCount, data.customSet, data.customWeight )
+            val postEquipDeferred = async { equipmentService.postEquipment(accessToken, equipment) }
             val postEquipResponse = postEquipDeferred.await()
             if (postEquipResponse.isSuccessful){
                 Log.d("postEquipResponse","")

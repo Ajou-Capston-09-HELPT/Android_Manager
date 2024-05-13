@@ -285,7 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:layout_marginBottom="24dp"
-                        android:background="@drawable/auth_btn"
+                        android:background="@drawable/all_gray_btn"
                         android:text="거절"
                         android:textColor="@color/white"
                         android:textSize="16sp"
