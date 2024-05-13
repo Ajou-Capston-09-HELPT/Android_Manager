@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/menu_ticket_on"
+        android:id="@+id/menuitem1"
+        android:title="이용권 등록 및 수정" />
+    <item
+        android:icon="@drawable/menu_qr"
+        android:id="@+id/menuitem2"
+        android:title="입장용 QR스캔" />
+    <item
+        android:icon="@drawable/menu_machine"
+        android:id="@+id/menuitem3"
+        android:title="기구 등록 및 조회" />
+    <item
+        android:icon="@drawable/menu_user"
+        android:id="@+id/menuitem4"
+        android:title="회원 등록 및 조회" />
+    <item
+        android:icon="@drawable/menu_notice"
+        android:id="@+id/menuitem5"
+        android:title="공지사항 관리" />
+    <item
+        android:icon="@drawable/menu_chat"
+        android:id="@+id/menuitem6"
+        android:title="채팅방 등록" />
+</menu>

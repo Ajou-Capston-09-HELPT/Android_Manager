@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="styleMembershipTitle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleMembershipPrice">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleMembershipMonthPrice">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#828282</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleMembershipRegisterButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleRegisterMembershipTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+
+    <style name="styleEtRegisterMembershipTitle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textColorHint">#C9C9C9</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleEtRegisterMembershipPrice">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textColorHint">#C9C9C9</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleMembershipModify">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="styleMembershipDelete">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#FF3433</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/register_more_dialog</item>
+    </style>
+
+</resources>
