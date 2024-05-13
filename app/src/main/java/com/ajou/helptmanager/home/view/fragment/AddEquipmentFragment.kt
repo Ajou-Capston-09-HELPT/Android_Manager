@@ -12,10 +12,15 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.EquipmentService
+import kotlinx.coroutines.*
 
 class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private var _binding: FragmentAddEquipmentBinding? = null
@@ -23,6 +28,9 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private var mContext: Context? = null
     private lateinit var adapter : EquipmentRVAdapter
     private var list = emptyList<Equipment>()
+    private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
+    private val dataStore = UserDataStore()
+    private lateinit var accessToken: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,21 +47,27 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAddEquipmentBinding.inflate(layoutInflater, container, false)
+        CoroutineScope(Dispatchers.IO).launch {
+            accessToken = dataStore.getAccessToken().toString()
+            val equipDeferred = async { equipmentService.getAllEquipments(accessToken!!) }
+            val equipResponse = equipDeferred.await()
+            if (equipResponse.isSuccessful) {
+                Log.d("equipResponse",equipResponse.body()?.data.toString())
+                list = equipResponse.body()?.data!!
+                withContext(Dispatchers.Main){
+                    adapter = EquipmentRVAdapter(mContext!!, list, "add", this@AddEquipmentFragment)
+                    binding.equipRV.adapter = adapter
+                    binding.equipRV.layoutManager = LinearLayoutManager(mContext)
+                }
+            }else{
+                Log.d("equipResponse faill",equipResponse.errorBody()?.string().toString())
+            }
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        list = listOf<Equipment>(Equipment(0,"name",4,3,20),
-            Equipment(1,"ame",4,3,20),
-            Equipment(2,"name",4,3,20),
-            Equipment(3,"nae",4,3,20)
-        )
-
-        adapter = EquipmentRVAdapter(mContext!!, list, "add", this)
-        binding.equipRV.adapter = adapter
-        binding.equipRV.layoutManager = LinearLayoutManager(mContext)
 
         binding.equip.setOnEditorActionListener { view, i, keyEvent ->
             if (i == EditorInfo.IME_ACTION_SEARCH){
@@ -70,7 +84,29 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {
-        Log.d("selectedItem in add",data.toString())
+        var setting = listOf<Int>(data.defaultWeight, data.defaultCount, data.defaultSet)
+        val dialog = TrainSettingDialog(setting) { value ->
+            setting = value
+            data.defaultSet = value[2]
+            data.defaultCount = value[1]
+            data.defaultWeight = value[0]
+            Log.d("before data","data  $data  value $value")
+            // TODO data랑 value 값 조합해서 기구 등록 api 던지기
+            postEquipmentApi(data)
 
+        }
+        dialog.show(requireActivity().supportFragmentManager, "setting")
+    }
+
+    private fun postEquipmentApi(data: Equipment){
+        CoroutineScope(Dispatchers.IO).launch {
+            val postEquipDeferred = async { equipmentService.postEquipment(accessToken, data) }
+            val postEquipResponse = postEquipDeferred.await()
+            if (postEquipResponse.isSuccessful){
+                Log.d("postEquipResponse","")
+            }else {
+                Log.d("postEquipResponse faill",postEquipResponse.errorBody()?.string().toString())
+            }
+        }
     }
 }

@@ -12,10 +12,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentEquipmentListBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.EquipmentService
+import com.ajou.helptmanager.network.api.GymService
+import kotlinx.coroutines.*
 
 class EquipmentListFragment : Fragment(), AdapterToFragment {
     private var _binding : FragmentEquipmentListBinding? = null
@@ -23,6 +28,11 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     private var mContext : Context? = null
     private lateinit var adapter : EquipmentRVAdapter
     private var list = emptyList<Equipment>()
+    private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
+    private val gymService = RetrofitInstance.getInstance().create(GymService::class.java)
+    private var accessToken : String? = null
+    private var gymId : Int? = null
+    private val dataStore = UserDataStore()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,17 +48,24 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentEquipmentListBinding.inflate(layoutInflater, container, false)
+        CoroutineScope(Dispatchers.IO).launch {
+            accessToken = dataStore.getAccessToken()
+            gymId = dataStore.getGymId()
+            val equipDeferred = async { gymService.getAllGymEquipments(accessToken!!,gymId!!) }
+            val equipResponse = equipDeferred.await()
+            if (equipResponse.isSuccessful) {
+                list = equipResponse.body()!!.data
+                Log.d("list",list.toString())
+                withContext(Dispatchers.Main){
+                    adapter.updateList(list)
+                }
+            }
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        list = listOf<Equipment>(Equipment(0,"name",4,3,20),
-            Equipment(1,"name",4,3,20),
-            Equipment(2,"name",4,3,20),
-            Equipment(3,"name",4,3,20)
-        )
 
         adapter = EquipmentRVAdapter(mContext!!, list, "search", this)
         binding.equipRV.adapter = adapter

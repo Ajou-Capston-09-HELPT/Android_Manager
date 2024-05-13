@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_loginFragment_to_pendingFragment"
             app:destination="@id/pendingFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_pendingFragment2"
+            app:destination="@id/pendingFragment" />
     </fragment>
     <fragment
         android:id="@+id/setGymInfoFragment"

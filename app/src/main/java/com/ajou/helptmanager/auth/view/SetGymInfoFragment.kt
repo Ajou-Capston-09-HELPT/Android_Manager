@@ -18,10 +18,7 @@ import com.ajou.helptmanager.network.api.GymService
 import com.ajou.helptmanager.network.model.GymAddress
 import com.ajou.helptmanager.network.model.RegisterGymInfo
 import com.skt.Tmap.TMapTapi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.math.log
 
 
@@ -149,7 +146,10 @@ class SetGymInfoFragment : Fragment() {
                 val registerResponse = registerDeferred.await()
                 if (registerResponse.isSuccessful) {
                     Log.d("registerResponse",registerResponse.toString())
-                    findNavController().navigate(R.id.action_setGymInfoFragment_to_pendingFragment)
+                    dataStore.saveUserName(binding.gymName.text.toString())
+                    withContext(Dispatchers.Main){
+                        findNavController().navigate(R.id.action_setGymInfoFragment_to_pendingFragment)
+                    }
                 }else{
                     Log.d("registerResponse Fail",registerResponse.errorBody()?.string().toString())
                 }

@@ -34,6 +34,4 @@ class PendingFragment : Fragment() {
             return@setOnKeyListener false
         }
     }
-
-    // TODO 뒤로가기 막기
 }

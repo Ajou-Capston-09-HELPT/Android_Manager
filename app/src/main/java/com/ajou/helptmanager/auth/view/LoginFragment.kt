@@ -45,6 +45,16 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CoroutineScope(Dispatchers.IO).launch {
+            val gymStatus = dataStore.getGymStatus()
+            if (gymStatus == "Pending"){
+                Log.d("gymStatus","Pending")
+                withContext(Dispatchers.Main){
+                    findNavController().navigate(R.id.action_loginFragment_to_pendingFragment)
+                }
+            }
+        }
+
     }
 
     override fun onCreateView(

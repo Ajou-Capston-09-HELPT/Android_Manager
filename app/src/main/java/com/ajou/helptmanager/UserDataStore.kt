@@ -2,10 +2,7 @@ package com.ajou.helptmanager
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -20,9 +17,10 @@ class UserDataStore() {
     private object PreferencesKeys {
         val ACCESS_TOKEN = stringPreferencesKey("access_token")
         val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
-        val HAS_TICKET = booleanPreferencesKey("has_ticket")
+        val GYM_STATUS = stringPreferencesKey("gym_status")
         val USER_NAME = stringPreferencesKey("user_name")
         val KAKAO_ID = stringPreferencesKey("kakao_id")
+        val GYM_ID = intPreferencesKey("gym_id")
     }
 
     suspend fun saveAccessToken(token : String) {
@@ -61,17 +59,17 @@ class UserDataStore() {
         }
     }
 
-    suspend fun saveHasTicket(hasTicket : Boolean) {
+    suspend fun saveGymStatus(status : String) {
         withContext(Dispatchers.IO){
             dataStore.edit { pref ->
-                pref[PreferencesKeys.HAS_TICKET] = hasTicket
+                pref[PreferencesKeys.GYM_STATUS] = status
             }
         }
     }
 
-    suspend fun getHasTicket() : Boolean {
+    suspend fun getGymStatus() : String? {
         return withContext(Dispatchers.IO) {
-            dataStore.data.first()[PreferencesKeys.HAS_TICKET] ?: false
+            dataStore.data.first()[PreferencesKeys.GYM_STATUS]
         }
     }
 
@@ -92,6 +90,20 @@ class UserDataStore() {
     suspend fun getKakaoId():String? {
         return withContext(Dispatchers.IO) {
             dataStore.data.first()[PreferencesKeys.KAKAO_ID]
+        }
+    }
+
+    suspend fun saveGymId(id:Int) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.GYM_ID] = id
+            }
+        }
+    }
+
+    suspend fun getGymId():Int? {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.GYM_ID]
         }
     }
 
