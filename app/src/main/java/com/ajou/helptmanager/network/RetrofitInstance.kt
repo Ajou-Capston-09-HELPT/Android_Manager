@@ -1,5 +1,6 @@
 package com.ajou.helptmanager.network
 
+import ProductService
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Converter
@@ -45,8 +46,8 @@ object RetrofitInstance {
             override fun convert(value: ResponseBody) : Any? =
                 if (value.contentLength() != 0L) nextResponseBodyConverter.convert(value) else null
         }
-
     }
 
+    val productService: ProductService = client.create(ProductService::class.java)
 }
 

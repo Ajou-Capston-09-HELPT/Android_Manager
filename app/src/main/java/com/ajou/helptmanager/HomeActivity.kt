@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ajou.helptmanager.databinding.ActivityHomeBinding
-import com.ajou.helptmanager.membership.TestMembershipActivity
+import com.ajou.helptmanager.membership.view.TestMembershipActivity
 
 class HomeActivity : AppCompatActivity() {
     private var _binding : ActivityHomeBinding? = null

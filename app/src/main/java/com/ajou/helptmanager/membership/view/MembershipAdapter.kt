@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.membership.view
 
 
 import android.view.LayoutInflater
@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.membership.model.Membership
 
 
-class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(MembershipDiffCallback) {
+class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(
+    MembershipDiffCallback
+) {
 
     interface OnItemClickListener {
         fun onMoreButtonClicked(id: Int)
@@ -34,7 +37,7 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
 
     override fun onBindViewHolder(holder: MembershipViewHolder, position: Int) {
         val membership = getItem(position)
-        holder.title.text = membership.title
+        holder.title.text = membership.day
         holder.price.text = membership.price
         holder.month_price.text = membership.month_price
         holder.moreButton.setOnClickListener{

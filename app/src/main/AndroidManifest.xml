@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".membership.TestMembershipActivity"
+            android:name=".membership.view.TestMembershipActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

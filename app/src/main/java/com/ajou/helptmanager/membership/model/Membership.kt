@@ -1,8 +1,8 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.membership.model
 
 data class Membership(
     val id: Int,
-    val title: String,
+    val day: String,
     val price: String,
     val month_price: String,
 )

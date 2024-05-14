@@ -6,10 +6,10 @@
 
     <fragment
         android:id="@+id/membershipFragment"
-        android:name="com.ajou.helptmanager.membership.MembershipFragment"
+        android:name="com.ajou.helptmanager.membership.view.MembershipFragment"
         android:label="MembershipFragment" />
     <fragment
         android:id="@+id/registerMoreDialog"
-        android:name="com.ajou.helptmanager.membership.RegisterMoreDialog"
+        android:name="com.ajou.helptmanager.membership.view.RegisterMoreDialog"
         android:label="RegisterMoreDialog" />
 </navigation>

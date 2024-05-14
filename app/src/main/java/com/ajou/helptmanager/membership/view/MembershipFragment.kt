@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.membership.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.membership.viewmodel.MembershipViewModel
 
 class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
     private lateinit var viewModel: MembershipViewModel

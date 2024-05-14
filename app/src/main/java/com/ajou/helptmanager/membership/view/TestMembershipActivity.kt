@@ -1,9 +1,10 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.membership.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.commit
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.membership.view.MembershipFragment
 
 class TestMembershipActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

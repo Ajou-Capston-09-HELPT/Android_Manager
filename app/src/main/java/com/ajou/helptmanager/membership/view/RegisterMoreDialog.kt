@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.membership
+package com.ajou.helptmanager.membership.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.membership.viewmodel.MembershipViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class RegisterMoreDialog(private val id: Int, private val viewModel: MembershipViewModel) : BottomSheetDialogFragment() {
@@ -45,7 +46,7 @@ class RegisterMoreDialog(private val id: Int, private val viewModel: MembershipV
 
     private fun deleteMembership()
     {
-        viewModel.deleteMembership(id)
+       // viewModel.deleteMembership(id)
         //회원권 삭제 로직 추가
         dismiss()
     }
