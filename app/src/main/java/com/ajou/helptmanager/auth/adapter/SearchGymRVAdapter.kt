@@ -17,7 +17,7 @@ class SearchGymRVAdapter(val context: Context, var list : ArrayList<TMapPOIItem>
             binding.address.text = item.newAddressList[0].fullAddressRoad
 
             binding.item.setOnClickListener {
-                link.getSelectedItem(Gym(item.name, item.newAddressList[0].fullAddressRoad,null))
+                link.getSelectedItem(Gym(item.name, item.newAddressList[0].fullAddressRoad,null, item.poiPoint.latitude.toString(), item.poiPoint.longitude.toString()))
             }
         }
     }

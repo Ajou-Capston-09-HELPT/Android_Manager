@@ -1,13 +1,8 @@
 package com.ajou.helptmanager
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -63,25 +58,27 @@ class UserDataStore() {
             }
         }
     }
+
+    suspend fun saveHasTicket(hasTicket : Boolean) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.HAS_TICKET] = hasTicket
+            }
+        }
+    }
+
+    suspend fun getGymStatus() : String? {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.GYM_STATUS]
+        }
+    }
+
     suspend fun getUserName():String? {
         return withContext(Dispatchers.IO) {
             dataStore.data.first()[PreferencesKeys.USER_NAME]
         }
     }
 
-    suspend fun saveGymStatus(status : String) {
-        withContext(Dispatchers.IO){
-            dataStore.edit { pref ->
-                pref[PreferencesKeys.GYM_STATUS] = status
-            }
-        }
-    }
-
-    suspend fun getGymStatus():String? {
-        return withContext(Dispatchers.IO) {
-            dataStore.data.first()[PreferencesKeys.GYM_STATUS]
-        }
-    }
     suspend fun saveKakaoId(id:String) {
         withContext(Dispatchers.IO){
             dataStore.edit { pref ->
@@ -116,22 +113,6 @@ class UserDataStore() {
                 pref.clear()
             }
         }
-    }
-
-    suspend fun printAllValues() {
-        val accessToken = getAccessToken()
-        val refreshToken = getRefreshToken()
-        val gymStatus = getGymStatus()
-        val userName = getUserName()
-        val kakaoId = getKakaoId()
-        val gymId = getGymId()
-
-        Log.d("UserDataStore", "Access Token: $accessToken")
-        Log.d("UserDataStore", "Refresh Token: $refreshToken")
-        Log.d("UserDataStore", "Gym Status: $gymStatus")
-        Log.d("UserDataStore", "User Name: $userName")
-        Log.d("UserDataStore", "Kakao ID: $kakaoId")
-        Log.d("UserDataStore", "Gym ID: $gymId")
     }
 
 }

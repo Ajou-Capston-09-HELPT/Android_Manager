@@ -3,8 +3,6 @@ package com.ajou.helptmanager.auth.view
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,12 +12,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import com.ajou.helpt.auth.view.LogOutDialog
-import com.ajou.helptmanager.HomeActivity
-import com.ajou.helptmanager.MainActivity
+import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentLoginBinding
 import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.GymService
 import com.ajou.helptmanager.network.api.ManagerService
 import com.google.gson.JsonObject
 import com.kakao.sdk.auth.model.OAuthToken
@@ -27,14 +25,17 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import org.json.JSONObject
 
 class LoginFragment : Fragment() {
-
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private var mContext: Context? = null
     private val dataStore = UserDataStore()
     private val managerService = RetrofitInstance.getInstance().create(ManagerService::class.java)
+    private val gymService = RetrofitInstance.getInstance().create(GymService::class.java)
     private lateinit var logOutDialog : LogOutDialog
 
     override fun onAttach(context: Context) {
@@ -44,6 +45,16 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CoroutineScope(Dispatchers.IO).launch {
+            val gymStatus = dataStore.getGymStatus()
+            if (gymStatus == "Pending"){
+                Log.d("gymStatus","Pending")
+                withContext(Dispatchers.Main){
+                    findNavController().navigate(R.id.action_loginFragment_to_pendingFragment)
+                }
+            }
+        }
+
     }
 
     override fun onCreateView(
@@ -106,14 +117,10 @@ class LoginFragment : Fragment() {
                                     "${user?.kakaoAccount?.email} ${user?.kakaoAccount?.profile?.nickname}"
                                 )
 
-                                dataStore.saveUserName(user?.kakaoAccount?.profile?.nickname.toString())
+//                                dataStore.saveUserName(user?.kakaoAccount?.profile?.nickname.toString())
                                 withContext(Dispatchers.Main) {
                                     Log.d("user Id",user?.id.toString())
-//                                    callLoginApi(user?.id.toString())
-                                    findNavController().navigate(R.id.action_loginFragment_to_setBizInfoFragment)
-//                                    val intent = Intent(mContext!!, MainActivity::class.java)
-//                                    startActivity(intent)
-                                    // TODO 추후에 페이지 이동
+                                    callLoginApi(user?.id.toString())
                                 }
                             }
                         }
@@ -166,25 +173,52 @@ class LoginFragment : Fragment() {
         }
     } // TODO 구체적인 오류 메세지로 변경하기
 
-//    private fun callLoginApi(id:String) {
-//        val jsonObject = JsonObject().apply {
-//            addProperty("kakaoId", id)
-//        }
-//        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
-//        Log.d("로그인 시도",jsonObject.toString())
-//        CoroutineScope(Dispatchers.IO).launch{
-//            val loginDeferred = async {managerService.login(requestBody) }
-//            val loginResponse = loginDeferred.await()
-//            if (loginResponse.isSuccessful) {
-//                val tokenBody = JSONObject(loginResponse.body()?.string())
-//                Log.d("tokenBody",tokenBody.toString())
-//                dataStore.saveAccessToken("Bearer "+tokenBody.get("accessToken").toString())
-//                dataStore.saveRefreshToken("Bearer "+tokenBody.get("refreshToken").toString())
-//                val intent = Intent(mContext, MainActivity::class.java)
-//                startActivity(intent)
-//            }else{
-//                Log.d("fail",loginResponse.errorBody()?.string().toString())
-//            }
-//        }
-//    }
+    private fun callLoginApi(id:String) {
+        val jsonObject = JsonObject().apply {
+            addProperty("kakaoId", id)
+        }
+        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+        CoroutineScope(Dispatchers.IO).launch{
+            val loginDeferred = async {managerService.login(requestBody) }
+            val loginResponse = loginDeferred.await()
+            if (loginResponse.isSuccessful) {
+                val tokenBody = JSONObject(loginResponse.body()?.string())
+                val accessToken = "Bearer "+tokenBody.getJSONObject("data").getString("accessToken")
+                dataStore.saveAccessToken(accessToken)
+                dataStore.saveRefreshToken("Bearer "+tokenBody.getJSONObject("data").getString("refreshToken"))
+                val checkGymDeferred = async { gymService.getGymStatus(accessToken) }
+                val checkGymResponse = checkGymDeferred.await()
+                var hasGym = "null"
+                if (checkGymResponse.isSuccessful) {
+                    hasGym = JSONObject(checkGymResponse.body()?.string()).getJSONObject("data").getString("status")
+                }
+                withContext(Dispatchers.Main){
+                    when(hasGym){
+                        "Unregistered" -> {
+                            findNavController().navigate(R.id.action_loginFragment_to_setBizInfoFragment)
+                        }
+                        "Registered" -> {
+                            val intent = Intent(mContext,HomeActivity::class.java)
+                            startActivity(intent)
+                        }
+                        "Pending" -> {
+                            findNavController().navigate(R.id.action_loginFragment_to_pendingFragment)
+                        }
+                    }
+
+                }
+            }else{
+                val registerDeferred = async { managerService.register(requestBody) }
+                val registerResponse = registerDeferred.await()
+                if (registerResponse.isSuccessful) {
+                    val tokenBody = JSONObject(registerResponse.body()?.string())
+                    dataStore.saveAccessToken("Bearer "+tokenBody.getJSONObject("data").getString("accessToken"))
+                    dataStore.saveRefreshToken("Bearer "+tokenBody.getJSONObject("data").getString("refreshToken"))
+                    withContext(Dispatchers.Main){
+                        findNavController().navigate(R.id.action_loginFragment_to_setBizInfoFragment)
+                    }
+                }
+            }
+        }
+    }
 }

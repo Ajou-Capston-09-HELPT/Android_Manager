@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class UserInfoViewModel : ViewModel() {
+class AuthInfoViewModel : ViewModel() {
     private val _division = MutableLiveData<String>()
     val division : LiveData<String>
         get() = _division
