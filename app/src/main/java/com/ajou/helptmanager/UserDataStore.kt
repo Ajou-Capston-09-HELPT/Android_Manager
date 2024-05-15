@@ -1,10 +1,12 @@
 package com.ajou.helptmanager
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +22,10 @@ class UserDataStore() {
     private object PreferencesKeys {
         val ACCESS_TOKEN = stringPreferencesKey("access_token")
         val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
-        val HAS_TICKET = booleanPreferencesKey("has_ticket")
+        val GYM_STATUS = stringPreferencesKey("gym_status")
         val USER_NAME = stringPreferencesKey("user_name")
         val KAKAO_ID = stringPreferencesKey("kakao_id")
+        val GYM_ID = intPreferencesKey("gym_id")
     }
 
     suspend fun saveAccessToken(token : String) {
@@ -60,27 +63,25 @@ class UserDataStore() {
             }
         }
     }
-
-    suspend fun saveHasTicket(hasTicket : Boolean) {
-        withContext(Dispatchers.IO){
-            dataStore.edit { pref ->
-                pref[PreferencesKeys.HAS_TICKET] = hasTicket
-            }
-        }
-    }
-
-    suspend fun getHasTicket() : Boolean {
-        return withContext(Dispatchers.IO) {
-            dataStore.data.first()[PreferencesKeys.HAS_TICKET] ?: false
-        }
-    }
-
     suspend fun getUserName():String? {
         return withContext(Dispatchers.IO) {
             dataStore.data.first()[PreferencesKeys.USER_NAME]
         }
     }
 
+    suspend fun saveGymStatus(status : String) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.GYM_STATUS] = status
+            }
+        }
+    }
+
+    suspend fun getGymStatus():String? {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.GYM_STATUS]
+        }
+    }
     suspend fun saveKakaoId(id:String) {
         withContext(Dispatchers.IO){
             dataStore.edit { pref ->
@@ -95,12 +96,42 @@ class UserDataStore() {
         }
     }
 
+    suspend fun saveGymId(id:Int) {
+        withContext(Dispatchers.IO){
+            dataStore.edit { pref ->
+                pref[PreferencesKeys.GYM_ID] = id
+            }
+        }
+    }
+
+    suspend fun getGymId():Int? {
+        return withContext(Dispatchers.IO) {
+            dataStore.data.first()[PreferencesKeys.GYM_ID]
+        }
+    }
+
     suspend fun deleteAll() {
         withContext(Dispatchers.IO) {
             dataStore.edit { pref ->
                 pref.clear()
             }
         }
+    }
+
+    suspend fun printAllValues() {
+        val accessToken = getAccessToken()
+        val refreshToken = getRefreshToken()
+        val gymStatus = getGymStatus()
+        val userName = getUserName()
+        val kakaoId = getKakaoId()
+        val gymId = getGymId()
+
+        Log.d("UserDataStore", "Access Token: $accessToken")
+        Log.d("UserDataStore", "Refresh Token: $refreshToken")
+        Log.d("UserDataStore", "Gym Status: $gymStatus")
+        Log.d("UserDataStore", "User Name: $userName")
+        Log.d("UserDataStore", "Kakao ID: $kakaoId")
+        Log.d("UserDataStore", "Gym ID: $gymId")
     }
 
 }
