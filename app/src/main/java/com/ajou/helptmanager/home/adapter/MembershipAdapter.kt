@@ -1,9 +1,4 @@
-<<<<<<<< HEAD:app/src/main/java/com/ajou/helptmanager/membership/view/MembershipAdapter.kt
-package com.ajou.helptmanager.membership.view
-========
 package com.ajou.helptmanager.home.adapter
->>>>>>>> origin/develop:app/src/main/java/com/ajou/helptmanager/home/adapter/MembershipAdapter.kt
-
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
-<<<<<<<< HEAD:app/src/main/java/com/ajou/helptmanager/membership/view/MembershipAdapter.kt
-import com.ajou.helptmanager.membership.model.Membership
-========
-import com.ajou.helptmanager.home.model.Membership
->>>>>>>> origin/develop:app/src/main/java/com/ajou/helptmanager/home/adapter/MembershipAdapter.kt
-
+import com.ajou.helptmanager.home.model.product.Membership
 
 class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(
     MembershipDiffCallback
@@ -45,7 +35,7 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
 
     override fun onBindViewHolder(holder: MembershipViewHolder, position: Int) {
         val membership = getItem(position)
-        holder.title.text = membership.day
+        holder.title.text = membership.months
         holder.price.text = membership.price
         holder.month_price.text = membership.month_price
         holder.moreButton.setOnClickListener{
@@ -55,10 +45,15 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
 
     }
 
+    fun addItem(membership: Membership) {
+        val currentList = currentList.toMutableList()
+        currentList.add(membership)
+        submitList(currentList)
+    }
     companion object MembershipDiffCallback : DiffUtil.ItemCallback<Membership>() {
         override fun areItemsTheSame(oldItem: Membership, newItem: Membership): Boolean {
             // 아이템 동일성 검사 코드
-            return oldItem.id == newItem.id
+            return oldItem.product_id == newItem.product_id
         }
 
         override fun areContentsTheSame(oldItem: Membership, newItem: Membership): Boolean {

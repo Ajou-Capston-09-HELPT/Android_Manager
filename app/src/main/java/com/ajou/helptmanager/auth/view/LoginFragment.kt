@@ -82,6 +82,12 @@ class LoginFragment : Fragment() {
 //            }
         }
         binding.nextBtn.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                UserDataStore().saveGymId(4)
+            }
+
+
+            /*
             // 카카오톡 설치 확인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext!!)) {
                 Log.d(ContentValues.TAG, "유저가 카카오톡 설치했음")
@@ -139,6 +145,7 @@ class LoginFragment : Fragment() {
                     callback = mCallback
                 ) // 카카오 이메일 로그인
             }
+            */
         }
     }
 

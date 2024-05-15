@@ -11,12 +11,11 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
-import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
-import com.ajou.helptmanager.home.model.GymEquipment
+import com.ajou.helptmanager.home.model.product.GymEquipment
 import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.network.RetrofitInstance
@@ -54,6 +53,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
             gymId = dataStore.getGymId()
             val equipDeferred = async { equipmentService.getAllEquipments(accessToken!!) }
             val equipResponse = equipDeferred.await()
+
             if (equipResponse.isSuccessful) {
                 Log.d("equipResponse",equipResponse.body()?.data.toString())
                 list = equipResponse.body()?.data!!

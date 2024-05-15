@@ -1,5 +1,8 @@
-import com.ajou.helptmanager.membership.model.ProductRequest
-import com.ajou.helptmanager.membership.model.ProductResponse
+import com.ajou.helptmanager.network.model.AllProductsResponse
+import com.ajou.helptmanager.home.model.product.ProductRequest
+import com.ajou.helptmanager.home.model.product.ProductResponseData
+import com.ajou.helptmanager.network.model.DeleteProductResponse
+import com.ajou.helptmanager.network.model.ProductResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -7,24 +10,28 @@ interface ProductService {
     @GET("/products/{gymId}")
     suspend fun getProductList(
         @Header("Authorization") accessToken: String,
-        @Path("gymId") gymId: Long
-    ): Response<List<ProductResponse>>
+        @Path("gymId") gymId: Int?
+    ): Response<AllProductsResponse>
 
     @POST("/products/{gymId}")
     suspend fun addProduct(
-        @Path("gymId") gymId: Long,
+        @Header("Authorization") accessToken: String,
+        @Path("gymId") gymId: Int?,
         @Body productRequest: ProductRequest
     ): Response<ProductResponse>
 
     @PUT("/products/{gymId}/{productId}")
     suspend fun modifyProduct(
-        @Path("gymId") gymId: Long,
-        @Path("productId") productId: Long,
+        @Header("Authorization") accessToken: String,
+        @Path("gymId") gymId: Int?,
+        @Path("productId") productId: Int?,
         @Body productRequest: ProductRequest
     ): Response<ProductResponse>
 
     @DELETE("/products/{gymId}/{productId}")
     suspend fun removeProduct(
-        @Path("productId") productId: Long
-    ): Response<Boolean>
+        @Header("Authorization") accessToken: String,
+        @Path("gymId") gymId: Int?,
+        @Path("productId") productId: Int?
+    ): Response<DeleteProductResponse>
 }
