@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.datastore.dataStore
@@ -22,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.Calendar
 
@@ -45,11 +47,11 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
-
-
         CoroutineScope(Dispatchers.IO).launch {
             val accessToken = dataStore.getAccessToken()
-            val memberId = 1 //임시 데이터
+
+            val memberId = 1 //임시 데이터 => 선택한 유저의 ID 불러오는 로직 추가
+
             if (accessToken != null) {
                 val memberInfoDeferred =
                     async { memberService.getMemberInfo(accessToken, memberId.toString()) }
@@ -64,7 +66,9 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         memberInfoBody.getJSONObject("data").getString("startDate"),
                         memberInfoBody.getJSONObject("data").getString("endDate")
                     )
-                    Log.d("MemberDetail", memberInfo.toString())
+                    withContext(Dispatchers.Main) {
+                        updateMemberInfoUI(view, memberInfo)
+                    }
                 }
             }
         }
@@ -99,6 +103,19 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         return view
     }
 
+    private fun updateMemberInfoUI(view: View, memberInfo: MemberDetail) {
+        val tvMemberDetailName: TextView = view.findViewById(R.id.tvMemberDetailNameContent)
+        val tvMemberDetailGender: TextView = view.findViewById(R.id.tvMemberDetailGenderContent)
+        val tvMemberDetailHeight: TextView = view.findViewById(R.id.tvMemberDetailHeight)
+        val tvMemberDetailWeight: TextView = view.findViewById(R.id.tvMemberDetailWeight)
+        val tvMemberDetailMembershipPeriod: TextView = view.findViewById(R.id.tvMemberDetailMembershipPeriod)
+
+        tvMemberDetailName.text = memberInfo.userName
+        tvMemberDetailGender.text = memberInfo.gender
+        tvMemberDetailHeight.text = memberInfo.height
+        tvMemberDetailWeight.text = memberInfo.weight
+        tvMemberDetailMembershipPeriod.text = "${memberInfo.startDate} ~ ${memberInfo.endDate}"
+    }
 
     private fun showMemberExerciseRecord(){
         findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment)

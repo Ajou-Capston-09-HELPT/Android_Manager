@@ -81,6 +81,7 @@
         app:layout_constraintTop_toBottomOf="@id/memberDetailNameText">
 
         <TextView
+            android:id="@+id/tvMemberDetailNameContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -147,6 +148,7 @@
         app:layout_constraintTop_toBottomOf="@id/memberDetailGenderText">
 
         <TextView
+            android:id="@+id/tvMemberDetailGenderContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -287,7 +289,7 @@
         app:layout_constraintTop_toBottomOf="@id/memberDetailMembershipText">
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/tvMemberDetailMembershipPeriod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
