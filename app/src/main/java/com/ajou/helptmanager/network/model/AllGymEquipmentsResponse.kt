@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.network.api
+package com.ajou.helptmanager.network.model
 
 import com.ajou.helptmanager.home.model.GymEquipment
 import com.google.gson.annotations.SerializedName

@@ -2,6 +2,7 @@ package com.ajou.helptmanager.network.api
 
 import com.ajou.helptmanager.network.model.GymRegisteredInfoResponse
 import com.ajou.helptmanager.home.model.RegisterGymInfo
+import com.ajou.helptmanager.network.model.AllGymEquipmentsResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
