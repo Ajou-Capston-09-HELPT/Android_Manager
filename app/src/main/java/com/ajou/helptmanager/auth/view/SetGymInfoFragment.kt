@@ -15,11 +15,10 @@ import com.ajou.helptmanager.*
 import com.ajou.helptmanager.databinding.FragmentSetGymInfoBinding
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.GymService
-import com.ajou.helptmanager.network.model.GymAddress
-import com.ajou.helptmanager.network.model.RegisterGymInfo
+import com.ajou.helptmanager.home.model.GymAddress
+import com.ajou.helptmanager.home.model.RegisterGymInfo
 import com.skt.Tmap.TMapTapi
 import kotlinx.coroutines.*
-import kotlin.math.log
 
 
 class SetGymInfoFragment : Fragment() {

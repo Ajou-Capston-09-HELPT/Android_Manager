@@ -177,6 +177,7 @@ class LoginFragment : Fragment() {
         val jsonObject = JsonObject().apply {
             addProperty("kakaoId", id)
         }
+        Log.d("kakaoid",id.toString())
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
         CoroutineScope(Dispatchers.IO).launch{
             val loginDeferred = async {managerService.login(requestBody) }
@@ -184,6 +185,7 @@ class LoginFragment : Fragment() {
             if (loginResponse.isSuccessful) {
                 val tokenBody = JSONObject(loginResponse.body()?.string())
                 val accessToken = "Bearer "+tokenBody.getJSONObject("data").getString("accessToken")
+                Log.d("tokenBody",tokenBody.toString())
                 dataStore.saveAccessToken(accessToken)
                 dataStore.saveRefreshToken("Bearer "+tokenBody.getJSONObject("data").getString("refreshToken"))
                 val checkGymDeferred = async { gymService.getGymStatus(accessToken) }
@@ -191,21 +193,40 @@ class LoginFragment : Fragment() {
                 var hasGym = "null"
                 if (checkGymResponse.isSuccessful) {
                     hasGym = JSONObject(checkGymResponse.body()?.string()).getJSONObject("data").getString("status")
+                    if (hasGym == "Approved"){
+                        val idDeferred = async { managerService.getGymId(accessToken) }
+                        val idResponse = idDeferred.await()
+                        if (idResponse.isSuccessful){
+                            val idBody = JSONObject(idResponse.body()?.string())
+                            Log.d("idBody success",idBody.toString())
+                            dataStore.saveGymId(idBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt())
+                            val infoDeferred = async { gymService.getGymInfo(accessToken, idBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt()) }
+                            val infoResponse = infoDeferred.await()
+                            if (infoResponse.isSuccessful){
+                                Log.d("infoBody success",infoResponse.body().toString())
+                                dataStore.saveUserName(infoResponse.body()!!.data.gymName)
+                            }
+                        }
+                    }
+                }else{
+                    Log.d("checkGymResponse fail",checkGymResponse.errorBody()?.string().toString())
                 }
                 withContext(Dispatchers.Main){
                     when(hasGym){
                         "Unregistered" -> {
                             findNavController().navigate(R.id.action_loginFragment_to_setBizInfoFragment)
                         }
-                        "Registered" -> {
+                        "Approved" -> {
                             val intent = Intent(mContext,HomeActivity::class.java)
                             startActivity(intent)
                         }
                         "Pending" -> {
                             findNavController().navigate(R.id.action_loginFragment_to_pendingFragment)
                         }
+                        "Rejected" -> {
+                            // ...
+                        }
                     }
-
                 }
             }else{
                 val registerDeferred = async { managerService.register(requestBody) }
@@ -217,6 +238,8 @@ class LoginFragment : Fragment() {
                     withContext(Dispatchers.Main){
                         findNavController().navigate(R.id.action_loginFragment_to_setBizInfoFragment)
                     }
+                }else{
+                    Log.d("registerResponse faill",registerResponse.errorBody()?.string().toString())
                 }
             }
         }

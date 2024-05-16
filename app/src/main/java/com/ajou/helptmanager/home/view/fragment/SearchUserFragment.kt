@@ -48,12 +48,12 @@ class SearchUserFragment : Fragment(){
         viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         _binding = FragmentSearchUserBinding.inflate(layoutInflater, container, false)
 
-        viewModel.userInfo.observe(viewLifecycleOwner, Observer {
-            if (viewModel.userInfo.value != null){
-                if (viewModel.userInfo.value?.ticket == null) {
-                    findNavController().navigate(R.id.action_searchUserFragment_to_addUserFragment)
-                } else {
+        viewModel.userId.observe(viewLifecycleOwner, Observer {
+            if (viewModel.userId.value != null){
+                if (viewModel.admissionId.value == null) {
                     // TODO 회원 상세 조회로 이동
+                } else {
+                    findNavController().navigate(R.id.action_searchUserFragment_to_addUserFragment)
                 }
             }
         })

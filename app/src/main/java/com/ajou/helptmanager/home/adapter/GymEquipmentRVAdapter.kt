@@ -15,10 +15,10 @@ import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.fragment.EquipmentEditBottomSheetFragment
 import com.ajou.helptmanager.home.view.fragment.EquipmentListFragment
 
-class EquipmentRVAdapter(val context: Context, var list: List<Equipment>, val type : String, val link: AdapterToFragment): RecyclerView.Adapter<EquipmentRVAdapter.ViewHolder>(){
+class GymEquipmentRVAdapter(val context: Context, var list: List<GymEquipment>, val type : String, val link: AdapterToFragment): RecyclerView.Adapter<GymEquipmentRVAdapter.ViewHolder>(){
 
     inner class ViewHolder(val binding:ItemEquipmentBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Equipment) {
+        fun bind(item: GymEquipment) {
             when(type) {
                 "search" -> {
                     binding.more.visibility = View.VISIBLE
@@ -45,12 +45,12 @@ class EquipmentRVAdapter(val context: Context, var list: List<Equipment>, val ty
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): EquipmentRVAdapter.ViewHolder {
+    ): GymEquipmentRVAdapter.ViewHolder {
         val binding = ItemEquipmentBinding.inflate(LayoutInflater.from(context),parent,false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: EquipmentRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GymEquipmentRVAdapter.ViewHolder, position: Int) {
         holder.bind(list[position])
     }
 
@@ -58,7 +58,7 @@ class EquipmentRVAdapter(val context: Context, var list: List<Equipment>, val ty
         return list.size
     }
 
-    fun updateList(newList: List<Equipment>) {
+    fun updateList(newList: List<GymEquipment>) {
         list = newList
         notifyDataSetChanged()
     }

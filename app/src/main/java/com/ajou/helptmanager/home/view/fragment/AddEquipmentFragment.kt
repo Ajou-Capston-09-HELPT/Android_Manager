@@ -21,6 +21,7 @@ import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
+import com.ajou.helptmanager.network.api.GymEquipmentService
 import kotlinx.coroutines.*
 
 class AddEquipmentFragment : Fragment(), AdapterToFragment {
@@ -30,6 +31,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private lateinit var adapter : EquipmentRVAdapter
     private var list = emptyList<Equipment>()
     private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
+    private val gymEquipmentService = RetrofitInstance.getInstance().create(GymEquipmentService::class.java)
     private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId : Int? = null
@@ -83,7 +85,10 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
 
     }
 
-    override fun getSelectedItem(data: UserInfo) {
+    override fun getSelectedItem(userId: Int, admissionId: Int?) {
+    }
+
+    override fun getSelectedItem(data: GymEquipment, position: Int) {
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {
@@ -103,8 +108,8 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
 
     private fun postEquipmentApi(data: Equipment){
         CoroutineScope(Dispatchers.IO).launch {
-            val equipment = GymEquipment(data.equipmentId, gymId!!, data.customCount, data.customSet, data.customWeight )
-            val postEquipDeferred = async { equipmentService.postEquipment(accessToken, equipment) }
+            Log.d("gymId",gymId.toString())
+            val postEquipDeferred = async { gymEquipmentService.postGymEquipment(accessToken, data) }
             val postEquipResponse = postEquipDeferred.await()
             if (postEquipResponse.isSuccessful){
                 Log.d("postEquipResponse","")

@@ -3,6 +3,7 @@ package com.ajou.helptmanager.home.view.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,8 +41,10 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         CoroutineScope(Dispatchers.IO).launch {
             userName = dataStore.getUserName()
+            Log.d("gymId is",dataStore.getGymId().toString())
             withContext(Dispatchers.Main) {
                 binding.greetMsg.text = String.format(mContext!!.resources.getString(R.string.home_greet_msg),userName)
+                Log.d("kakaoid",dataStore.getKakaoId().toString())
             }
         }
         return binding.root

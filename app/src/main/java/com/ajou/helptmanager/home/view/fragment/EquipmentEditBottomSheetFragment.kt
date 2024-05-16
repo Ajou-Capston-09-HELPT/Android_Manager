@@ -61,7 +61,12 @@ class EquipmentEditBottomSheetFragment(val setting: List<Int>,private val callba
                     callback(value)
                 }
                 dialog.show(requireActivity().supportFragmentManager, "setting")
+        }
 
+        binding.delete.setOnClickListener {
+            val value = listOf<Int>(-1,-1,-1)
+            dismiss()
+            callback(value)
         }
     }
 

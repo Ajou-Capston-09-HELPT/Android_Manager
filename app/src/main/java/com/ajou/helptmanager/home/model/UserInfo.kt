@@ -1,8 +1,10 @@
 package com.ajou.helptmanager.home.model
 
 data class UserInfo(
-    val name: String,
-    val ticket : String?,
+    val userName: String,
+    val gender : String,
+    val height : Int,
+    val weight : Int,
     var startDate : String?,
     var endDate : String?
 )
