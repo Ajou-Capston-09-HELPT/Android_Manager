@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.network.model
+package com.ajou.helptmanager.home.model
 
 data class GymAddress(
     val fullAddress : String,

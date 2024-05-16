@@ -1,7 +1,7 @@
 package com.ajou.helptmanager.network.api
 
-import com.ajou.helptmanager.network.model.AllEquipmentsResponse
-import com.ajou.helptmanager.network.model.RegisterGymInfo
+import com.ajou.helptmanager.network.model.GymRegisteredInfoResponse
+import com.ajou.helptmanager.home.model.RegisterGymInfo
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -25,8 +25,8 @@ interface GymService {
     @GET("gyms/{gym_id}")
     suspend fun getGymInfo(
         @Header("Authorization") accessToken : String,
-        @Path("gym_id") gymId : String
-    ) : Response<ResponseBody>
+        @Path("gym_id") gymId : Int
+    ) : Response<GymRegisteredInfoResponse>
 
     @GET("gyms/status")
     suspend fun getGymStatus(
@@ -37,5 +37,5 @@ interface GymService {
     suspend fun getAllGymEquipments(
         @Header("Authorization") accessToken : String,
         @Path("gymId") gymId : Int
-    ):Response<AllEquipmentsResponse>
+    ):Response<AllGymEquipmentsResponse>
 }

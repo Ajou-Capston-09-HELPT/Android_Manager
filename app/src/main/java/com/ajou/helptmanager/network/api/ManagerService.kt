@@ -29,7 +29,7 @@ interface ManagerService {
     ): Response<ResponseBody>
 
     @GET("managers")
-    suspend fun getGymInfo(
+    suspend fun getGymId(
         @Header("Authorization") accessToken: String
     ): Response<ResponseBody>
 

@@ -1,31 +1,23 @@
 package com.ajou.helptmanager.home.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.AdapterToFragment
-import com.ajou.helptmanager.auth.model.Gym
+import com.ajou.helptmanager.home.model.PendingUserInfo
 import com.ajou.helptmanager.databinding.ItemUserInfoBinding
-import com.ajou.helptmanager.home.model.UserInfo
-import com.ajou.helptmanager.home.view.fragment.SearchUserFragment
 
-class UserInfoRVAdapter(val context: Context, var list: List<UserInfo>, val link: AdapterToFragment) :
- RecyclerView.Adapter<UserInfoRVAdapter.ViewHolder>() {
+class PendingUserInfoRVAdapter(val context: Context, var list: List<PendingUserInfo>, val link: AdapterToFragment) :
+ RecyclerView.Adapter<PendingUserInfoRVAdapter.ViewHolder>() {
 
      inner class ViewHolder(val binding: ItemUserInfoBinding) :
              RecyclerView.ViewHolder(binding.root) {
-                 fun bind(item: UserInfo) {
-                     binding.name.text = item.name
-                     if (item.ticket != null) {
-                         binding.ticket.text = item.ticket
-                         val period = item.startDate + "~" + item.endDate
-                         binding.period.text = period
-                     }
+                 fun bind(item: PendingUserInfo) {
+                     binding.name.text = item.userName
 
                      binding.item.setOnClickListener {
-                         link.getSelectedItem(item)
+                         link.getSelectedItem(item.memberId,item.gymAdmissionId)
                      }
                  }
              }
@@ -43,8 +35,13 @@ class UserInfoRVAdapter(val context: Context, var list: List<UserInfo>, val link
         holder.bind(list[position])
     }
 
-    fun updateList(newList: List<UserInfo>) {
+    fun updateList(newList: List<PendingUserInfo>) {
         list = newList
+        notifyDataSetChanged()
+    }
+
+    fun filterList(keyword:String){
+        list = list.filter { it.userName.contains(keyword)  }
         notifyDataSetChanged()
     }
 }

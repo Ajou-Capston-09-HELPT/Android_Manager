@@ -10,6 +10,7 @@ properties.load(project.rootProject.file('apikey.properties').newDataInputStream
 def native_api_key = properties.getProperty('native_api_key')
 def redirect_uri = properties.getProperty('redirect_uri')
 def tmap_api_key = properties.getProperty('tmap_api_key')
+def base_url = properties.getProperty('base_url')
 
 android {
     namespace 'com.ajou.helptmanager'
@@ -27,6 +28,7 @@ android {
         buildConfigField "String", "NATIVE_API_KEY", native_api_key
         buildConfigField "String", "REDIRECT_URI", redirect_uri
         buildConfigField "String", "TMAP_API_KEY", tmap_api_key
+        buildConfigField "String", "BASE_URL", base_url
 
         manifestPlaceholders = [NATIVE_API_KEY : native_api_key]
     }
