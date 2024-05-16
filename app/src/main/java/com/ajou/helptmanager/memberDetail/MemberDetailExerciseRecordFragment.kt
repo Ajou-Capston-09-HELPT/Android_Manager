@@ -13,11 +13,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.MemberService
+import com.ajou.helptmanager.network.api.RecordService
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class MemberDetailExerciseRecordFragment : Fragment() {
 
+
+    private val recordService = RetrofitInstance.getInstance().create(RecordService::class.java)
+    private val dataStore = UserDataStore()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var exerciseRecordAdapter: ExerciseRecordAdapter
@@ -25,6 +38,8 @@ class MemberDetailExerciseRecordFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
     }
 
     override fun onCreateView(
@@ -32,6 +47,13 @@ class MemberDetailExerciseRecordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_member_detail_exercise_record, container, false)
+
+
+        val memberId = arguments?.getInt("memberId")
+        Log.d("ExerciseRecord", "Member ID: $memberId")
+
+
+
 
         // RecyclerView 초기화
         recyclerView = view.findViewById(R.id.rvExerciseRecords)
