@@ -46,39 +46,93 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:gravity="center_vertical"
+                    >
                 <TextView
                     android:id="@+id/textViewMembershipTitle"
-                    android:layout_width="226dp"
-                    android:layout_height="29dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:height="29sp"
+                    android:fontFamily="@font/pretendard"
+                    android:gravity="top"
+                    android:textAppearance="@style/styleMembershipTitle"
+                    />
+
+                <TextView
+                    android:id="@+id/textViewMembershipTitle_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:height="29sp"
                     android:fontFamily="@font/pretendard"
                     android:gravity="top"
                     android:text="@string/stringMembershipTitle"
                     android:textAppearance="@style/styleMembershipTitle"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginStart="4dp"
+                    />
 
-                <TextView
-                    android:id="@+id/textViewMembershipPrice"
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/stringMembershipPrice"
-                    android:textAppearance="@style/styleMembershipPrice"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:orientation="horizontal"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:gravity="center_vertical"
+                    app:layout_constraintEnd_toEndOf="@id/membershipName"
+                    >
+                    <TextView
+                        android:id="@+id/textViewMembershipPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="@style/styleMembershipPrice"
+                         />
+                    <TextView
+                        android:id="@+id/textViewMembershipPrice_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/stringMembershipPrice"
+                        android:textAppearance="@style/styleMembershipPrice"
+                        android:layout_marginStart="4dp"
+                        />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/textViewMembershipMonthPrice"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right|bottom"
-                android:text="@string/stringMembershipMonthPrice"
-                android:textAppearance="@style/styleMembershipMonthPrice"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:orientation="horizontal"
 
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+                <TextView
+                    android:id="@+id/textViewMembershipMonthPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|bottom"
+                    android:textAppearance="@style/styleMembershipMonthPrice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:id="@+id/textViewMembershipMonthPrice_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|bottom"
+                    android:text="@string/stringMembershipMonthPrice"
+                    android:textAppearance="@style/styleMembershipMonthPrice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

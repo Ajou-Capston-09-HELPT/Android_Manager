@@ -46,8 +46,8 @@ object RetrofitInstance {
             override fun convert(value: ResponseBody) : Any? =
                 if (value.contentLength() != 0L) nextResponseBodyConverter.convert(value) else null
         }
-
     }
 
+    val productService: ProductService = client.create(ProductService::class.java)
 }
 

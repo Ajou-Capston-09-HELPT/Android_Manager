@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,22 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.home.model.product.ProductRequest
+import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class RegisterMembershipDialog : DialogFragment() {
+class RegisterMembershipDialog(
+    private val viewModel: MembershipViewModel
+) : DialogFragment() {
+
+    private val dataStroe = UserDataStore()
+    private lateinit var accessToken: String
+    private var gymId: Int? = null
 
     private lateinit var etMembershipTitle: EditText
     private lateinit var etMembershipPrice: EditText
@@ -26,6 +40,7 @@ class RegisterMembershipDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_register_membership, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,10 +127,16 @@ class RegisterMembershipDialog : DialogFragment() {
         val membershipPrice = etMembershipPrice.text.toString().trim().replace(",".toRegex(), "").toIntOrNull()
 
         if (membershipTitle.isNotEmpty() && membershipPrice != null) {
-            // 회원권 등록 로직 구현예정
+            val intMembershipTitle = membershipTitle.toInt()
+            CoroutineScope(Dispatchers.IO).launch {
+                accessToken = dataStroe.getAccessToken().toString()
+                gymId = dataStroe.getGymId()
+                viewModel.addProduct(accessToken, gymId, ProductRequest(intMembershipTitle, membershipPrice))
+            }
             dismiss()
-        } else {
-            // 입력값 오류 처리예정
+        }
+        else {
+            Log.d("RegisterMembershipDialog", "registerMembership: title or price is empty")
             dismiss()
         }
     }

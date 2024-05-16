@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.home.model
+package com.ajou.helptmanager.home.model.product
 
 data class GymEquipment(
     val gymEquipmentId: Int,

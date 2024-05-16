@@ -1,6 +1,5 @@
 package com.ajou.helptmanager.network.model
 
-import com.ajou.helptmanager.home.model.Membership
 import com.ajou.helptmanager.home.model.UserMembership
 import com.google.gson.annotations.SerializedName
 

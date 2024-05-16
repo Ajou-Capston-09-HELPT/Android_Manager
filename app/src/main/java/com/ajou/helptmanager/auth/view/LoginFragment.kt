@@ -82,6 +82,16 @@ class LoginFragment : Fragment() {
 //            }
         }
         binding.nextBtn.setOnClickListener {
+
+            /* 임시 토큰 발행용
+            CoroutineScope(Dispatchers.IO).launch {
+                UserDataStore().saveGymId(4)
+            }
+            callLoginApi("3443165759")
+            */
+
+
+            /*
             // 카카오톡 설치 확인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext!!)) {
                 Log.d(ContentValues.TAG, "유저가 카카오톡 설치했음")
@@ -139,6 +149,7 @@ class LoginFragment : Fragment() {
                     callback = mCallback
                 ) // 카카오 이메일 로그인
             }
+            */
         }
     }
 

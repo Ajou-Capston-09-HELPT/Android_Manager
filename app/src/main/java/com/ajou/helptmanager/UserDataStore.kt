@@ -1,6 +1,7 @@
 package com.ajou.helptmanager
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
@@ -113,6 +114,22 @@ class UserDataStore() {
                 pref.clear()
             }
         }
+    }
+
+    suspend fun printAllValues() {
+        val accessToken = getAccessToken()
+        val refreshToken = getRefreshToken()
+        val gymStatus = getGymStatus()
+        val userName = getUserName()
+        val kakaoId = getKakaoId()
+        val gymId = getGymId()
+
+        Log.d("UserDataStore", "Access Token: $accessToken")
+        Log.d("UserDataStore", "Refresh Token: $refreshToken")
+        Log.d("UserDataStore", "Gym Status: $gymStatus")
+        Log.d("UserDataStore", "User Name: $userName")
+        Log.d("UserDataStore", "Kakao ID: $kakaoId")
+        Log.d("UserDataStore", "Gym ID: $gymId")
     }
 
 }
