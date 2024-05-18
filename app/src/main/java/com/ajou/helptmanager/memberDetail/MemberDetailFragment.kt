@@ -11,6 +11,8 @@ import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
@@ -41,21 +43,13 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private val memberId: Int = 1 //임시 데이터 ==> 선택한 유저 ID 불러오는 로직 추가
     private var membershipId: Int = 0 //임시 데이터 ==> 선택한 유저의 membership ID 불러오는 로직 추가
 
+    private val _memberInfo = MutableLiveData<MemberDetail>()
+    val memberInfo: LiveData<MemberDetail> = _memberInfo
+
     private var selectedDateString: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_member_detail, container, false)
-
-        val showExerciseRecord: ConstraintLayout = view.findViewById(R.id.btnShowExerciseRecord)
-        val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
-        val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
         CoroutineScope(Dispatchers.IO).launch {
             val accessToken = dataStore.getAccessToken()
@@ -76,14 +70,34 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         memberInfoBody.getJSONObject("data").getString("startDate"),
                         memberInfoBody.getJSONObject("data").getString("endDate")
                     )
+                    _memberInfo.postValue(memberInfo)
                     membershipId = memberInfoBody.getJSONObject("data").getInt("membershipId")
-
-                    withContext(Dispatchers.Main) {
-                        updateMemberInfoUI(view, memberInfo)
-                    }
+                } else {
+                    Log.d(
+                        "MemberDetail",
+                        "Failed to get member info. HTTP status code: ${memberInfoResponse.code()}, accessToken:$accessToken, memberId:$memberId ${
+                            memberInfoResponse.errorBody()?.string()
+                        }"
+                    )
                 }
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_member_detail, container, false)
+
+        val showExerciseRecord: ConstraintLayout = view.findViewById(R.id.btnShowExerciseRecord)
+        val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
+        val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
+
+        memberInfo.observe(viewLifecycleOwner) { info ->
+            updateMemberInfoUI(view, info)
+        }
+
 
         showMemberDetailExerciseRecord(showExerciseRecord)
 
@@ -144,6 +158,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private fun showMemberExerciseRecord(membershipId: Int){
         val bundle = Bundle().apply {
             putInt("memberId", memberId)
+            putString("memberName", _memberInfo.value?.userName)
         }
         findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment, bundle)
     }
