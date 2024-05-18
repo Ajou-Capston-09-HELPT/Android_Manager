@@ -18,13 +18,12 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.home.model.product.ProductRequest
 import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
-import com.google.android.material.shape.ShapeAppearanceModel.CornerSizeUnaryOperator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ModifyMembershipDialog(
-    private val index: Int,
+    private val productId: Int,
     private val viewModel: MembershipViewModel
     ) : DialogFragment() {
 
@@ -127,7 +126,7 @@ class ModifyMembershipDialog(
             CoroutineScope(Dispatchers.IO).launch {
                 accessToken = dataStroe.getAccessToken().toString()
                 gymId = dataStroe.getGymId()
-                viewModel.modifyProduct(accessToken, gymId, viewModel.membershipList.value?.get(index)?.product_id, ProductRequest(membershipTitle.toInt(), membershipPrice))
+                viewModel.modifyProduct(accessToken, gymId, productId, ProductRequest(membershipTitle.toInt(), membershipPrice.toInt()))
             }
             dismiss()
         } else {

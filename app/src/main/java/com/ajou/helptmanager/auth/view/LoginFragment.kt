@@ -83,12 +83,12 @@ class LoginFragment : Fragment() {
         }
         binding.nextBtn.setOnClickListener {
 
-            /* 임시 토큰 발행용
+            // 임시 토큰 발행용
             CoroutineScope(Dispatchers.IO).launch {
                 UserDataStore().saveGymId(4)
             }
             callLoginApi("3443165759")
-            */
+
 
 
             /*

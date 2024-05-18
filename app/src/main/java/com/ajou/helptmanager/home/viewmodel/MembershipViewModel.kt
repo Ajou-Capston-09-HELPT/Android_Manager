@@ -52,11 +52,14 @@
 
         fun addProduct(accessToken: String, gymId: Int?, productRequest: ProductRequest) {
             viewModelScope.launch {
+                val currentList = _productList.value?.toMutableList() ?: mutableListOf()
                 val addProductDeferred = async { productService.addProduct(accessToken!!, gymId, productRequest) }
                 val addProductResponse = addProductDeferred.await()
                 if (addProductResponse.isSuccessful) {
                     Log.d("addProductResponse", addProductResponse.body().toString())
                     _addProductResponseData.postValue(addProductResponse.body()?.data)
+                    currentList.add(addProductResponse.body()?.data!!)
+                    _productList.postValue(currentList) // Update the product list
                     _addProductResult.postValue(true)
                 }
                 else {
@@ -68,11 +71,17 @@
 
         fun modifyProduct(accessToken: String, gymId: Int?, productId: Int?, productRequest: ProductRequest) {
             viewModelScope.launch {
+                val currentList = _productList.value?.toMutableList() ?: mutableListOf()
                 val modifyProductDeferred = async { productService.modifyProduct(accessToken!!, gymId, productId, productRequest) }
                 val modifyProductResponse = modifyProductDeferred.await()
                 if (modifyProductResponse.isSuccessful) {
                     Log.d("modifyProductResponse", modifyProductResponse.body().toString())
                     _modifyProductResponseData.postValue(modifyProductResponse.body()?.data)
+                    val index = currentList.indexOfFirst { it.productId.toInt() == productId }
+                    if (index != -1) {
+                        currentList[index] = modifyProductResponse.body()?.data!!
+                        _productList.postValue(currentList) // Update the product list
+                    }
                 }
                 else {
                     Log.d("modifyProductResponse", modifyProductResponse.body().toString())
@@ -82,12 +91,15 @@
 
         fun removeProduct(accessToken: String, gymId: Int?, productId: Int?) {
             viewModelScope.launch {
+                val currentList = _productList.value?.toMutableList() ?: mutableListOf()
                 val removeProductDeferred = async { productService.removeProduct(accessToken!!, gymId, productId) }
                 val removeProductResponse = removeProductDeferred.await()
                 if (removeProductResponse.isSuccessful) {
                     Log.d("removeProductResponse", removeProductResponse.body().toString())
                     Log.d("removeProductResponse", productId.toString())
                     _removeProductResponse.postValue(removeProductResponse.body()?.data)
+                    currentList.removeIf { it.productId.toString() == productId.toString() }
+                    _productList.postValue(currentList) // Update the product list
                     _removeProductResult.postValue(true)
                 } else {
                     Log.d("removeProductResponse", removeProductResponse.body().toString())
@@ -95,17 +107,6 @@
                 }
             }
         }
-
-
-        /*
-        private fun <T> handleResponse(response: Response<T>, liveData: MutableLiveData<T>) {
-            if (response.isSuccessful) {
-                liveData.postValue(response.body())
-            } else {
-                // 오류 처리 로직 추가
-            }
-        }
-         */
 
 
         private fun convertProductResponseToMembership(productResponseData: ProductResponseData): Membership {
