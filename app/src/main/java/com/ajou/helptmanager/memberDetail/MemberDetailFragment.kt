@@ -62,9 +62,17 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val memberInfoResponse = memberInfoDeferred.await()
                 if (memberInfoResponse.isSuccessful) {
                     val memberInfoBody = JSONObject(memberInfoResponse.body()?.string())
+
+                    val gender = memberInfoBody.getJSONObject("data").getString("gender")
+                    val translatedGender = when (gender) {
+                        "WOMEN" -> "여성"
+                        "MAN" -> "남성"
+                        else -> gender // If gender is neither "WOMAN" nor "MAN", keep the original value
+                    }
+
                     val memberInfo = MemberDetail(
                         memberInfoBody.getJSONObject("data").getString("userName"),
-                        memberInfoBody.getJSONObject("data").getString("gender"),
+                        translatedGender,
                         memberInfoBody.getJSONObject("data").getString("height"),
                         memberInfoBody.getJSONObject("data").getString("weight"),
                         memberInfoBody.getJSONObject("data").getString("startDate"),
