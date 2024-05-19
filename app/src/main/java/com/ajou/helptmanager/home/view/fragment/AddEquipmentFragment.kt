@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
@@ -22,7 +23,10 @@ import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
 import com.ajou.helptmanager.network.api.GymEquipmentService
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 
 class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private var _binding: FragmentAddEquipmentBinding? = null
@@ -109,7 +113,17 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private fun postEquipmentApi(data: Equipment){
         CoroutineScope(Dispatchers.IO).launch {
             Log.d("gymId",gymId.toString())
-            val postEquipDeferred = async { gymEquipmentService.postGymEquipment(accessToken, data) }
+            Log.d("gym data",data.toString())
+            val jsonObject = JsonObject().apply {
+                addProperty("equipmentId", data.equipmentId)
+                addProperty("gymId",gymId)
+                addProperty("customCount",data.customCount)
+                addProperty("customSet",data.customSet)
+                addProperty("customWeight",data.customWeight)
+            }
+            Log.d("kakaoid",id.toString())
+            val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+            val postEquipDeferred = async { gymEquipmentService.postGymEquipment(accessToken, requestBody) }
             val postEquipResponse = postEquipDeferred.await()
             if (postEquipResponse.isSuccessful){
                 Log.d("postEquipResponse","")

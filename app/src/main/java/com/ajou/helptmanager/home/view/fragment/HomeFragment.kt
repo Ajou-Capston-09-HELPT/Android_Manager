@@ -13,10 +13,12 @@ import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentHomeBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.QrService
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
+import kotlinx.coroutines.*
 
 class HomeFragment : Fragment() {
     private var _binding : FragmentHomeBinding? = null
@@ -24,6 +26,7 @@ class HomeFragment : Fragment() {
     private var mContext : Context? = null
     private val dataStore = UserDataStore()
     private var userName : String? = null
+    private val qrService = RetrofitInstance.getInstance().create(QrService::class.java)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,6 +67,7 @@ class HomeFragment : Fragment() {
             // TODO 이용권으로 이동
         }
         binding.drawer.qr.setOnClickListener {
+            qrScan()
             // TODO QR스캔으로 이동
         }
         binding.drawer.train.setOnClickListener {
@@ -98,5 +102,39 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
         }
 
+        binding.qrBg.setOnClickListener {
+            qrScan()
+        }
+
+    }
+
+    private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
+        ScanContract()
+    ) { result: ScanIntentResult ->
+        if (result.contents == null) {
+            Log.d("contents", result.contents)
+        } else {
+            Log.d("contents", result.contents)
+            checkValidation(result.contents)
+//            viewModel.setTrain(result.contents)
+//            Log.d("contents",result.contents)
+        }
+    }
+
+    private fun qrScan() {
+        barcodeLauncher.launch(ScanOptions())
+    }
+
+    private fun checkValidation(contents: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val gymId = dataStore.getGymId()
+            val qrValidDeferred = async { qrService.validateQr(contents,gymId!!) }
+            val qrValidResponse = qrValidDeferred.await()
+            if (qrValidResponse.isSuccessful){
+                Log.d("qrValidResponse ",qrValidResponse.body().toString())
+            }else{
+                Log.d("qrValieResponse fail",qrValidResponse.errorBody()?.string().toString())
+            }
+        }
     }
 }

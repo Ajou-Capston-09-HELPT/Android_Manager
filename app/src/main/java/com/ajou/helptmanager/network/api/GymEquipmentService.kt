@@ -31,7 +31,7 @@ interface GymEquipmentService{
     @POST("gym-equipments")
     suspend fun postGymEquipment(
         @Header("Authorization") accessToken : String,
-        @Body equipment : Equipment
+        @Body equipment : RequestBody
     ): Response<ResponseBody>
 
     @DELETE("gym-equipments/{gymEquipmentId}")
