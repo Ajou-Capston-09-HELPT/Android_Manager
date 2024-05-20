@@ -94,6 +94,7 @@ class AddUserFragment : Fragment() {
         }
 
         binding.backBtn.setOnClickListener {
+            Log.d("backbtn","")
             findNavController().navigate(R.id.action_addUserFragment_to_searchUserFragment)
         }
 

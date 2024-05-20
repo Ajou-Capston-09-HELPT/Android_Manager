@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
@@ -133,6 +134,7 @@ class HomeFragment : Fragment() {
             if (qrValidResponse.isSuccessful){
                 Log.d("qrValidResponse ",qrValidResponse.body().toString())
             }else{
+                Toast.makeText(mContext, "QR스캔에 실패하였습니다.",Toast.LENGTH_SHORT).show()
                 Log.d("qrValieResponse fail",qrValidResponse.errorBody()?.string().toString())
             }
         }

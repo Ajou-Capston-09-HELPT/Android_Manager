@@ -49,12 +49,14 @@ class SearchUserFragment : Fragment(){
         _binding = FragmentSearchUserBinding.inflate(layoutInflater, container, false)
 
         viewModel.userId.observe(viewLifecycleOwner, Observer {
-            if (viewModel.userId.value != null){
+            if (viewModel.check.value == null || viewModel.check.value == false){
                 if (viewModel.admissionId.value == null) {
                     // TODO 회원 상세 조회로 이동
                 } else {
                     findNavController().navigate(R.id.action_searchUserFragment_to_addUserFragment)
                 }
+            }else{
+                viewModel.setCheck(false)
             }
         })
         return binding.root

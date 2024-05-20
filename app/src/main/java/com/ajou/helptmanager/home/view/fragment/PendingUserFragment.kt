@@ -90,6 +90,7 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
     override fun getSelectedItem(userId: Int, admissionId: Int?) {
         viewModel.setAdmissionId(admissionId!!)
         viewModel.setUserId(userId)
+        viewModel.setCheck(true)
     }
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {
