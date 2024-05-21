@@ -115,41 +115,63 @@ class MemberDetailExerciseRecordFragment : Fragment() {
                 val accessToken = dataStore.getAccessToken().toString()
                 val memberId = arguments?.getInt("memberId")
                 val getExerciseRecordDeferred = async {
-                    recordService.getExerciseRecordDateByMemberId(
+                    recordService.getExerciseRecord(
                         accessToken,
                         memberId,
                         formattedDate
                     )
                 }
-                Log.d("ExerciseRecord", "Date: $formattedDate, Member ID: $memberId, Access Token: $accessToken, Date: $selectedDate")
+
+                Log.d(
+                    "ExerciseRecord",
+                    "Date: $formattedDate, Member ID: $memberId, Access Token: $accessToken, Date: $selectedDate"
+                )
+
                 val getExerciseRecordResponse = getExerciseRecordDeferred.await()
 
-                if (getExerciseRecordResponse.isSuccessful) {
-                    val exerciseRecordResponse = JSONObject(getExerciseRecordResponse.body()?.string())
-                    Log.d("ExerciseRecord", "Exercise Record Response: $exerciseRecordResponse")
 
-                    val exerciseRecords = exerciseRecordResponse.getJSONArray("data").let{ jsonArray ->
-                        List(jsonArray.length()) { i ->
-                            val jsonObject = jsonArray.getJSONObject(i)
-                            val equipmentResponse = equipmentService.getEquipment(accessToken, jsonObject.getInt("equipmentId"))
-                            val equipmentJSONObject = JSONObject(equipmentResponse.body()?.string())
-                            Log.d("ExerciseRecord2", "Equipment Response: $equipmentJSONObject")
-                            val equipmentName = equipmentJSONObject.getJSONObject("data").getString("equipmentName")
-                            ExerciseRecord(
-                                equipmentName,
-                                "부위(추가예정)", // TODO Part 정보 추가
-                                jsonObject.getInt("count"),
-                                jsonObject.getInt("setNumber"),
-                                "00:10:00" // TODO Time 정보 추가
-                            )
+
+
+                Log.d("ExerciseRecord", "Response: $getExerciseRecordResponse , ${getExerciseRecordResponse.errorBody()?.string()} ")
+
+                if (getExerciseRecordResponse.isSuccessful) {
+                    val exerciseRecordResponse =
+                        JSONObject(getExerciseRecordResponse.body()?.string())
+
+                    Log.d("ExerciseRecord", "Exercise Record Response: ${exerciseRecordResponse}")
+
+
+                    /*
+                    if (!exerciseRecordResponse.isNull("data")) {
+                        val exerciseRecords = exerciseRecordResponse.getJSONArray("data").let{ jsonArray ->
+                            List(jsonArray.length()) { i ->
+                                val jsonObject = jsonArray.getJSONObject(i)
+                                val equipmentResponse = equipmentService.getEquipment(accessToken, jsonObject.getInt("equipmentId"))
+                                val equipmentJSONObject = JSONObject(equipmentResponse.body()?.string())
+                                Log.d("ExerciseRecord2", "Equipment Response: $equipmentJSONObject")
+                                val equipmentName = equipmentJSONObject.getJSONObject("data").getString("equipmentName")
+                                ExerciseRecord(
+                                    equipmentName,
+                                    "부위(추가예정)", // TODO Part 정보 추가
+                                    jsonObject.getInt("count"),
+                                    jsonObject.getInt("setNumber"),
+                                    "00:10:00" // TODO Time 정보 추가
+                                )
+                            }
                         }
-                    }
-                    withContext(Dispatchers.Main) {
-                        exerciseRecordAdapter.submitList(exerciseRecords)
+                        withContext(Dispatchers.Main) {
+                            exerciseRecordAdapter.submitList(exerciseRecords)
+                        }
+                    } else {
+                        Log.d("ExerciseRecord", "No data in response")
+                        // TODO 'data'가 없는 경우에 대한 처리
                     }
                 } else {
                     Log.d("ExerciseRecord", getExerciseRecordResponse.errorBody().toString())
-                    // TODO 실패 시 실행할 로직
+                    //
+                }
+
+                     */
                 }
             }
         }

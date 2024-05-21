@@ -5,6 +5,8 @@ data class ExerciseRecordData(
     val count: Int,
     val setNumber: Int,
     val weight: Int,
+    val startdate: String,
+    val enddate: String,
     val recordDate: String,
     val successRate: Float
 )

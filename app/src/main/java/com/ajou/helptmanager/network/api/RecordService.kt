@@ -10,18 +10,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RecordService {
-    @GET("records/calender")
-    suspend fun getExerciseRecordDate(
-        @Header("Authorization") accessToken: String,
-        @Query("date") date: String
-    ): Response<ExerciseRecordResponse>
 
 
-    @POST("records/calender/members/{memberId}")
-    suspend fun getExerciseRecordDateByMemberId(
+    @POST("records/detail/members")
+    suspend fun getExerciseRecord(
         @Header("Authorization") accessToken: String,
-        @Path("memberId") memberId: Int?,
-        @Query("date") date: String
+        @Query("memberId") memberId: Int?,
+        @Query("date") date: String,
     ): Response<ResponseBody>
 
 }

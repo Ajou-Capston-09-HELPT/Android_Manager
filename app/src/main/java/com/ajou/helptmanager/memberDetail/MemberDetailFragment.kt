@@ -67,7 +67,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     val translatedGender = when (gender) {
                         "WOMEN" -> "여성"
                         "MAN" -> "남성"
-                        else -> gender // If gender is neither "WOMAN" nor "MAN", keep the original value
+                        else -> gender
                     }
 
                     val memberInfo = MemberDetail(
