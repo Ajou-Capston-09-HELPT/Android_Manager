@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -139,25 +140,37 @@ class MemberDetailExerciseRecordFragment : Fragment() {
                         JSONObject(getExerciseRecordResponse.body()?.string())
 
                     Log.d("ExerciseRecord", "Exercise Record Response: ${exerciseRecordResponse}")
-
-
-                    /*
+                    //  TODO 수정 예정
                     if (!exerciseRecordResponse.isNull("data")) {
-                        val exerciseRecords = exerciseRecordResponse.getJSONArray("data").let{ jsonArray ->
+                        val jsonArray = exerciseRecordResponse.getJSONArray("data")
+                        val exerciseRecords = if (jsonArray != null) {
                             List(jsonArray.length()) { i ->
                                 val jsonObject = jsonArray.getJSONObject(i)
                                 val equipmentResponse = equipmentService.getEquipment(accessToken, jsonObject.getInt("equipmentId"))
-                                val equipmentJSONObject = JSONObject(equipmentResponse.body()?.string())
-                                Log.d("ExerciseRecord2", "Equipment Response: $equipmentJSONObject")
-                                val equipmentName = equipmentJSONObject.getJSONObject("data").getString("equipmentName")
+                                val equipmentResponseBody = equipmentResponse.body()?.string()
+                                val equipmentName = if (equipmentResponseBody != null) {
+                                    val equipmentJSONObject = JSONObject(equipmentResponseBody)
+                                    Log.d("ExerciseRecord2", "Equipment Response: $equipmentJSONObject")
+                                    equipmentJSONObject.getJSONObject("data").getString("equipmentName")
+                                } else {
+                                    "장비 이름 없음" // 또는 적절한 기본값 설정
+                                }
+
+                                val startTime = jsonObject.getString("startTime")
+                                val endTime = jsonObject.getString("endTime")
+
+                                val duration = calculateDuration(startTime, endTime)
+
+
                                 ExerciseRecord(
                                     equipmentName,
-                                    "부위(추가예정)", // TODO Part 정보 추가
                                     jsonObject.getInt("count"),
                                     jsonObject.getInt("setNumber"),
-                                    "00:10:00" // TODO Time 정보 추가
+                                    duration
                                 )
                             }
+                        } else {
+                            emptyList()
                         }
                         withContext(Dispatchers.Main) {
                             exerciseRecordAdapter.submitList(exerciseRecords)
@@ -166,17 +179,10 @@ class MemberDetailExerciseRecordFragment : Fragment() {
                         Log.d("ExerciseRecord", "No data in response")
                         // TODO 'data'가 없는 경우에 대한 처리
                     }
-                } else {
-                    Log.d("ExerciseRecord", getExerciseRecordResponse.errorBody().toString())
-                    //
-                }
-
-                     */
                 }
             }
         }
-    }
-
+}
     private fun clickBackButton(backButton: ImageView) {
         backButton.setOnClickListener {
             backButton.alpha = 0.5f
@@ -197,4 +203,18 @@ class MemberDetailExerciseRecordFragment : Fragment() {
             view.findViewById(R.id.memberDetailExerciseRecordName)
         tvMemberDetailExerciseRecordName.text = arguments?.getString("memberName")
     }
+
+    private fun calculateDuration(startTime: String, endTime: String): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val startDate = dateFormat.parse(startTime)
+        val endDate = dateFormat.parse(endTime)
+
+        val durationMillis = endDate.time - startDate.time
+        val seconds = (durationMillis / 1000) % 60
+        val minutes = (durationMillis / (1000 * 60)) % 60
+        val hours = (durationMillis / (1000 * 60 * 60)) % 24
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.ajou.helptmanager.network.model
 
-import com.ajou.helptmanager.home.model.product.ProductResponseData
+import com.ajou.helptmanager.home.model.ProductResponseData
 import com.google.gson.annotations.SerializedName
 
 data class ProductResponse(

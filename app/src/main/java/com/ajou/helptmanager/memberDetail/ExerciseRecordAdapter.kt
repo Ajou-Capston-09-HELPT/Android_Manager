@@ -15,7 +15,6 @@ class ExerciseRecordAdapter() : ListAdapter<ExerciseRecord,ExerciseRecordAdapter
 
     class ExerciseRecordViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tvExerciseRecordName)
-        val part: TextView = view.findViewById(R.id.tvExerciseRecordPart)
         val reps: TextView = view.findViewById(R.id.tvExerciseRecordReps)
         val sets: TextView = view.findViewById(R.id.tvExerciseRecordSets)
         val time: TextView = view.findViewById(R.id.tvExerciseRecordTime)
@@ -30,7 +29,6 @@ class ExerciseRecordAdapter() : ListAdapter<ExerciseRecord,ExerciseRecordAdapter
     override fun onBindViewHolder(holder: ExerciseRecordViewHolder, position: Int) {
         val exerciseRecord = getItem(position)
         holder.name.text = "${exerciseRecord.exerciseName}"
-        holder.part.text = exerciseRecord.exercisePart
         holder.reps.text = holder.itemView.context.getString(R.string.reps_format, exerciseRecord.reps)
         holder.sets.text = holder.itemView.context.getString(R.string.sets_format, exerciseRecord.sets)
         holder.time.text = exerciseRecord.time

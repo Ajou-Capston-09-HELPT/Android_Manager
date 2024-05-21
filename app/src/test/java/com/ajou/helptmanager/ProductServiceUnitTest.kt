@@ -1,6 +1,6 @@
-import com.ajou.helptmanager.home.model.product.ProductRequest
+import com.ajou.helptmanager.home.model.ProductRequest
 import com.ajou.helptmanager.network.model.AllProductsResponse
-import com.ajou.helptmanager.home.model.product.ProductResponseData
+import com.ajou.helptmanager.home.model.ProductResponseData
 import com.ajou.helptmanager.network.model.DeleteProductResponse
 import com.ajou.helptmanager.network.model.ProductResponse
 import kotlinx.coroutines.test.runBlockingTest

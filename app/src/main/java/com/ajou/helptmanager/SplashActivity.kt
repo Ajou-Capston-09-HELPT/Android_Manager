@@ -15,6 +15,7 @@ import org.json.JSONObject
 class SplashActivity : AppCompatActivity() {
     private val managerService = RetrofitInstance.getInstance().create(ManagerService::class.java)
     private val gymService = RetrofitInstance.getInstance().create(GymService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -25,8 +26,13 @@ class SplashActivity : AppCompatActivity() {
             val accessToken = dataStore.getAccessToken()
             val gymStatus = dataStore.getGymStatus()
             val gymId = dataStore.getGymId()
+
+
+            Log.d("gymId  accessToken","$gymId  $accessToken")
+
             if (gymId == null && accessToken != null){
                 val idDeferred = async { managerService.getGymId(accessToken) }
+                Log.d("idDeferred",idDeferred.toString())
                 val idResponse = idDeferred.await()
                 if (idResponse.isSuccessful) {
                     val gymIdBody = JSONObject(idResponse.body()?.string())
@@ -71,6 +77,9 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
+
         }
+
+
     }
 }

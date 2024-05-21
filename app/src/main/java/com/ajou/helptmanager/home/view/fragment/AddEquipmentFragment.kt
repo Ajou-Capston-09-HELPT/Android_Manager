@@ -12,12 +12,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.UserDataStore
-import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
-import com.ajou.helptmanager.home.model.product.GymEquipment
-import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService

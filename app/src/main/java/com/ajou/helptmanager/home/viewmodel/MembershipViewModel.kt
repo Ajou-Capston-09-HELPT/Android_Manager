@@ -8,9 +8,9 @@
     import androidx.lifecycle.map
     import androidx.lifecycle.viewModelScope
     import com.ajou.helptmanager.UserDataStore
-    import com.ajou.helptmanager.home.model.product.Membership
-    import com.ajou.helptmanager.home.model.product.ProductRequest
-    import com.ajou.helptmanager.home.model.product.ProductResponseData
+    import com.ajou.helptmanager.home.model.Membership
+    import com.ajou.helptmanager.home.model.ProductRequest
+    import com.ajou.helptmanager.home.model.ProductResponseData
     import com.ajou.helptmanager.network.RetrofitInstance
     import kotlinx.coroutines.async
     import kotlinx.coroutines.launch
@@ -45,7 +45,8 @@
                 val productListResponse = productListDeffered.await()
                 if (productListResponse.isSuccessful) {
                     Log.d("getProductList", productListResponse.body()?.data.toString())
-                    _productList.postValue(productListResponse.body()?.data ?: emptyList())
+                    val sortedProductList = productListResponse.body()?.data?.sortedWith(compareBy { it.months }) ?: emptyList()
+                    _productList.value = sortedProductList
                 }
             }
         }
@@ -59,7 +60,8 @@
                     Log.d("addProductResponse", addProductResponse.body().toString())
                     _addProductResponseData.postValue(addProductResponse.body()?.data)
                     currentList.add(addProductResponse.body()?.data!!)
-                    _productList.postValue(currentList) // Update the product list
+                    val sortedList = currentList.sortedWith(compareBy { it.months })
+                    _productList.postValue(sortedList) // Update the product list
                     _addProductResult.postValue(true)
                 }
                 else {
@@ -80,7 +82,8 @@
                     val index = currentList.indexOfFirst { it.productId.toInt() == productId }
                     if (index != -1) {
                         currentList[index] = modifyProductResponse.body()?.data!!
-                        _productList.postValue(currentList) // Update the product list
+                        val sortedList = currentList.sortedWith(compareBy { it.months })
+                        _productList.postValue(sortedList) // Update the product list
                     }
                 }
                 else {
@@ -99,7 +102,8 @@
                     Log.d("removeProductResponse", productId.toString())
                     _removeProductResponse.postValue(removeProductResponse.body()?.data)
                     currentList.removeIf { it.productId.toString() == productId.toString() }
-                    _productList.postValue(currentList) // Update the product list
+                    val sortedList = currentList.sortedWith(compareBy { it.months })
+                    _productList.postValue(sortedList) // Update the product list
                     _removeProductResult.postValue(true)
                 } else {
                     Log.d("removeProductResponse", removeProductResponse.body().toString())

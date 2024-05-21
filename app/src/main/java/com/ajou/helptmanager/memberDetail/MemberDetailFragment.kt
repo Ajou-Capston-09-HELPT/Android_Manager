@@ -40,7 +40,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private val dataStore = UserDataStore()
 
 
-    private val memberId: Int = 1 //임시 데이터 ==> 선택한 유저 ID 불러오는 로직 추가
+    private var memberId: Int? = 1 //임시 데이터 ==> 선택한 유저 ID 불러오는 로직 추가
     private var membershipId: Int = 0 //임시 데이터 ==> 선택한 유저의 membership ID 불러오는 로직 추가
 
     private val _memberInfo = MutableLiveData<MemberDetail>()
@@ -51,10 +51,11 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        memberId = arguments?.getInt("userId")
+
+
         CoroutineScope(Dispatchers.IO).launch {
             val accessToken = dataStore.getAccessToken()
-
-            val memberId = 1 //임시 데이터 => 선택한 유저의 ID 불러오는 로직 추가
 
             if (accessToken != null) {
                 val memberInfoDeferred =
@@ -63,12 +64,12 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 if (memberInfoResponse.isSuccessful) {
                     val memberInfoBody = JSONObject(memberInfoResponse.body()?.string())
 
-                    val gender = memberInfoBody.getJSONObject("data").getString("gender")
-                    val translatedGender = when (gender) {
+                    val translatedGender = when (val gender = memberInfoBody.getJSONObject("data").getString("gender")){
                         "WOMEN" -> "여성"
                         "MAN" -> "남성"
                         else -> gender
                     }
+
 
                     val memberInfo = MemberDetail(
                         memberInfoBody.getJSONObject("data").getString("userName"),
@@ -78,8 +79,12 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         memberInfoBody.getJSONObject("data").getString("startDate"),
                         memberInfoBody.getJSONObject("data").getString("endDate")
                     )
+
+                    Log.d("MemberDetail", "Member info: $memberInfo")
+
                     _memberInfo.postValue(memberInfo)
                     membershipId = memberInfoBody.getJSONObject("data").getInt("membershipId")
+
                 } else {
                     Log.d(
                         "MemberDetail",
@@ -165,7 +170,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private fun showMemberExerciseRecord(membershipId: Int){
         val bundle = Bundle().apply {
-            putInt("memberId", memberId)
+            putInt("memberId", memberId!!)
             putString("memberName", _memberInfo.value?.userName)
         }
         findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment, bundle)
@@ -208,7 +213,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
             if (accessToken != null) {
                 val extendMembershipDeferred =
-                    async { membershipService.extendMembership(accessToken, memberId, endDate) }
+                    async { membershipService.extendMembership(accessToken, memberId!!, endDate) }
                 val extendMembershipResponse = extendMembershipDeferred.await()
                 if (extendMembershipResponse.isSuccessful) {
                     val responseBody = extendMembershipResponse.body()?.string()
