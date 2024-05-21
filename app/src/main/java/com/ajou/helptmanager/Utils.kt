@@ -19,6 +19,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import kotlin.math.ceil
 
 
 fun getFileName(uri: Uri, activity: Activity): String? {
@@ -109,4 +111,11 @@ fun getWindowSize(context: Context): Point{
 //    size.x  디바이스 가로 길이
 //    size.y  디바이스 세로 길이
     return size
+}
+
+fun calDate(stD : String, endD: String):Int{
+    val sf = SimpleDateFormat("yyyy-MM-dd")
+    val startDate = sf.parse(stD)
+    val endDate = sf.parse(endD)
+    return ceil(((((endDate.time - startDate.time) / (60 * 60 * 24 * 1000))).toDouble() / 30)).toInt()
 }

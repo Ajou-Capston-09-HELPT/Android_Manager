@@ -1,4 +1,6 @@
-package com.ajou.helptmanager.network.model
+package com.ajou.helptmanager.home.model
+
+import com.ajou.helptmanager.home.model.GymAddress
 
 data class RegisterGymInfo(
     val address: GymAddress,

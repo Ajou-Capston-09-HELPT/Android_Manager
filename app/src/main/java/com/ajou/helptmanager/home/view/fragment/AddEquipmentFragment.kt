@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
@@ -20,7 +21,11 @@ import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
+import com.ajou.helptmanager.network.api.GymEquipmentService
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 
 class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private var _binding: FragmentAddEquipmentBinding? = null
@@ -29,6 +34,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private lateinit var adapter : EquipmentRVAdapter
     private var list = emptyList<Equipment>()
     private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
+    private val gymEquipmentService = RetrofitInstance.getInstance().create(GymEquipmentService::class.java)
     private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId : Int? = null
@@ -83,7 +89,10 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
 
     }
 
-    override fun getSelectedItem(data: UserInfo) {
+    override fun getSelectedItem(userId: Int, admissionId: Int?) {
+    }
+
+    override fun getSelectedItem(data: GymEquipment, position: Int) {
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {
@@ -103,8 +112,18 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
 
     private fun postEquipmentApi(data: Equipment){
         CoroutineScope(Dispatchers.IO).launch {
-            val equipment = GymEquipment(data.equipmentId, gymId!!, data.customCount, data.customSet, data.customWeight )
-            val postEquipDeferred = async { equipmentService.postEquipment(accessToken, equipment) }
+            Log.d("gymId",gymId.toString())
+            Log.d("gym data",data.toString())
+            val jsonObject = JsonObject().apply {
+                addProperty("equipmentId", data.equipmentId)
+                addProperty("gymId",gymId)
+                addProperty("customCount",data.customCount)
+                addProperty("customSet",data.customSet)
+                addProperty("customWeight",data.customWeight)
+            }
+            Log.d("kakaoid",id.toString())
+            val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+            val postEquipDeferred = async { gymEquipmentService.postGymEquipment(accessToken, requestBody) }
             val postEquipResponse = postEquipDeferred.await()
             if (postEquipResponse.isSuccessful){
                 Log.d("postEquipResponse","")

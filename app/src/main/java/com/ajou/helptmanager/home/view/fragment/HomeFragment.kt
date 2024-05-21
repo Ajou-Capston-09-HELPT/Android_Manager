@@ -3,19 +3,23 @@ package com.ajou.helptmanager.home.view.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentHomeBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.QrService
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
+import kotlinx.coroutines.*
 
 class HomeFragment : Fragment() {
     private var _binding : FragmentHomeBinding? = null
@@ -23,6 +27,7 @@ class HomeFragment : Fragment() {
     private var mContext : Context? = null
     private val dataStore = UserDataStore()
     private var userName : String? = null
+    private val qrService = RetrofitInstance.getInstance().create(QrService::class.java)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,8 +45,10 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         CoroutineScope(Dispatchers.IO).launch {
             userName = dataStore.getUserName()
+            Log.d("gymId is",dataStore.getGymId().toString())
             withContext(Dispatchers.Main) {
                 binding.greetMsg.text = String.format(mContext!!.resources.getString(R.string.home_greet_msg),userName)
+                Log.d("kakaoid",dataStore.getKakaoId().toString())
             }
         }
         return binding.root
@@ -61,6 +68,7 @@ class HomeFragment : Fragment() {
             // TODO 이용권으로 이동
         }
         binding.drawer.qr.setOnClickListener {
+            qrScan()
             // TODO QR스캔으로 이동
         }
         binding.drawer.train.setOnClickListener {
@@ -95,5 +103,40 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
         }
 
+        binding.qrBg.setOnClickListener {
+            qrScan()
+        }
+
+    }
+
+    private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
+        ScanContract()
+    ) { result: ScanIntentResult ->
+        if (result.contents == null) {
+            Log.d("contents", result.contents)
+        } else {
+            Log.d("contents", result.contents)
+            checkValidation(result.contents)
+//            viewModel.setTrain(result.contents)
+//            Log.d("contents",result.contents)
+        }
+    }
+
+    private fun qrScan() {
+        barcodeLauncher.launch(ScanOptions())
+    }
+
+    private fun checkValidation(contents: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val gymId = dataStore.getGymId()
+            val qrValidDeferred = async { qrService.validateQr(contents,gymId!!) }
+            val qrValidResponse = qrValidDeferred.await()
+            if (qrValidResponse.isSuccessful){
+                Log.d("qrValidResponse ",qrValidResponse.body().toString())
+            }else{
+                Toast.makeText(mContext, "QR스캔에 실패하였습니다.",Toast.LENGTH_SHORT).show()
+                Log.d("qrValieResponse fail",qrValidResponse.errorBody()?.string().toString())
+            }
+        }
     }
 }

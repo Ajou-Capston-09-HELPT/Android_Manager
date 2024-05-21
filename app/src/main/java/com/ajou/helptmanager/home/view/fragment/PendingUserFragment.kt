@@ -12,12 +12,16 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
-import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.home.model.PendingUserInfo
 import com.ajou.helptmanager.databinding.FragmentPendingUserBinding
-import com.ajou.helptmanager.home.adapter.UserInfoRVAdapter
+import com.ajou.helptmanager.home.adapter.PendingUserInfoRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
-import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
+import com.ajou.helptmanager.network.RetrofitInstance
+import com.ajou.helptmanager.network.api.GymAdmissionService
+import kotlinx.coroutines.*
 
 class PendingUserFragment : Fragment(), AdapterToFragment {
     private var _binding : FragmentPendingUserBinding? = null
@@ -25,6 +29,11 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
     private var mContext : Context? = null
     private lateinit var viewModel : UserInfoViewModel
     private val TAG = PendingUserFragment::class.java.simpleName
+    private val gymAdmissionService = RetrofitInstance.getInstance().create(GymAdmissionService::class.java)
+    private lateinit var accessToken : String
+    private val dataStore = UserDataStore()
+    private var gymId : Int? = null
+    private lateinit var adapter : PendingUserInfoRVAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,21 +50,28 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
         // Inflate the layout for this fragment
         viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         _binding = FragmentPendingUserBinding.inflate(layoutInflater, container, false)
+        CoroutineScope(Dispatchers.IO).launch {
+            accessToken = dataStore.getAccessToken().toString()
+            gymId = dataStore.getGymId()!!
+
+            val admissionDeferred = async { gymAdmissionService.getAllAdmissionUsers(accessToken,gymId!!) }
+            val admissionResponse = admissionDeferred.await()
+            if (admissionResponse.isSuccessful) {
+                Log.d("admissionResponse",admissionResponse.body()?.data.toString())
+                withContext(Dispatchers.Main){
+                    adapter.updateList(admissionResponse.body()!!.data)
+                }
+            }else{
+                Log.d("admissionResponse faill",admissionResponse.errorBody()?.string().toString())
+            }
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val list = listOf<UserInfo>(
-            UserInfo("최윤서",null,null,null),
-            UserInfo("최서",null,null,null),
-            UserInfo("최윤",null,null,null),
-            UserInfo("최윤서",null,null,null),
-            UserInfo("윤서",null,null,null)
-        )
-
-        var adapter : UserInfoRVAdapter = UserInfoRVAdapter(mContext!!, list, this)
+        adapter = PendingUserInfoRVAdapter(mContext!!, emptyList(), this)
 
         binding.userRV.adapter = adapter
         binding.userRV.layoutManager = LinearLayoutManager(mContext)
@@ -64,15 +80,20 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             if (i == EditorInfo.IME_ACTION_SEARCH){
                 val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(requireActivity().window.decorView.applicationWindowToken, 0)
-                adapter.updateList(list.filter { it.name.contains(binding.user.text)  })
+                adapter.filterList(binding.user.text.toString())
                 return@setOnEditorActionListener true
             }else return@setOnEditorActionListener false
         }
 
     }
 
-    override fun getSelectedItem(data: UserInfo) {
-        viewModel.setUserInfo(data)
+    override fun getSelectedItem(userId: Int, admissionId: Int?) {
+        viewModel.setAdmissionId(admissionId!!)
+        viewModel.setUserId(userId)
+        viewModel.setCheck(true)
+    }
+
+    override fun getSelectedItem(data: GymEquipment, position: Int) {
     }
 
     override fun getSelectedItem(data: Equipment, position: Int) {

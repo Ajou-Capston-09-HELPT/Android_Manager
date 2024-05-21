@@ -19,25 +19,31 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         val dataStore = UserDataStore()
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-
+//        val intent = Intent(this, HomeActivity::class.java)
+//        startActivity(intent)
         CoroutineScope(Dispatchers.IO).launch {
             val accessToken = dataStore.getAccessToken()
             val gymStatus = dataStore.getGymStatus()
             val gymId = dataStore.getGymId()
             if (gymId == null && accessToken != null){
-                val infoDeferred = async { managerService.getGymInfo(accessToken) }
-                val infoResponse = infoDeferred.await()
-                if (infoResponse.isSuccessful) {
-                    val gymIdBody = JSONObject(infoResponse.body()?.string())
+                val idDeferred = async { managerService.getGymId(accessToken) }
+                val idResponse = idDeferred.await()
+                if (idResponse.isSuccessful) {
+                    val gymIdBody = JSONObject(idResponse.body()?.string())
+                    val infoDeferred = async { gymService.getGymInfo(accessToken, gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt()) }
+                    val infoResponse = infoDeferred.await()
+                    if (infoResponse.isSuccessful){
+                        dataStore.saveUserName(infoResponse.body()!!.data.gymName)
+                    }
                     dataStore.saveGymId(gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt())
                     Log.d("infoResponse  body",gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId"))
                 } else{
-                    Log.d("infoResponse faill",infoResponse.errorBody()?.string().toString())
+                    Log.d("infoResponse faill",idResponse.errorBody()?.string().toString())
                 }
+            }else{
+                Log.d("gymId  accessToken","$gymId  $accessToken")
             }
-            if (gymStatus != "Registered" && accessToken != null){
+            if (gymStatus != "Approved" && accessToken != null){
                 val gymStatusDeferred = async { gymService.getGymStatus(accessToken) }
                 val gymStatusResponse = gymStatusDeferred.await()
                 if (gymStatusResponse.isSuccessful) {
@@ -47,13 +53,15 @@ class SplashActivity : AppCompatActivity() {
                 }else{
                     Log.d("gymStatus faill",gymStatusResponse.errorBody()?.string().toString())
                 }
+            } else{
+                Log.d("gymStatus accesToken",gymStatus.toString())
             }
             withContext(Dispatchers.Main){
                 if (accessToken == null){
                     Log.d("Login 필요!","")
                     val intent = Intent(this@SplashActivity, AuthActivity::class.java)
                     startActivity(intent)
-                }else if(gymStatus != "Registered") {
+                }else if(gymStatus != "Approved") {
                     Log.d("등록되지 않은 헬스장",accessToken.toString())
                     val intent = Intent(this@SplashActivity, AuthActivity::class.java)
                     startActivity(intent)
@@ -64,7 +72,5 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 }
