@@ -22,7 +22,7 @@
     <string name="stringModifyMembershipButton">수정 완료</string>
 
     <!-- MemberDetail Strings -->
-    <string name="stringMemberDetailTitleText">회원조회</string>
+    <string name="stringMemberDetailTitleText">회원 조회</string>
     <string name="stringMemberDetailName">이름</string>
     <string name="stringMemberDetailGender">성별</string>
     <string name="stringMemberDetailHeight">키(cm)</string>
