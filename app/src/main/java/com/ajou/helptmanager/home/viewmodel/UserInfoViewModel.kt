@@ -15,11 +15,19 @@ class UserInfoViewModel : ViewModel() {
     val admissionId : LiveData<Int>
         get() = _admissionId
 
+    private val _check = MutableLiveData<Boolean>()
+    val check : LiveData<Boolean>
+    get() = _check
+
     fun setUserId(data: Int) {
         _userId.postValue(data)
     }
 
     fun setAdmissionId(data: Int){
         _admissionId.postValue(data)
+    }
+
+    fun setCheck(data: Boolean){
+        _check.postValue(data)
     }
 }

@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.home.model.product
+package com.ajou.helptmanager.home.model
 
 data class ProductRequest(
     val months: Int,

@@ -51,17 +51,6 @@
             </intent-filter>
         </activity>
 
-        <!-- 테스트로 export를 true로 설정 merge시 수정 필요 -->
-        <activity
-            android:name=".memberDetail.TestMemberDetailActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <!-- 여기까지  -->
-
     </application>
 
 </manifest>

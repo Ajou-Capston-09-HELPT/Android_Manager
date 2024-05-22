@@ -88,6 +88,7 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
 
     override fun getSelectedItem(userId: Int, admissionId: Int?) {
         viewModel.setUserId(userId)
+        viewModel.setCheck(true)
     }
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {

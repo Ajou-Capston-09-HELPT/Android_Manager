@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.navigation.findNavController
 import com.ajou.helptmanager.auth.view.AuthActivity
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.network.RetrofitInstance
@@ -27,6 +26,7 @@ class SplashActivity : AppCompatActivity() {
             val accessToken = dataStore.getAccessToken()
             val gymStatus = dataStore.getGymStatus()
             val gymId = dataStore.getGymId()
+            Log.d("gymId  accessToken","$gymId  $accessToken")
             if (gymId == null && accessToken != null){
                 val idDeferred = async { managerService.getGymId(accessToken) }
                 val idResponse = idDeferred.await()

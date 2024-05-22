@@ -8,9 +8,9 @@
     import androidx.lifecycle.map
     import androidx.lifecycle.viewModelScope
     import com.ajou.helptmanager.UserDataStore
-    import com.ajou.helptmanager.home.model.product.Membership
-    import com.ajou.helptmanager.home.model.product.ProductRequest
-    import com.ajou.helptmanager.home.model.product.ProductResponseData
+    import com.ajou.helptmanager.home.model.Membership
+    import com.ajou.helptmanager.home.model.ProductRequest
+    import com.ajou.helptmanager.home.model.ProductResponseData
     import com.ajou.helptmanager.network.RetrofitInstance
     import kotlinx.coroutines.async
     import kotlinx.coroutines.launch
@@ -45,18 +45,23 @@
                 val productListResponse = productListDeffered.await()
                 if (productListResponse.isSuccessful) {
                     Log.d("getProductList", productListResponse.body()?.data.toString())
-                    _productList.postValue(productListResponse.body()?.data ?: emptyList())
+                    val sortedProductList = productListResponse.body()?.data?.sortedWith(compareBy { it.months }) ?: emptyList()
+                    _productList.value = sortedProductList
                 }
             }
         }
 
         fun addProduct(accessToken: String, gymId: Int?, productRequest: ProductRequest) {
             viewModelScope.launch {
+                val currentList = _productList.value?.toMutableList() ?: mutableListOf()
                 val addProductDeferred = async { productService.addProduct(accessToken!!, gymId, productRequest) }
                 val addProductResponse = addProductDeferred.await()
                 if (addProductResponse.isSuccessful) {
                     Log.d("addProductResponse", addProductResponse.body().toString())
                     _addProductResponseData.postValue(addProductResponse.body()?.data)
+                    currentList.add(addProductResponse.body()?.data!!)
+                    val sortedList = currentList.sortedWith(compareBy { it.months })
+                    _productList.postValue(sortedList) // Update the product list
                     _addProductResult.postValue(true)
                 }
                 else {
@@ -68,11 +73,18 @@
 
         fun modifyProduct(accessToken: String, gymId: Int?, productId: Int?, productRequest: ProductRequest) {
             viewModelScope.launch {
+                val currentList = _productList.value?.toMutableList() ?: mutableListOf()
                 val modifyProductDeferred = async { productService.modifyProduct(accessToken!!, gymId, productId, productRequest) }
                 val modifyProductResponse = modifyProductDeferred.await()
                 if (modifyProductResponse.isSuccessful) {
                     Log.d("modifyProductResponse", modifyProductResponse.body().toString())
                     _modifyProductResponseData.postValue(modifyProductResponse.body()?.data)
+                    val index = currentList.indexOfFirst { it.productId.toInt() == productId }
+                    if (index != -1) {
+                        currentList[index] = modifyProductResponse.body()?.data!!
+                        val sortedList = currentList.sortedWith(compareBy { it.months })
+                        _productList.postValue(sortedList) // Update the product list
+                    }
                 }
                 else {
                     Log.d("modifyProductResponse", modifyProductResponse.body().toString())
@@ -82,12 +94,16 @@
 
         fun removeProduct(accessToken: String, gymId: Int?, productId: Int?) {
             viewModelScope.launch {
+                val currentList = _productList.value?.toMutableList() ?: mutableListOf()
                 val removeProductDeferred = async { productService.removeProduct(accessToken!!, gymId, productId) }
                 val removeProductResponse = removeProductDeferred.await()
                 if (removeProductResponse.isSuccessful) {
                     Log.d("removeProductResponse", removeProductResponse.body().toString())
                     Log.d("removeProductResponse", productId.toString())
                     _removeProductResponse.postValue(removeProductResponse.body()?.data)
+                    currentList.removeIf { it.productId.toString() == productId.toString() }
+                    val sortedList = currentList.sortedWith(compareBy { it.months })
+                    _productList.postValue(sortedList) // Update the product list
                     _removeProductResult.postValue(true)
                 } else {
                     Log.d("removeProductResponse", removeProductResponse.body().toString())
@@ -95,17 +111,6 @@
                 }
             }
         }
-
-
-        /*
-        private fun <T> handleResponse(response: Response<T>, liveData: MutableLiveData<T>) {
-            if (response.isSuccessful) {
-                liveData.postValue(response.body())
-            } else {
-                // 오류 처리 로직 추가
-            }
-        }
-         */
 
 
         private fun convertProductResponseToMembership(productResponseData: ProductResponseData): Membership {

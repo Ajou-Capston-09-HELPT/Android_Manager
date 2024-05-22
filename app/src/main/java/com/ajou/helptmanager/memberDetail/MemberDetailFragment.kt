@@ -11,30 +11,90 @@ import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.datastore.dataStore
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.MemberService
+import com.ajou.helptmanager.network.api.MembershipControllerService
+import com.ajou.helptmanager.network.model.MembershipExtensionResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 
 class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private val memberService = RetrofitInstance.getInstance().create(MemberService::class.java)
+    private val membershipService = RetrofitInstance.getInstance().create(MembershipControllerService::class.java)
+
     private val dataStore = UserDataStore()
+
+
+    private var memberId: Int? = 1 //임시 데이터 ==> 선택한 유저 ID 불러오는 로직 추가
+    private var membershipId: Int = 0 //임시 데이터 ==> 선택한 유저의 membership ID 불러오는 로직 추가
+
+    private val _memberInfo = MutableLiveData<MemberDetail>()
+    val memberInfo: LiveData<MemberDetail> = _memberInfo
+
+    private var selectedDateString: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        memberId = arguments?.getInt("userId")
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val accessToken = dataStore.getAccessToken()
+
+            if (accessToken != null) {
+                val memberInfoDeferred =
+                    async { memberService.getMemberInfo(accessToken, memberId.toString()) }
+                val memberInfoResponse = memberInfoDeferred.await()
+                if (memberInfoResponse.isSuccessful) {
+                    val memberInfoBody = JSONObject(memberInfoResponse.body()?.string())
+
+                    val translatedGender = when (val gender = memberInfoBody.getJSONObject("data").getString("gender")){
+                        "WOMEN" -> "여성"
+                        "MAN" -> "남성"
+                        else -> gender
+                    }
+
+
+                    val memberInfo = MemberDetail(
+                        memberInfoBody.getJSONObject("data").getString("userName"),
+                        translatedGender,
+                        memberInfoBody.getJSONObject("data").getString("height"),
+                        memberInfoBody.getJSONObject("data").getString("weight"),
+                        memberInfoBody.getJSONObject("data").getString("startDate"),
+                        memberInfoBody.getJSONObject("data").getString("endDate")
+                    )
+
+                    Log.d("MemberDetail", "Member info: $memberInfo")
+
+                    _memberInfo.postValue(memberInfo)
+                    membershipId = memberInfoBody.getJSONObject("data").getInt("membershipId")
+
+                } else {
+                    Log.d(
+                        "MemberDetail",
+                        "Failed to get member info. HTTP status code: ${memberInfoResponse.code()}, accessToken:$accessToken, memberId:$memberId ${
+                            memberInfoResponse.errorBody()?.string()
+                        }"
+                    )
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -47,43 +107,34 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val accessToken = dataStore.getAccessToken()
+        memberInfo.observe(viewLifecycleOwner) { info ->
+            updateMemberInfoUI(view, info)
+        }
 
-            val memberId = 1 //임시 데이터 => 선택한 유저의 ID 불러오는 로직 추가
 
-            if (accessToken != null) {
-                val memberInfoDeferred =
-                    async { memberService.getMemberInfo(accessToken, memberId.toString()) }
-                val memberInfoResponse = memberInfoDeferred.await()
-                if (memberInfoResponse.isSuccessful) {
-                    val memberInfoBody = JSONObject(memberInfoResponse.body()?.string())
-                    val memberInfo = MemberDetail(
-                        memberInfoBody.getJSONObject("data").getString("userName"),
-                        memberInfoBody.getJSONObject("data").getString("gender"),
-                        memberInfoBody.getJSONObject("data").getString("height"),
-                        memberInfoBody.getJSONObject("data").getString("weight"),
-                        memberInfoBody.getJSONObject("data").getString("startDate"),
-                        memberInfoBody.getJSONObject("data").getString("endDate")
-                    )
-                    withContext(Dispatchers.Main) {
-                        updateMemberInfoUI(view, memberInfo)
-                    }
-                }
+        showMemberDetailExerciseRecord(showExerciseRecord)
+
+        editMemberDetailMembershipPeriod(editMembershipPeriod)
+
+        btnMemberDetailBack(backButton)
+
+        return view
+    }
+
+    private fun btnMemberDetailBack(backButton: ImageView) {
+        backButton.setOnClickListener {
+            backButton.alpha = 0.5f
+            backButton.postDelayed({
+                backButton.alpha = 1.0f
+            }, 100)
+            val navController = findNavController()
+            if (navController.previousBackStackEntry != null) {
+                navController.popBackStack()
             }
         }
+    }
 
-
-
-
-        showExerciseRecord.setOnClickListener{
-            showExerciseRecord.alpha = 0.5f
-            showExerciseRecord.postDelayed({
-                showExerciseRecord.alpha = 1.0f
-            }, 100)
-            showMemberExerciseRecord()
-        }
-
+    private fun editMemberDetailMembershipPeriod(editMembershipPeriod: ImageView) {
         editMembershipPeriod.setOnClickListener {
             editMembershipPeriod.alpha = 0.5f
             editMembershipPeriod.postDelayed({
@@ -91,16 +142,16 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }, 100)
             editMemberMembershipPeriod()
         }
+    }
 
-        backButton.setOnClickListener {
-            backButton.alpha = 0.5f
-            backButton.postDelayed({
-                backButton.alpha = 1.0f
+    private fun showMemberDetailExerciseRecord(showExerciseRecord: ConstraintLayout) {
+        showExerciseRecord.setOnClickListener {
+            showExerciseRecord.alpha = 0.5f
+            showExerciseRecord.postDelayed({
+                showExerciseRecord.alpha = 1.0f
             }, 100)
-            findNavController().popBackStack()
+            showMemberExerciseRecord(membershipId)
         }
-
-        return view
     }
 
     private fun updateMemberInfoUI(view: View, memberInfo: MemberDetail) {
@@ -117,12 +168,17 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         tvMemberDetailMembershipPeriod.text = "${memberInfo.startDate} ~ ${memberInfo.endDate}"
     }
 
-    private fun showMemberExerciseRecord(){
-        findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment)
+    private fun showMemberExerciseRecord(membershipId: Int){
+        val bundle = Bundle().apply {
+            putInt("memberId", memberId!!)
+            putString("memberName", _memberInfo.value?.userName)
+        }
+        findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment, bundle)
     }
     private fun editMemberMembershipPeriod(){
         //TODO 회원권 기간 수정
         showDatePicker()
+
     }
 
 
@@ -144,6 +200,47 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val selectedDate = Calendar.getInstance().apply {
             set(year, month, dayOfMonth)
         }.time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        selectedDateString = dateFormat.format(selectedDate)
 
+        extendMembershipPeriod(selectedDateString)
+    }
+    private fun extendMembershipPeriod(endDate: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val accessToken = dataStore.getAccessToken()
+
+
+
+            if (accessToken != null) {
+                val extendMembershipDeferred =
+                    async { membershipService.extendMembership(accessToken, membershipId!!, endDate) }
+                val extendMembershipResponse = extendMembershipDeferred.await()
+                if (extendMembershipResponse.isSuccessful) {
+
+                    Log.d("ExtendMembership", "Membership extended successfully")
+
+                    val responseBody = extendMembershipResponse.body()?.string()
+
+                    Log.d("ExtendMembership", "Response body: $responseBody")
+
+                    val responseBodyJson = JSONObject(responseBody)
+                    val dataJson = responseBodyJson.getJSONObject("data")
+                    val startDate = dataJson.getString("startDate")
+                    val endDate = dataJson.getString("endDate")
+                    Log.d("ExtendMembership", "Response body: $responseBody")
+
+
+                    withContext(Dispatchers.Main) {
+                        val tvMemberDetailMembershipPeriod: TextView = view?.findViewById(R.id.tvMemberDetailMembershipPeriod)!!
+                        tvMemberDetailMembershipPeriod.text = "$startDate ~ $endDate"
+                        Log.d("ExtendMembership", "Membership extended successfully")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Log.d("ExtendMembership", "Failed to extend membership. HTTP status code: ${extendMembershipResponse.code()}, accessToken:$accessToken, membershipId:$membershipId, endDate:$endDate ${extendMembershipResponse.errorBody()?.string()}")
+                    }
+                }
+            }
+        }
     }
 }

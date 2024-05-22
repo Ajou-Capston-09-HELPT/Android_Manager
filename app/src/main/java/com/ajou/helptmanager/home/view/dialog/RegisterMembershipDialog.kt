@@ -15,10 +15,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
-import com.ajou.helptmanager.home.model.product.ProductRequest
+import com.ajou.helptmanager.home.model.ProductRequest
 import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

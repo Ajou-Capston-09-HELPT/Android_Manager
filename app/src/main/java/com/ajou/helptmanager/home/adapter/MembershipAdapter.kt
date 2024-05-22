@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
-import com.ajou.helptmanager.home.model.product.Membership
+import com.ajou.helptmanager.home.model.Membership
 
 class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(
     MembershipDiffCallback
 ) {
 
     interface OnItemClickListener {
-        fun onMoreButtonClicked(id: Int)
+        fun onMoreButtonClicked(productId: Int)
     }
 
     class MembershipViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,17 +39,10 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
         holder.price.text = membership.price
         holder.month_price.text = membership.month_price
         holder.moreButton.setOnClickListener{
-            listener.onMoreButtonClicked(position)
+            listener.onMoreButtonClicked(membership.product_id)
         }
-
-
     }
 
-    fun addItem(membership: Membership) {
-        val currentList = currentList.toMutableList()
-        currentList.add(membership)
-        submitList(currentList)
-    }
     companion object MembershipDiffCallback : DiffUtil.ItemCallback<Membership>() {
         override fun areItemsTheSame(oldItem: Membership, newItem: Membership): Boolean {
             // 아이템 동일성 검사 코드
@@ -58,6 +51,7 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
 
         override fun areContentsTheSame(oldItem: Membership, newItem: Membership): Boolean {
             // 아이템 내용 동일성 검사 코드
+
             return oldItem == newItem
         }
     }

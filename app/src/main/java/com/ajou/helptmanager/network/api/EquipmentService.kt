@@ -1,6 +1,7 @@
 package com.ajou.helptmanager.network.api
 
-import com.ajou.helptmanager.home.model.product.GymEquipment
+import com.ajou.helptmanager.home.model.Equipment
+import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.network.model.AllEquipmentsResponse
 import com.ajou.helptmanager.network.model.OneEquipmentResponse
 import okhttp3.ResponseBody
@@ -16,4 +17,17 @@ interface EquipmentService {
     suspend fun getAllEquipments(
         @Header("Authorization") accessToken : String
     ): Response<AllEquipmentsResponse>
+
+    @POST("gym-equipments")
+    suspend fun postEquipment(
+        @Header("Authorization") accessToken : String,
+        @Body equipment : GymEquipment
+    ): Response<ResponseBody>
+
+    @GET("equipments/{equipmentId}")
+    suspend fun getEquipment(
+        @Header("Authorization") accessToken : String,
+        @Path("equipmentId") equipmentId : Int
+    ): Response<ResponseBody>
+
 }
