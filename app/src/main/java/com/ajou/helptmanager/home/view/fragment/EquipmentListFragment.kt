@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
@@ -19,6 +21,7 @@ import com.ajou.helptmanager.home.adapter.GymEquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
 import com.ajou.helptmanager.network.api.GymEquipmentService
@@ -39,6 +42,8 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     private var accessToken : String? = null
     private var gymId : Int? = null
     private val dataStore = UserDataStore()
+    private lateinit var viewModel : UserInfoViewModel
+    private var selectedTmp : Equipment? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,6 +59,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentEquipmentListBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken()
             gymId = dataStore.getGymId()
@@ -82,6 +88,33 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
             findNavController().navigate(R.id.action_equipmentListFragment_to_addEquipmentFragment)
         }
 
+        viewModel.equipment.observe(viewLifecycleOwner, Observer {
+            if(viewModel.equipment.value != null && viewModel.equipment.value != selectedTmp) {
+//                Log.d("viewmodel is called","equipmentlistfragment ${viewModel.position.value}")
+                if(viewModel.equipment.value!!.customWeight == -1 && viewModel.position.value != null) {
+                    deleteEquipmentApi(viewModel.equipment.value!!.equipmentId)
+                    val position = viewModel.position.value!!
+                        list.removeAt(position)
+                        adapter.notifyItemRemoved(position)
+                    Log.d("viewModel is called","deleteapi called ${viewModel.position.value}")
+                } else if (viewModel.equipment.value!!.customWeight != -1 && viewModel.position.value != null){
+
+                    Log.d("viewModel is called","editapi called ${viewModel.position.value}")
+                    val position = viewModel.position.value!!
+                    list[position].customWeight = viewModel.equipment.value!!.customWeight
+                    list[position].customCount = viewModel.equipment.value!!.customCount
+                    list[position].customSet = viewModel.equipment.value!!.customSet
+                    adapter.notifyItemChanged(position)
+                                    val jsonObject = JsonObject().apply {
+                    addProperty("customCount", viewModel.equipment.value!!.customCount)
+                    addProperty("customSet",viewModel.equipment.value!!.customSet)
+                    addProperty("customWeight",viewModel.equipment.value!!.customWeight)
+                }
+                val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+                editSettingApi(requestBody, viewModel.equipment.value!!.equipmentId)
+                }
+            }
+        })
         binding.drawer.trainIcon.setImageResource(R.drawable.menu_machine_on)
 
         binding.drawer.train.setTextColor(resources.getColor(R.color.primary))
@@ -120,26 +153,30 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {
         val setting = listOf<Int>(data.customWeight, data.customCount, data.customSet)
-        val dialog = EquipmentEditBottomSheetFragment(setting){value ->
-            if(value[0]==-1){
-                deleteEquipmentApi(data.gymEquipmentId)
-                list.removeAt(position)
-                adapter.notifyItemRemoved(position)
-            }else{
-                list[position].customWeight = value[0]
-                list[position].customCount = value[1]
-                list[position].customSet = value[2]
-                adapter.notifyItemChanged(position)
-                val jsonObject = JsonObject().apply {
-                    addProperty("customCount", value[1])
-                    addProperty("customSet",value[2])
-                    addProperty("customWeight",value[0])
-                }
-                val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
-                editSettingApi(requestBody,data.gymEquipmentId)
-            }
+        selectedTmp = Equipment(data.gymEquipmentId,data.equipmentName, data.customCount, data.customSet, data.customWeight)
+        Log.d("viewmodel is called tmp changed",selectedTmp.toString())
+        val tmp = selectedTmp
+        viewModel.setEquipment(tmp!!, position)
+//        val dialog = EquipmentEditBottomSheetFragment(setting){value ->
+//            if(value[0]==-1){
+//                deleteEquipmentApi(data.gymEquipmentId)
+//                list.removeAt(position)
+//                adapter.notifyItemRemoved(position)
+//            }else{
+//                list[position].customWeight = value[0]
+//                list[position].customCount = value[1]
+//                list[position].customSet = value[2]
+//                adapter.notifyItemChanged(position)
+//                val jsonObject = JsonObject().apply {
+//                    addProperty("customCount", value[1])
+//                    addProperty("customSet",value[2])
+//                    addProperty("customWeight",value[0])
+//                }
+//                val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+//                editSettingApi(requestBody,data.gymEquipmentId)
+//            }
 
-        }
+        val dialog = EquipmentEditBottomSheetFragment()
         dialog.show(parentFragmentManager,dialog.tag)
     }
 
@@ -152,6 +189,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
             val deleteResponse = deleteDeferred.await()
             if(deleteResponse.isSuccessful){
                 Log.d("deleteResponse success","")
+                viewModel.setEquipment(null)
             }else{
                 Log.d("deleteResponse fail",deleteResponse.errorBody()?.string().toString())
             }
@@ -164,6 +202,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
             val deleteResponse = deleteDeferred.await()
             if(deleteResponse.isSuccessful){
                 Log.d("deleteResponse success","")
+                viewModel.setEquipment(null)
             }else{
                 Log.d("deleteResponse fail",deleteResponse.errorBody()?.string().toString())
             }

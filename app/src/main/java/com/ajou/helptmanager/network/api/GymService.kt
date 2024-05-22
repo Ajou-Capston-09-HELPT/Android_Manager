@@ -4,6 +4,7 @@ import com.ajou.helptmanager.network.model.GymRegisteredInfoResponse
 import com.ajou.helptmanager.home.model.RegisterGymInfo
 import com.ajou.helptmanager.network.model.AllGymEquipmentsResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -39,4 +40,11 @@ interface GymService {
         @Header("Authorization") accessToken : String,
         @Path("gymId") gymId : Int
     ):Response<AllGymEquipmentsResponse>
+
+    @PUT("gyms/{gymId}/chat-link")
+    suspend fun putChatLink(
+        @Header("Authorization") accessToken : String,
+        @Path("gymId") gymId : Int,
+        @Body body : RequestBody
+    ): Response<ResponseBody>
 }

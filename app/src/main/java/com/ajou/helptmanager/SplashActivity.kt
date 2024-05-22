@@ -21,8 +21,6 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         val dataStore = UserDataStore()
-//        val intent = Intent(this, HomeActivity::class.java)
-//        startActivity(intent)
         CoroutineScope(Dispatchers.IO).launch {
             val accessToken = dataStore.getAccessToken()
             val gymStatus = dataStore.getGymStatus()
@@ -60,16 +58,16 @@ class SplashActivity : AppCompatActivity() {
             }
             withContext(Dispatchers.Main){
                 if (accessToken == null){
-                    Log.d("Login 필요!","")
                     val intent = Intent(this@SplashActivity, AuthActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }else if(gymStatus != "Approved") {
-                    Log.d("등록되지 않은 헬스장",accessToken.toString())
                     val intent = Intent(this@SplashActivity, AuthActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }else{
-                    Log.d("Login!",accessToken.toString())
                     val intent = Intent(this@SplashActivity, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }
             }

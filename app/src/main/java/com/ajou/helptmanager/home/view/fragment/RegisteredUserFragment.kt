@@ -58,8 +58,8 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
             val registeredMemberResponse = registeredMemberDeferred.await()
             if (registeredMemberResponse.isSuccessful){
                 val list = registeredMemberResponse.body()!!.data
-                Log.d("list registered",list.toString())
                 withContext(Dispatchers.Main){
+                    binding.loadingBar.hide()
                     adapter.updateList(list)
                 }
             }

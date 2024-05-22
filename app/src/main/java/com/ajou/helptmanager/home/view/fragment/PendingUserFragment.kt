@@ -28,7 +28,6 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
     private val binding get() = _binding!!
     private var mContext : Context? = null
     private lateinit var viewModel : UserInfoViewModel
-    private val TAG = PendingUserFragment::class.java.simpleName
     private val gymAdmissionService = RetrofitInstance.getInstance().create(GymAdmissionService::class.java)
     private lateinit var accessToken : String
     private val dataStore = UserDataStore()
@@ -57,8 +56,8 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             val admissionDeferred = async { gymAdmissionService.getAllAdmissionUsers(accessToken,gymId!!) }
             val admissionResponse = admissionDeferred.await()
             if (admissionResponse.isSuccessful) {
-                Log.d("admissionResponse",admissionResponse.body()?.data.toString())
                 withContext(Dispatchers.Main){
+                    binding.loadingBar.hide()
                     adapter.updateList(admissionResponse.body()!!.data)
                 }
             }else{
