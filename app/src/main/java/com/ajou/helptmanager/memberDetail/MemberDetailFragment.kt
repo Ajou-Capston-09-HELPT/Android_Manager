@@ -213,10 +213,16 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
             if (accessToken != null) {
                 val extendMembershipDeferred =
-                    async { membershipService.extendMembership(accessToken, memberId!!, endDate) }
+                    async { membershipService.extendMembership(accessToken, membershipId!!, endDate) }
                 val extendMembershipResponse = extendMembershipDeferred.await()
                 if (extendMembershipResponse.isSuccessful) {
+
+                    Log.d("ExtendMembership", "Membership extended successfully")
+
                     val responseBody = extendMembershipResponse.body()?.string()
+
+                    Log.d("ExtendMembership", "Response body: $responseBody")
+
                     val responseBodyJson = JSONObject(responseBody)
                     val dataJson = responseBodyJson.getJSONObject("data")
                     val startDate = dataJson.getString("startDate")
