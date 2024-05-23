@@ -32,13 +32,16 @@ class SplashActivity : AppCompatActivity() {
                 val idResponse = idDeferred.await()
                 if (idResponse.isSuccessful) {
                     val gymIdBody = JSONObject(idResponse.body()?.string())
-                    val infoDeferred = async { gymService.getGymInfo(accessToken, gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt()) }
+
+                    dataStore.saveGymId(gymIdBody.getJSONObject("data").getString("gymId").toInt())
+                    val infoDeferred = async { gymService.getGymInfo(accessToken, gymIdBody.getJSONObject("data").getString("gymId").toInt()) }
+
                     val infoResponse = infoDeferred.await()
                     if (infoResponse.isSuccessful){
                         dataStore.saveUserName(infoResponse.body()!!.data.gymName)
                     }
-                    dataStore.saveGymId(gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt())
-                    Log.d("infoResponse  body",gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId"))
+
+                    Log.d("infoResponse  body",gymIdBody.getJSONObject("data").getString("gymId"))
                 } else{
                     Log.d("infoResponse faill",idResponse.errorBody()?.string().toString())
                 }
