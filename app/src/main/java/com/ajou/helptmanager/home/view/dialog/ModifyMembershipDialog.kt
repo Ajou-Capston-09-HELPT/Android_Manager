@@ -15,8 +15,21 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.home.model.ProductRequest
+import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class ModifyMembershipDialog(private val index: Int) : DialogFragment() {
+class ModifyMembershipDialog(
+    private val productId: Int,
+    private val viewModel: MembershipViewModel
+    ) : DialogFragment() {
+
+    private val dataStroe = UserDataStore()
+    private lateinit var accessToken: String
+    private var gymId: Int? = null
 
     private lateinit var etMembershipTitle: EditText
     private lateinit var etMembershipPrice: EditText
@@ -109,9 +122,12 @@ class ModifyMembershipDialog(private val index: Int) : DialogFragment() {
     private fun modifyMembership() {
         val membershipTitle = etMembershipTitle.text.toString().trim()
         val membershipPrice = etMembershipPrice.text.toString().trim().replace(",".toRegex(), "").toIntOrNull()
-
         if (membershipTitle.isNotEmpty() && membershipPrice != null) {
-            // 회원권 수정 로직 구현예정
+            CoroutineScope(Dispatchers.IO).launch {
+                accessToken = dataStroe.getAccessToken().toString()
+                gymId = dataStroe.getGymId()
+                viewModel.modifyProduct(accessToken, gymId, productId, ProductRequest(membershipTitle.toInt(), membershipPrice.toInt()))
+            }
             dismiss()
         } else {
             // 입력값 오류 처리예정

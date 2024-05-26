@@ -55,6 +55,7 @@ class HomeFragment : Fragment() {
             userName = dataStore.getUserName()
             withContext(Dispatchers.Main) {
                 binding.greetMsg.text = String.format(mContext!!.resources.getString(R.string.home_greet_msg),userName)
+                binding.drawer.name.text = userName
             }
         }
         return binding.root

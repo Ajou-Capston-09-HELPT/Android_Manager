@@ -51,7 +51,11 @@ class SearchUserFragment : Fragment(){
         viewModel.userId.observe(viewLifecycleOwner, Observer {
             if (viewModel.check.value == null || viewModel.check.value == false){
                 if (viewModel.admissionId.value == null) {
-                    // TODO 회원 상세 조회로 이동
+                    val bundle = Bundle().apply {
+                        putInt("userId", viewModel.userId.value!!)
+                    }
+
+                    findNavController().navigate(R.id.action_searchUserFragment_to_memberDetailFragment, bundle)
                 } else {
                     findNavController().navigate(R.id.action_searchUserFragment_to_addUserFragment)
                 }

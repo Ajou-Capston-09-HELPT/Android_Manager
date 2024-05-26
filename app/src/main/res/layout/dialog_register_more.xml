@@ -24,31 +24,25 @@
         android:id="@+id/btnMembershipModify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="28dp"
         android:layout_marginTop="49dp"
-        android:layout_marginEnd="350dp"
         android:background="@drawable/ripple_effect"
         android:gravity="top"
         android:lineSpacingExtra="3sp"
         android:text="@string/stringMembershipModify"
         android:textAppearance="@style/styleMembershipModify"
         android:translationY="-1.26sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/btnMembershipDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="28dp"
         android:layout_marginTop="97dp"
-        android:layout_marginEnd="350dp"
-        android:layout_marginBottom="79dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/ripple_effect"
         android:gravity="top"
         android:lineSpacingExtra="2sp"
@@ -56,7 +50,6 @@
         android:textAppearance="@style/styleMembershipDelete"
         android:translationY="-1.2sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     

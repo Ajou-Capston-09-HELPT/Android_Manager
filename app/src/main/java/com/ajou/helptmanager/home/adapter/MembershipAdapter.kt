@@ -34,27 +34,25 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
             .inflate(R.layout.item_membership, parent, false)
         return MembershipViewHolder(itemView)
     }
-
     override fun onBindViewHolder(holder: MembershipViewHolder, position: Int) {
         val membership = getItem(position)
-        holder.title.text = membership.title
+        holder.title.text = membership.months
         holder.price.text = membership.price
         holder.month_price.text = membership.month_price
         holder.moreButton.setOnClickListener{
-            listener.onMoreButtonClicked(position)
+            listener.onMoreButtonClicked(membership.product_id)
         }
-
-
     }
 
     companion object MembershipDiffCallback : DiffUtil.ItemCallback<Membership>() {
         override fun areItemsTheSame(oldItem: Membership, newItem: Membership): Boolean {
             // 아이템 동일성 검사 코드
-            return oldItem.id == newItem.id
+            return oldItem.product_id == newItem.product_id
         }
 
         override fun areContentsTheSame(oldItem: Membership, newItem: Membership): Boolean {
             // 아이템 내용 동일성 검사 코드
+
             return oldItem == newItem
         }
     }

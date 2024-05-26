@@ -171,13 +171,12 @@ class LoginFragment : Fragment() {
                 show()
             }
         }
-    } // TODO 구체적인 오류 메세지로 변경하기
+    }
 
     private fun callLoginApi(id:String) {
         val jsonObject = JsonObject().apply {
             addProperty("kakaoId", id)
         }
-        Log.d("kakaoid",id.toString())
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
         CoroutineScope(Dispatchers.IO).launch{
             val loginDeferred = async {managerService.login(requestBody) }
@@ -199,13 +198,15 @@ class LoginFragment : Fragment() {
                         if (idResponse.isSuccessful){
                             val idBody = JSONObject(idResponse.body()?.string())
                             Log.d("idBody success",idBody.toString())
-                            dataStore.saveGymId(idBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt())
-                            val infoDeferred = async { gymService.getGymInfo(accessToken, idBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt()) }
+                            dataStore.saveGymId(idBody.getJSONObject("data").getString("gymId").toInt())
+                            val infoDeferred = async { gymService.getGymInfo(accessToken, idBody.getJSONObject("data").getString("gymId").toInt()) }
                             val infoResponse = infoDeferred.await()
                             if (infoResponse.isSuccessful){
                                 Log.d("infoBody success",infoResponse.body().toString())
                                 dataStore.saveUserName(infoResponse.body()!!.data.gymName)
                             }
+                        }else{
+                            Log.d("idBody error",idResponse.errorBody()?.string().toString())
                         }
                     }
                 }else{

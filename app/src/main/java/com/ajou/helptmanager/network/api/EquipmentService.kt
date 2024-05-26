@@ -17,4 +17,17 @@ interface EquipmentService {
     suspend fun getAllEquipments(
         @Header("Authorization") accessToken : String
     ): Response<AllEquipmentsResponse>
+
+    @POST("gym-equipments")
+    suspend fun postEquipment(
+        @Header("Authorization") accessToken : String,
+        @Body equipment : GymEquipment
+    ): Response<ResponseBody>
+
+    @GET("equipments/{equipmentId}")
+    suspend fun getEquipment(
+        @Header("Authorization") accessToken : String,
+        @Path("equipmentId") equipmentId : Int
+    ): Response<ResponseBody>
+
 }
