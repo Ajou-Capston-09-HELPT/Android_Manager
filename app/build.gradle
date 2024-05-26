@@ -5,6 +5,13 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('apikey.properties').newDataInputStream())
+def native_api_key = properties.getProperty('native_api_key')
+def redirect_uri = properties.getProperty('redirect_uri')
+def tmap_api_key = properties.getProperty('tmap_api_key')
+def base_url = properties.getProperty('base_url')
+
 android {
     namespace 'com.ajou.helptmanager'
     compileSdk 33
@@ -17,6 +24,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "NATIVE_API_KEY", native_api_key
+        buildConfigField "String", "REDIRECT_URI", redirect_uri
+        buildConfigField "String", "TMAP_API_KEY", tmap_api_key
+        buildConfigField "String", "BASE_URL", base_url
+
+        manifestPlaceholders = [NATIVE_API_KEY : native_api_key]
     }
 
     buildTypes {
@@ -43,6 +57,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation files('libs/com.skt.Tmap_1.75.jar')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+
+    implementation 'androidx.activity:activity:1.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -58,7 +78,6 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
-    implementation files('libs/com.skt.Tmap_1.75.jar')
 
     //Retrofit
     def retrofit_version = "2.9.0"
@@ -74,4 +93,17 @@ dependencies {
     // qr code
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // calendar
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    // Test Code
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+
+    // GIF
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.22'
 }

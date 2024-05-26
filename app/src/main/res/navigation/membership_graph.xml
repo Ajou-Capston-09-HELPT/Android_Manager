@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/membership_graph.xml"
+    app:startDestination="@id/membershipFragment">
+
+    <fragment
+        android:id="@+id/membershipFragment"
+        android:name="com.ajou.helptmanager.home.view.fragment.MembershipFragment"
+        android:label="MembershipFragment" />
+    <fragment
+        android:id="@+id/registerMoreDialog"
+        android:name="com.ajou.helptmanager.home.view.dialog.RegisterMoreDialog"
+        android:label="RegisterMoreDialog" />
+</navigation>

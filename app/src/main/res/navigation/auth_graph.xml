@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/setBizInfoFragment"
+        android:name="com.ajou.helptmanager.auth.view.SetBizInfoFragment"
+        android:label="fragment_set_biz_info"
+        tools:layout="@layout/fragment_set_biz_info" >
+        <action
+            android:id="@+id/action_setBizInfoFragment_to_setGymInfoFragment"
+            app:destination="@id/setGymInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.ajou.helptmanager.auth.view.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_setBizInfoFragment"
+            app:destination="@id/setBizInfoFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_pendingFragment"
+            app:destination="@id/pendingFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_pendingFragment2"
+            app:destination="@id/pendingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setGymInfoFragment"
+        android:name="com.ajou.helptmanager.auth.view.SetGymInfoFragment"
+        android:label="fragment_set_gym_info"
+        tools:layout="@layout/fragment_set_gym_info" >
+        <action
+            android:id="@+id/action_setGymInfoFragment_to_pendingFragment"
+            app:destination="@id/pendingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pendingFragment"
+        android:name="com.ajou.helptmanager.auth.view.PendingFragment"
+        android:label="fragment_pending"
+        tools:layout="@layout/fragment_pending" />
+</navigation>
