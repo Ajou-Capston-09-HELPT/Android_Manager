@@ -119,7 +119,35 @@
         android:id="@+id/noticeFragment"
         android:name="com.ajou.helptmanager.notice.NoticeFragment"
         android:label="fragment_notice"
-        tools:layout="@layout/fragment_notice"/>
+        tools:layout="@layout/fragment_notice">
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeDetailFragment"
+            app:destination="@id/noticeDetailFragment" />
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeCreateFragment"
+            app:destination="@id/noticeCreateFragment" />
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeModifyFragment"
+            app:destination="@id/noticeModifyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noticeDetailFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeDetailFragment"
+        android:label="fragment_notice_detail"
+        tools:layout="@layout/fragment_notice_detail"
+        />
+    <fragment
+        android:id="@+id/noticeCreateFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeCreateFragment"
+        android:label="fragment_notice_create"
+        tools:layout="@layout/fragment_notice_create"
+        />
+    <fragment
+        android:id="@+id/noticeModifyFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeModifyFragment"
+        android:label="fragment_notice_modify"
+        tools:layout="@layout/fragment_notice_modify"
+        />
 
 
 

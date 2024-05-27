@@ -1,7 +1,8 @@
 package com.ajou.helptmanager.network.api
 
 import com.ajou.helptmanager.network.model.AllNoticeResponse
-import com.ajou.helptmanager.notice.NoticeRequest
+import com.ajou.helptmanager.notice.NoticeModifyRequest
+import com.ajou.helptmanager.notice.NoticeUploadRequest
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -22,7 +23,7 @@ interface NoticeService {
     @POST("/notices/upload")
     suspend fun uploadNotice(
         @Header("Authorization") accessToken: String,
-        @Body noticeRequest: NoticeRequest
+        @Body noticeUploadRequest: NoticeUploadRequest
     ): Response<ResponseBody>
 
     @POST("/notices/{noticeId}/delete")
@@ -35,6 +36,6 @@ interface NoticeService {
     suspend fun modifyNotice(
         @Header("Authorization") accessToken: String,
         @Path("noticeId") noticeId: Int,
-        @Body noticeRequest: NoticeRequest
+        @Body noticeModifyRequest: NoticeModifyRequest
     ): Response<ResponseBody>
 }

@@ -40,8 +40,8 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private val dataStore = UserDataStore()
 
 
-    private var memberId: Int? = 1 //임시 데이터 ==> 선택한 유저 ID 불러오는 로직 추가
-    private var membershipId: Int = 0 //임시 데이터 ==> 선택한 유저의 membership ID 불러오는 로직 추가
+    private var memberId: Int? = null //선택한 유저 ID
+    private var membershipId: Int = 0 //선택한 유저의 membership ID
 
     private val _memberInfo = MutableLiveData<MemberDetail>()
     val memberInfo: LiveData<MemberDetail> = _memberInfo

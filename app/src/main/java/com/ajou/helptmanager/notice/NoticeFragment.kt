@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
@@ -56,15 +57,24 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
             Log.d("NoticeFragment", "noticeRegisterButton Clicked")
         }
 
+        pressUploadButton()
+
+
         pressBackButton()
         pressHamburgerButton()
         pressHamburgerCloseButton()
 
-
         return binding.root
     }
 
+    private fun pressUploadButton() {
+        binding.noticeRegisterButton.setOnClickListener {
+            // TODO : 공지사항 등록 프래그먼트 이동
+            Log.d("NoticeFragment", "noticeRegisterButton Clicked")
+            findNavController().navigate(R.id.action_noticeFragment_to_noticeCreateFragment)
 
+        }
+    }
 
     private fun pressBackButton() {
         binding.noticeToolbar.noticeBackButton.setOnClickListener {
@@ -101,5 +111,13 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
     }
     override fun onMoreButtonClicked(noticeId: Int) {
         // TODO : noticeId에 해당하는 notice 수정/삭제 페이지로 이동
+        Log.d("NoticeFragment", "onMoreButtonClicked: $noticeId")
+        showMoreDialog(noticeId, viewModel)
     }
+
+    private fun showMoreDialog(id: Int, viewModel: NoticeViewModel) {
+        val dialog = NoticeMoreDialog(id, viewModel)
+        dialog.show(parentFragmentManager, "MoreDialog")
+    }
+
 }

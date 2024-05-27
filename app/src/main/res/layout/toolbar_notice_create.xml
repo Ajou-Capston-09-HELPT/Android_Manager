@@ -1,15 +1,15 @@
-    <androidx.appcompat.widget.Toolbar
+<androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/titleBarNotice"
+    android:id="@+id/titleBarNoticeCreate"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="@drawable/membership_title_bar"
     android:clipToOutline="true">
 
     <ImageView
-        android:id="@+id/noticeBackButton"
+        android:id="@+id/noticeCreateBackButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center|start|top"
@@ -20,7 +20,7 @@
         tools:layout_editor_absoluteY="24dp" />
 
     <TextView
-        android:id="@+id/noticeTitleText"
+        android:id="@+id/noticeCreateTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -28,18 +28,19 @@
         android:layout_gravity="center"
         android:gravity="center_horizontal|center_vertical"
         android:lineSpacingExtra="5sp"
-        android:text="@string/stringNoticeTitleText"
+        android:text="@string/stringRegisterNoticeTitle"
         android:textAppearance="@style/styleMembershipPrice" />
 
-    <ImageView
-        android:id="@+id/noticeHamburgerButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center|top|end"
-        android:layout_margin="24dp"
-        android:src="@drawable/hamburger"
-        android:contentDescription="@string/descriptionMembershipHamburgerButton"
-        tools:layout_editor_absoluteX="363dp"
-        tools:layout_editor_absoluteY="24dp" />
+    <TextView
+        android:id="@+id/noticeCreateButtonTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end|top"
+        android:layout_marginEnd="24dp"
+        android:text="@string/stringNoticeCreateButton"
+        android:textAppearance="@style/styleNoticeCreateButton"
+
+
+        />
 
 </androidx.appcompat.widget.Toolbar>

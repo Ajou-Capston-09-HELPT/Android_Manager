@@ -31,7 +31,7 @@ class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeRespon
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
         val notice = getItem(position)
         holder.title.text = notice.title
-        holder.createAt.text = notice.createdAt
+        holder.createAt.text = notice.createAt
         holder.itemView.setOnClickListener {
             listener.onMoreButtonClicked(notice.noticeId)
         }

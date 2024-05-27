@@ -1,5 +1,6 @@
 package com.ajou.helptmanager.notice
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,32 +18,36 @@ class NoticeViewModel : ViewModel() {
     private val _noticeList = MutableLiveData<List<NoticeResponse>>()
     val noticeList: LiveData<List<NoticeResponse>> = _noticeList
 
+
+
     fun getNoticeList(accessToken: String, gymId: Int) {
         viewModelScope.launch {
             val noticeListDeferred = async { noticeService.getNoticeList(accessToken, gymId) }
             val noticeListResponse = noticeListDeferred.await()
             if (noticeListResponse.isSuccessful) {
+                Log.d("NoticeViewModel", noticeListResponse.body().toString())
                 _noticeList.value = noticeListResponse.body()?.data ?: emptyList()
             }
         }
     }
 
-    fun uploadNotice(accessToken: String, noticeRequest: NoticeRequest) {
+    fun uploadNotice(accessToken: String, noticeUploadRequest: NoticeUploadRequest) {
         viewModelScope.launch {
-            val noticeListDeferred = async { noticeService.uploadNotice(accessToken, noticeRequest) }
+            val noticeListDeferred = async { noticeService.uploadNotice(accessToken, noticeUploadRequest) }
             val noticeListResponse = noticeListDeferred.await()
             if (noticeListResponse.isSuccessful) {
-                getNoticeList(accessToken, noticeRequest.gymId)
+                Log.d("NoticeViewModel", noticeListResponse.body().toString())
+                getNoticeList(accessToken, noticeUploadRequest.gymId)
             }
         }
     }
 
-    fun modifyNotice(accessToken: String, noticeId: Int, noticeRequest: NoticeRequest) {
+    fun modifyNotice(accessToken: String, noticeId: Int, noticeModifyRequest: NoticeModifyRequest) {
         viewModelScope.launch {
-            val noticeListDeferred = async { noticeService.modifyNotice(accessToken, noticeId, noticeRequest) }
+            val noticeListDeferred = async { noticeService.modifyNotice(accessToken, noticeId, noticeModifyRequest) }
             val noticeListResponse = noticeListDeferred.await()
             if (noticeListResponse.isSuccessful) {
-                getNoticeList(accessToken, noticeRequest.gymId)
+                getNoticeList(accessToken, noticeModifyRequest.gymId)
             }
         }
     }
@@ -52,6 +57,7 @@ class NoticeViewModel : ViewModel() {
             val noticeListDeferred = async { noticeService.deleteNotice(accessToken, noticeId) }
             val noticeListResponse = noticeListDeferred.await()
             if (noticeListResponse.isSuccessful) {
+                Log.d("NoticeViewModel", noticeListResponse.body().toString())
                 getNoticeList(accessToken, gymId)
             }
         }
