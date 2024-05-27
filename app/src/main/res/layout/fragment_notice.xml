@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".notice.NoticeFragment">
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/noticeDrawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/membership_background"
+            tools:context=".notice.NoticeFragment" >
+            <include
+                android:id="@+id/noticeToolbar"
+                layout="@layout/toolbar_notice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/noticeRegisterButton"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/long_button"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toTopOf="@id/recyclerViewNotice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/noticeToolbar" >
+                <TextView
+                    android:id="@+id/noticeRegisterButtonText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/stringRegisterNoticeTitle"
+                    android:textAppearance="@style/styleMembershipRegisterButton"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewNotice"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingBottom="100dp"
+                android:clipToPadding="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/noticeRegisterButton"
+                app:layout_constraintVertical_bias="0.982"
+                tools:layout_editor_absoluteX="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/noticeDrawer"
+            layout="@layout/drawer_header"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</FrameLayout>

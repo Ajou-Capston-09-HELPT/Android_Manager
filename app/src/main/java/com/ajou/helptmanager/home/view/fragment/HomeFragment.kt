@@ -80,6 +80,7 @@ class HomeFragment : Fragment() {
         }
         binding.drawer.notice.setOnClickListener {
             // TODO 공지사항으로 이동
+            findNavController().navigate(R.id.action_homeFragment_to_noticeFragment)
         }
         binding.drawer.chat.setOnClickListener {
             // TODO 채팅으로 이동
@@ -93,6 +94,10 @@ class HomeFragment : Fragment() {
         binding.ticketBg.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
             // TODO 이용권으로 이동
+        }
+
+        binding.noticeBg.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_noticeFragment)
         }
 
         binding.userBg.setOnClickListener {
