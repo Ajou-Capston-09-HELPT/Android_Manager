@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -27,7 +28,7 @@ class RegisterMembershipDialog(
     private val viewModel: MembershipViewModel
 ) : DialogFragment() {
 
-    private val dataStroe = UserDataStore()
+    private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId: Int? = null
 
@@ -35,11 +36,8 @@ class RegisterMembershipDialog(
     private lateinit var etMembershipPrice: EditText
     private lateinit var tvMonthlyPrice: TextView
 
-    private val density = Resources.getSystem().displayMetrics.density
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_register_membership, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,17 +59,15 @@ class RegisterMembershipDialog(
         btnRegisterClose.setOnClickListener {
             dismiss() // 다이얼로그 닫기
         }
-
     }
+
     override fun onStart() {
         super.onStart()
-        val dialog = dialog
-        if (dialog != null) {
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val width = (388 * density).toInt()
-            val height = (294 * density).toInt()
-            dialog.window?.setLayout(width, height)
-        }
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // 다이얼로그의 너비를 화면 너비의 90%로 설정
+        val width = (Resources.getSystem().displayMetrics.widthPixels * 0.9).toInt()
+        dialog?.window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
     }
 
     private val titleTextWatcher = object : TextWatcher {
@@ -121,6 +117,7 @@ class RegisterMembershipDialog(
             tvMonthlyPrice.text = ""
         }
     }
+
     private fun registerMembership() {
         val membershipTitle = etMembershipTitle.text.toString().trim()
         val membershipPrice = etMembershipPrice.text.toString().trim().replace(",".toRegex(), "").toIntOrNull()
@@ -128,13 +125,12 @@ class RegisterMembershipDialog(
         if (membershipTitle.isNotEmpty() && membershipPrice != null) {
             val intMembershipTitle = membershipTitle.toInt()
             CoroutineScope(Dispatchers.IO).launch {
-                accessToken = dataStroe.getAccessToken().toString()
-                gymId = dataStroe.getGymId()
+                accessToken = dataStore.getAccessToken().toString()
+                gymId = dataStore.getGymId()
                 viewModel.addProduct(accessToken, gymId, ProductRequest(intMembershipTitle, membershipPrice))
             }
             dismiss()
-        }
-        else {
+        } else {
             Log.d("RegisterMembershipDialog", "registerMembership: title or price is empty")
             dismiss()
         }

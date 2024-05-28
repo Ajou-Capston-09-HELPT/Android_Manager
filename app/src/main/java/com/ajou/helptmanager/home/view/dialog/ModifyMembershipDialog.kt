@@ -61,13 +61,10 @@ class ModifyMembershipDialog(
     }
     override fun onStart() {
         super.onStart()
-        val dialog = dialog
-        if (dialog != null) {
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val width = (388 * density).toInt()
-            val height = (294 * density).toInt()
-            dialog.window?.setLayout(width, height)
-        }
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (Resources.getSystem().displayMetrics.widthPixels * 0.9).toInt()
+        dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
 

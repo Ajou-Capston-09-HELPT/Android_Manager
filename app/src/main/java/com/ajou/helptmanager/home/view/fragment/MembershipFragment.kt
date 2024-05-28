@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
@@ -87,11 +88,21 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
             findNavController().popBackStack()
         }
     }
-
-    private fun showRegisterMembershipDialog(){
+    private fun showRegisterMembershipDialog() {
         val dialog = RegisterMembershipDialog(viewModel)
+
         dialog.show(parentFragmentManager, "RegisterMembershipDialog")
+
+        // 다이얼로그가 보여진 후 크기를 설정합니다.
+        dialog.dialog?.setOnShowListener {
+            val window = dialog.dialog?.window
+            window?.setLayout(
+                (resources.displayMetrics.widthPixels * 0.9).toInt(),
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+        }
     }
+
     private fun observeViewModel() {
         viewModel.membershipList.observe(viewLifecycleOwner) { membershipList ->
             membershipAdapter.submitList(membershipList)

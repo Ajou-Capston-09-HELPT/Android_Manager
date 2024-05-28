@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
@@ -47,6 +48,15 @@ class RegisterMoreDialog(private val productId: Int, private val viewModel: Memb
         dismiss()
         val dialog = ModifyMembershipDialog(productId, viewModel)
         dialog.show(parentFragmentManager, "ModifyMembershipDialog")
+
+        dialog.dialog?.setOnShowListener{
+            val window = dialog.dialog?.window
+            window?.setLayout(
+                (resources.displayMetrics.widthPixels * 0.9).toInt(),
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+        }
+
     }
     private fun deleteMembership() {
         CoroutineScope(Dispatchers.IO).launch {
