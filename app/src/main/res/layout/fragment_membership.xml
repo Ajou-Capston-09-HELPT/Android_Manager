@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".home.view.fragment.MembershipFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.view.fragment.EquipmentListFragment">
+    android:background="@drawable/membership_background">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -65,8 +67,9 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
         <include
             android:id="@+id/drawer"
             layout="@layout/drawer_header" />
     </androidx.drawerlayout.widget.DrawerLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

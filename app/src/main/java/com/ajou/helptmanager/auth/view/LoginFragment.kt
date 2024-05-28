@@ -124,9 +124,6 @@ class LoginFragment : Fragment() {
                                 }
                             }
                         }
-
-
-
                         Log.e(ContentValues.TAG, "로그인 성공 ${token.accessToken}")
                         Log.d(
                             ContentValues.TAG,
@@ -142,7 +139,6 @@ class LoginFragment : Fragment() {
                     callback = mCallback
                 ) // 카카오 이메일 로그인
             }
-
         }
     }
 
@@ -175,50 +171,30 @@ class LoginFragment : Fragment() {
                 show()
             }
         }
-    } // TODO 구체적인 오류 메세지로 변경하기
+    }
 
     private fun callLoginApi(id:String) {
         val jsonObject = JsonObject().apply {
             addProperty("kakaoId", id)
         }
-        Log.d("kakaoid",id)
-
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
         CoroutineScope(Dispatchers.IO).launch{
-            /* // 임시 데이터 저장
-            dataStore.saveGymId(9)
-            dataStore.saveUserName("굿굿짐")
-            dataStore.saveGymStatus("Approved")
-            dataStore.saveKakaoId(id)
-             */
             val loginDeferred = async {managerService.login(requestBody) }
             val loginResponse = loginDeferred.await()
-            Log.d("loginResponse","${loginResponse.toString()} /// ${loginResponse.isSuccessful} /// ${loginResponse.code()}")
-
             if (loginResponse.isSuccessful) {
                 val tokenBody = JSONObject(loginResponse.body()?.string())
                 val accessToken = "Bearer "+tokenBody.getJSONObject("data").getString("accessToken")
                 Log.d("tokenBody",tokenBody.toString())
                 dataStore.saveAccessToken(accessToken)
                 dataStore.saveRefreshToken("Bearer "+tokenBody.getJSONObject("data").getString("refreshToken"))
-
                 val checkGymDeferred = async { gymService.getGymStatus(accessToken) }
                 val checkGymResponse = checkGymDeferred.await()
                 var hasGym = "null"
                 if (checkGymResponse.isSuccessful) {
-
-
                     hasGym = JSONObject(checkGymResponse.body()?.string()).getJSONObject("data").getString("status")
-                    Log.d("hasGym",hasGym)
-
                     if (hasGym == "Approved"){
                         val idDeferred = async { managerService.getGymId(accessToken) }
                         val idResponse = idDeferred.await()
-
-
-
-                       // Log.d("idResponse",idResponse.toString())
-
                         if (idResponse.isSuccessful){
                             val idBody = JSONObject(idResponse.body()?.string())
                             Log.d("idBody success",idBody.toString())
@@ -229,9 +205,8 @@ class LoginFragment : Fragment() {
                                 Log.d("infoBody success",infoResponse.body().toString())
                                 dataStore.saveUserName(infoResponse.body()!!.data.gymName)
                             }
-                        }
-                        else{
-                            Log.d("idBodyFail",idResponse.errorBody()?.string().toString())
+                        }else{
+                            Log.d("idBody error",idResponse.errorBody()?.string().toString())
                         }
                     }
                 }else{

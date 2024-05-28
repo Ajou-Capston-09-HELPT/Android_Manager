@@ -40,7 +40,6 @@
 
         fun getProductList(accessToken: String, gymId: Int?){
             viewModelScope.launch {
-                dataStore.printAllValues()
                 val productListDeffered = async { productService.getProductList(accessToken!!, gymId) }
                 val productListResponse = productListDeffered.await()
                 if (productListResponse.isSuccessful) {
@@ -125,8 +124,5 @@
 
             return Membership(id, day, price, monthPrice)
         }
-
-
-
 
     }

@@ -1,5 +1,6 @@
 package com.ajou.helptmanager.home.adapter
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.home.model.Membership
 
+
 class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(
     MembershipDiffCallback
 ) {
 
     interface OnItemClickListener {
-        fun onMoreButtonClicked(productId: Int)
+        fun onMoreButtonClicked(id: Int)
     }
 
     class MembershipViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,7 +34,6 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
             .inflate(R.layout.item_membership, parent, false)
         return MembershipViewHolder(itemView)
     }
-
     override fun onBindViewHolder(holder: MembershipViewHolder, position: Int) {
         val membership = getItem(position)
         holder.title.text = membership.months

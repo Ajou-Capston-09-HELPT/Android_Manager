@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.UserDataStore
@@ -28,16 +30,24 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
     private val binding get() = _binding!!
     private var mContext : Context? = null
     private lateinit var viewModel : UserInfoViewModel
-    private val TAG = PendingUserFragment::class.java.simpleName
     private val gymAdmissionService = RetrofitInstance.getInstance().create(GymAdmissionService::class.java)
     private lateinit var accessToken : String
     private val dataStore = UserDataStore()
     private var gymId : Int? = null
     private lateinit var adapter : PendingUserInfoRVAdapter
+    private lateinit var callback: OnBackPressedCallback
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("backpressed","")
+                viewModel.setCheck(true)
+                findNavController().popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +67,8 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             val admissionDeferred = async { gymAdmissionService.getAllAdmissionUsers(accessToken,gymId!!) }
             val admissionResponse = admissionDeferred.await()
             if (admissionResponse.isSuccessful) {
-                Log.d("admissionResponse",admissionResponse.body()?.data.toString())
                 withContext(Dispatchers.Main){
+                    binding.loadingBar.hide()
                     adapter.updateList(admissionResponse.body()!!.data)
                 }
             }else{
@@ -98,5 +108,8 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
 
     override fun getSelectedItem(data: Equipment, position: Int) {
     }
-
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
 }

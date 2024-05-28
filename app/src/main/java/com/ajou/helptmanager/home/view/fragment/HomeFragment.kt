@@ -9,11 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentHomeBinding
+import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
+import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.QrService
 import com.journeyapps.barcodescanner.ScanContract
@@ -28,6 +32,8 @@ class HomeFragment : Fragment() {
     private val dataStore = UserDataStore()
     private var userName : String? = null
     private val qrService = RetrofitInstance.getInstance().create(QrService::class.java)
+    private lateinit var viewModel : UserInfoViewModel
+    private lateinit var dialog : ChatLinkSettingDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,6 +41,7 @@ class HomeFragment : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -43,12 +50,12 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+
         CoroutineScope(Dispatchers.IO).launch {
             userName = dataStore.getUserName()
-            Log.d("gymId is",dataStore.getGymId().toString())
             withContext(Dispatchers.Main) {
                 binding.greetMsg.text = String.format(mContext!!.resources.getString(R.string.home_greet_msg),userName)
-                Log.d("kakaoid",dataStore.getKakaoId().toString())
+                binding.drawer.name.text = userName
             }
         }
         return binding.root
@@ -82,12 +89,13 @@ class HomeFragment : Fragment() {
             // TODO 공지사항으로 이동
         }
         binding.drawer.chat.setOnClickListener {
-            // TODO 채팅으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "link")
         }
         binding.drawer.home.setOnClickListener {
             val intent = Intent(mContext, HomeActivity::class.java)
             startActivity(intent)
-            // TODO 메인화면으로 이동
         }
 
         binding.ticketBg.setOnClickListener {
@@ -107,18 +115,25 @@ class HomeFragment : Fragment() {
             qrScan()
         }
 
+        binding.chatBg.setOnClickListener {
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "link")
+        }
+
+        viewModel.chatLink.observe(viewLifecycleOwner, Observer {
+            Log.d("chatLink",viewModel.chatLink.value.toString())
+
+        })
+
     }
 
     private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(
         ScanContract()
     ) { result: ScanIntentResult ->
         if (result.contents == null) {
-            Log.d("contents", result.contents)
         } else {
             Log.d("contents", result.contents)
             checkValidation(result.contents)
-//            viewModel.setTrain(result.contents)
-//            Log.d("contents",result.contents)
         }
     }
 

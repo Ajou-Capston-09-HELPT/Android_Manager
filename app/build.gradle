@@ -14,12 +14,12 @@ def base_url = properties.getProperty('base_url')
 
 android {
     namespace 'com.ajou.helptmanager'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.ajou.helptmanager"
         minSdk 24
-        targetSdk 34
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -61,8 +61,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
-    implementation files('libs/com.skt.Tmap_1.75.jar')
-    implementation 'androidx.activity:activity:1.8.0'
+
+    implementation 'androidx.activity:activity:1.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -99,10 +99,11 @@ dependencies {
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
-
-
     // Test Code
     testImplementation 'org.mockito:mockito-core:3.12.4'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+
+    // GIF
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.22'
 }

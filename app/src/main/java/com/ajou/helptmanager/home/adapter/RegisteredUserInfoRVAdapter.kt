@@ -15,16 +15,19 @@ class RegisteredUserInfoRVAdapter(val context: Context, var list: List<Registere
      inner class ViewHolder(val binding: ItemUserInfoBinding) :
              RecyclerView.ViewHolder(binding.root) {
                  fun bind(item: RegisteredUserInfo) {
-                     binding.name.text = item.userName
-                     val month = calDate(item.startDate, item.endDate)
-                     val ticketName = "${month}개월 회원권"
-                     binding.ticket.text = ticketName
-                     val period = item.startDate + "~" + item.endDate
-                     binding.period.text = period
+                     if (item.startDate!= null && item.endDate!=null){
+                         binding.name.text = item.userName
+                         val month = calDate(item.startDate, item.endDate)
+                         val ticketName = "${month}개월 회원권"
+                         binding.ticket.text = ticketName
+                         val period = item.startDate + "~" + item.endDate
+                         binding.period.text = period
 
-                     binding.item.setOnClickListener {
-                         link.getSelectedItem(item.userId,null)
+                         binding.item.setOnClickListener {
+                             link.getSelectedItem(item.userId,null)
+                         }
                      }
+
                  }
              }
 

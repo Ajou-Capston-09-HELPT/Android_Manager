@@ -5,21 +5,27 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.databinding.FragmentEquipmentEditBottomSheetBinding
+import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
+import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class EquipmentEditBottomSheetFragment(val setting: List<Int>,private val callback: (List<Int>) -> Unit) : BottomSheetDialogFragment() {
+class EquipmentEditBottomSheetFragment : BottomSheetDialogFragment() {
     private var mContext : Context? = null
     private var _binding : FragmentEquipmentEditBottomSheetBinding? = null
     private val binding get() = _binding!!
-    private lateinit var dialog : TrainSettingDialog
+    private lateinit var settingDialog : TrainSettingDialog
+    private lateinit var viewModel : UserInfoViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,6 +41,7 @@ class EquipmentEditBottomSheetFragment(val setting: List<Int>,private val callba
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentEquipmentEditBottomSheetBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         return binding.root
     }
 
@@ -52,21 +59,18 @@ class EquipmentEditBottomSheetFragment(val setting: List<Int>,private val callba
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var setting = listOf<Int>(setting[0],setting[1],setting[2]) // 운동 초기값 설정
-
         binding.edit.setOnClickListener {
-                dialog = TrainSettingDialog(setting) { value ->
-                    dismiss()
-                    setting = value
-                    callback(value)
-                }
-                dialog.show(requireActivity().supportFragmentManager, "setting")
+            settingDialog = TrainSettingDialog()
+            settingDialog.show(requireActivity().supportFragmentManager, "setting")
+            dialog?.hide()
+
         }
 
         binding.delete.setOnClickListener {
             val value = listOf<Int>(-1,-1,-1)
+            viewModel.setEquipmentSetting(value)
             dismiss()
-            callback(value)
+//            callback(value)
         }
     }
 
@@ -92,6 +96,6 @@ class EquipmentEditBottomSheetFragment(val setting: List<Int>,private val callba
 
     override fun onDestroy() {
         super.onDestroy()
-        if(::dialog.isInitialized) dialog.dismiss()
+        if(::settingDialog.isInitialized) settingDialog.dismiss()
     }
 }

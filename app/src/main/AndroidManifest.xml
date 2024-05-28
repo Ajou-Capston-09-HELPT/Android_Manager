@@ -50,7 +50,6 @@
                     android:scheme="kakao${NATIVE_API_KEY}" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

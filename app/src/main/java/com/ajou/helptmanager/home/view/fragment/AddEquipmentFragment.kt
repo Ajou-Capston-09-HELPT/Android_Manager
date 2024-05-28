@@ -9,14 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
+import com.ajou.helptmanager.DialogToFragment
+import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
+import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
+import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
 import com.ajou.helptmanager.network.api.GymEquipmentService
@@ -25,7 +32,7 @@ import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 
-class AddEquipmentFragment : Fragment(), AdapterToFragment {
+class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
     private var _binding: FragmentAddEquipmentBinding? = null
     private val binding get() = _binding!!
     private var mContext: Context? = null
@@ -36,7 +43,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId : Int? = null
-
+    private lateinit var viewModel : UserInfoViewModel
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -52,12 +59,12 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAddEquipmentBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken().toString()
             gymId = dataStore.getGymId()
             val equipDeferred = async { equipmentService.getAllEquipments(accessToken!!) }
             val equipResponse = equipDeferred.await()
-
             if (equipResponse.isSuccessful) {
                 Log.d("equipResponse",equipResponse.body()?.data.toString())
                 list = equipResponse.body()?.data!!
@@ -85,6 +92,15 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
             }else return@setOnEditorActionListener false
         }
 
+        viewModel.equipment.observe(viewLifecycleOwner, Observer {
+            if (viewModel.equipment.value != null) {
+                if (viewModel.equipment.value!!.customWeight != 0 || viewModel.equipment.value!!.customCount != 0 || viewModel.equipment.value!!.customSet != 0) {
+                    postEquipmentApi(viewModel.equipment.value!!)
+                    Log.d("viewModel is called","addequipmentfragment")
+                    viewModel.setEquipment(null)
+                }
+            }
+        })
     }
 
     override fun getSelectedItem(userId: Int, admissionId: Int?) {
@@ -95,16 +111,9 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
 
     override fun getSelectedItem(data: Equipment, position: Int) {
         var setting = listOf<Int>(data.customWeight, data.customCount, data.customSet)
-        val dialog = TrainSettingDialog(setting) { value ->
-            setting = value
-            data.customSet = value[2]
-            data.customCount = value[1]
-            data.customWeight = value[0]
-            Log.d("before data","data  $data  value $value")
-            // TODO data랑 value 값 조합해서 기구 등록 api 던지기
-            postEquipmentApi(data)
-
-        }
+        Log.d("setting in",setting.toString())
+        viewModel.setEquipment(data)
+        val dialog = TrainSettingDialog()
         dialog.show(requireActivity().supportFragmentManager, "setting")
     }
 
@@ -125,9 +134,14 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment {
             val postEquipResponse = postEquipDeferred.await()
             if (postEquipResponse.isSuccessful){
                 Log.d("postEquipResponse","")
+                viewModel.setEquipment(null)
             }else {
                 Log.d("postEquipResponse faill",postEquipResponse.errorBody()?.string().toString())
             }
         }
+    }
+
+    override fun getSetting(data: List<Int>) {
+
     }
 }
