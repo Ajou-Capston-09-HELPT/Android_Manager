@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".home.view.fragment.MembershipFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/membership_background">
+    tools:context=".home.view.fragment.EquipmentListFragment">
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+        android:id="@+id/membershipDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,7 +18,7 @@
             tools:context=".home.view.fragment.MembershipFragment">
 
             <include
-                android:id="@+id/toolbar"
+                android:id="@+id/membershipToolbar"
                 layout="@layout/toolbar_membership"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +31,7 @@
                 android:paddingBottom="100dp"
                 android:clipToPadding="false"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                app:layout_constraintTop_toBottomOf="@+id/membershipToolbar"
                 app:layout_constraintVertical_bias="0.982"
                 tools:layout_editor_absoluteX="0dp" />
 
@@ -66,10 +64,8 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         <include
-            android:id="@+id/drawer"
+            android:id="@+id/membershipDrawer"
             layout="@layout/drawer_header" />
     </androidx.drawerlayout.widget.DrawerLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

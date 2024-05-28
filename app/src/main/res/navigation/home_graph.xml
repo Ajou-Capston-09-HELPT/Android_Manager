@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_homeFragment_to_equipmentListFragment"
             app:destination="@id/equipmentListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_noticeFragment"
+            app:destination="@id/noticeFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchUserFragment"
@@ -107,11 +110,45 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
-
     <fragment
         android:id="@+id/memberDetailExerciseRecordFragment"
         android:name="com.ajou.helptmanager.memberDetail.MemberDetailExerciseRecordFragment"
         android:label="fragment_member_detail_exercise_record"
         tools:layout="@layout/fragment_member_detail_exercise_record" />
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeFragment"
+        android:label="fragment_notice"
+        tools:layout="@layout/fragment_notice">
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeDetailFragment"
+            app:destination="@id/noticeDetailFragment" />
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeCreateFragment"
+            app:destination="@id/noticeCreateFragment" />
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeModifyFragment"
+            app:destination="@id/noticeModifyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noticeDetailFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeDetailFragment"
+        android:label="fragment_notice_detail"
+        tools:layout="@layout/fragment_notice_detail"
+        />
+    <fragment
+        android:id="@+id/noticeCreateFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeCreateFragment"
+        android:label="fragment_notice_create"
+        tools:layout="@layout/fragment_notice_create"
+        />
+    <fragment
+        android:id="@+id/noticeModifyFragment"
+        android:name="com.ajou.helptmanager.notice.NoticeModifyFragment"
+        android:label="fragment_notice_modify"
+        tools:layout="@layout/fragment_notice_modify"
+        />
+
+
 
 </navigation>

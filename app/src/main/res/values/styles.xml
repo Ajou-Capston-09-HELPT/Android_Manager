@@ -50,13 +50,13 @@
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
     <style name="styleMembershipDelete">
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#FF3433</item>
-        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <!-- MemberDetail Style -->
@@ -102,10 +102,58 @@
         <item name="android:textColor">#828282</item>
         <item name="android:fontFamily">@font/pretendard</item>
     </style>
-    <!-- MemberDetail Style -->
+
+    <!-- Notice Style -->
+    <style name="styleNoticeTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+    </style>
+    <style name="styleNoticeCreateDate">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#828282</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleNoticeCreateButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#3BB9B6</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+    </style>
+    <style name="styleNoticeCreateTitleTV">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#828282</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+    </style>
+    <style name="styleNoticeCreateDateTV">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#828282</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+    <style name="styleNoticeCreateContentTV">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#828282</item>
+    </style>
+    <style name="styleNoticeDetailTitleTV">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+    </style>
+    <style name="styleNoticeDetailContentTV">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
 
 
-
+    <!-- Other Styles -->
     <style name="AppBottomSheetDialogTheme"
         parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>

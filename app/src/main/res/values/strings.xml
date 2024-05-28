@@ -47,7 +47,21 @@
     <string name="reps_format">%d회</string>
     <string name="sets_format">%d세트</string>
 
+    <!-- Notice Strings -->
+    <string name="stringNoticeTitleText">공지사항 관리</string>
+    <string name="stringRegisterNoticeTitle">공지사항 등록</string>
+    <string name="stringNoticeCreateButton">등록</string>
+    <string name="stringNoticeCreateTitleTV">제목을 입력해주세요</string>
+    <string name="stringNoticeCreateDateTV">20xx.xx.xx</string>
+    <string name="stringNoticeCreateContentTV">공지사항을 입력해주세요</string>
+    <string name="stringModifyNoticeTitle">공지사항 수정</string>
+    <string name="stringNoticeModifyButton">수정</string>
+    <string name="stringNoticeDetailTitleText">공지사항</string>
+    <string name="stringNoticeDetailContentTV">내용</string>
+    <string name="stringNoticeDetailTitleTV">제목</string>
 
+
+    <!-- Other Strings -->
     <string name="menu_ticket">이용권 등록 및 수정</string>
     <string name="menu_qr">입장용 QR 스캔</string>
     <string name="menu_fitness">기구 등록 및 조회</string>
@@ -62,6 +76,7 @@
     <string name="home_greet_msg">안녕하세요!\n%s 사장님</string>
 
     <string name="equip_set">%1$dkg %2$d회 %3$d세트</string>
+
 
 
 </resources>

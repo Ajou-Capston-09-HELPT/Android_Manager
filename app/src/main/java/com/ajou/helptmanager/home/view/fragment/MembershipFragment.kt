@@ -64,26 +64,26 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         pressHamburgerButton()
         pressHamburgerCloseButton()
 
-        binding.drawer.ticket.setOnClickListener {
+        binding.membershipDrawer.ticket.setOnClickListener {
             //findNavController().navigate(R.id.action_membershipFragment_to_membershipFragment)
         }
         return binding.root
     }
 
     private fun pressHamburgerCloseButton() {
-        binding.drawer.closeBtn.setOnClickListener {
-            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+        binding.membershipDrawer.closeBtn.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
         }
     }
 
     private fun pressHamburgerButton() {
-        binding.toolbar.membershipHamburgerButton.setOnClickListener {
-            binding.drawerLayout.openDrawer(binding.drawer.drawer)
+        binding.membershipToolbar.membershipHamburgerButton.setOnClickListener {
+            binding.membershipDrawerLayout.openDrawer(binding.membershipDrawer.drawer)
         }
     }
 
     private fun pressBackButton() {
-        binding.toolbar.membershipBackButton.setOnClickListener {
+        binding.membershipToolbar.membershipBackButton.setOnClickListener {
             findNavController().popBackStack()
         }
     }
