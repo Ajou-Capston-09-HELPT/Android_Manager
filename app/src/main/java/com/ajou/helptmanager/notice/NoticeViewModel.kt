@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.NoticeService
 import kotlinx.coroutines.async
