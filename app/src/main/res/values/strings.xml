@@ -51,7 +51,14 @@
     <string name="stringNoticeTitleText">공지사항 관리</string>
     <string name="stringRegisterNoticeTitle">공지사항 등록</string>
     <string name="stringNoticeCreateButton">등록</string>
-
+    <string name="stringNoticeCreateTitleTV">제목을 입력해주세요</string>
+    <string name="stringNoticeCreateDateTV">20xx.xx.xx</string>
+    <string name="stringNoticeCreateContentTV">공지사항을 입력해주세요</string>
+    <string name="stringModifyNoticeTitle">공지사항 수정</string>
+    <string name="stringNoticeModifyButton">수정</string>
+    <string name="stringNoticeDetailTitleText">공지사항</string>
+    <string name="stringNoticeDetailContentTV">내용</string>
+    <string name="stringNoticeDetailTitleTV">제목</string>
 
 
     <!-- Other Strings -->
@@ -69,9 +76,7 @@
     <string name="home_greet_msg">안녕하세요!\n%s 사장님</string>
 
     <string name="equip_set">%1$dkg %2$d회 %3$d세트</string>
-    <string name="stringNoticeCreateTitleTV">제목을 입력해주세요</string>
-    <string name="stringNoticeCreateDateTV">20xx.xx.xx</string>
-    <string name="stringNoticeCreateContentTV">공지사항을 입력해주세요</string>
+
 
 
 </resources>

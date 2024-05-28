@@ -9,14 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
-import com.ajou.helptmanager.home.adapter.MembershipAdapter
 
 class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeResponse, NoticeAdapter.NoticeViewHolder>(
     NoticeDiffCallback
 ) {
     interface  OnItemClickListener {
-        fun onMoreButtonClicked(noticeId: Int)
-        fun onDetailButtonClicked(noticeId: Int)
+        fun onMoreButtonClicked(noticeId: Int, title: String, content: String, createAt: String)
+        fun onDetailButtonClicked(noticeId: Int, title: String, content: String, createAt: String)
     }
 
     class NoticeViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -36,10 +35,10 @@ class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeRespon
         holder.title.text = notice.title
         holder.createAt.text = notice.createAt
         holder.moreButton.setOnClickListener {
-            listener.onMoreButtonClicked(notice.noticeId)
+            listener.onMoreButtonClicked(notice.noticeId, notice.title, notice.content, notice.createAt)
         }
         holder.itemView.setOnClickListener {
-            listener.onDetailButtonClicked(notice.noticeId)
+            listener.onDetailButtonClicked(notice.noticeId, notice.title, notice.content, notice.createAt)
         }
 
     }

@@ -1,5 +1,6 @@
 package com.ajou.helptmanager.notice
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -90,23 +91,25 @@ class NoticeCreateFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun uploadNotice(title: String, content: String) {
         val notice = NoticeUploadRequest(gymId!!, title, content, dateString)
-
-            CoroutineScope(Dispatchers.IO).launch {
-                if (accessToken != null) {
-                    val response = noticeService.uploadNotice(accessToken, notice)
-                    if (response.isSuccessful) {
-                        withContext(Dispatchers.Main) {
-                            Log.d("NoticeCreateFragment", "uploadNotice Success")
-                            findNavController().popBackStack()
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Log.d("NoticeCreateFragment", "uploadNotice Fail")
-                        }
+        CoroutineScope(Dispatchers.IO).launch {
+            if (accessToken != null) {
+                val response = noticeService.uploadNotice(accessToken, notice)
+                if (response.isSuccessful) {
+                    withContext(Dispatchers.Main) {
+                        Log.d("NoticeCreateFragment", "uploadNotice Success")
+                        findNavController().popBackStack()
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Log.d("NoticeCreateFragment", "uploadNotice Fail")
                     }
                 }
             }
+        }
     }
+
+
 }

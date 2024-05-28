@@ -1,0 +1,46 @@
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/titleBarNoticeModify"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@drawable/membership_title_bar"
+    android:clipToOutline="true">
+
+    <ImageView
+        android:id="@+id/noticeModifyBackButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center|start|top"
+        android:layout_margin="24dp"
+        android:src="@drawable/arrow"
+        android:contentDescription="@string/descriptionMembershipBackButton"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="24dp" />
+
+    <TextView
+        android:id="@+id/noticeModifyTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal|center_vertical"
+        android:lineSpacingExtra="5sp"
+        android:text="@string/stringModifyNoticeTitle"
+        android:textAppearance="@style/styleMembershipPrice" />
+
+    <TextView
+        android:id="@+id/noticeModifyButtonTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end|top"
+        android:layout_marginEnd="24dp"
+        android:text="@string/stringNoticeModifyButton"
+        android:textAppearance="@style/styleNoticeCreateButton"
+
+
+        />
+
+</androidx.appcompat.widget.Toolbar>

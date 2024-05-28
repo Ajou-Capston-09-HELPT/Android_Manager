@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -12,8 +13,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NoticeMoreDialog(private val noticeId: Int, private val viewModel: NoticeViewModel): BottomSheetDialogFragment() {
-    // TODO : 공지사항 수정/삭제 다이얼로그
+class NoticeMoreDialog(
+    private val noticeId: Int,
+    private val title: String,
+    private val content: String,
+    private val createAt: String,
+    private val viewModel: NoticeViewModel): BottomSheetDialogFragment() {
 
     private val dataStore = UserDataStore()
     private lateinit var accessToken: String
@@ -47,8 +52,15 @@ class NoticeMoreDialog(private val noticeId: Int, private val viewModel: NoticeV
     }
 
     private fun modifyNotice() {
-        dismiss()
         // TODO 수정 Fragment 추가
+        val bundle = Bundle().apply{
+            putInt("noticeId", noticeId)
+            putString("title", title)
+            putString("content", content)
+            putString("createAt", createAt)
+        }
+        findNavController().navigate(R.id.action_noticeFragment_to_noticeModifyFragment, bundle)
+        dismiss()
     }
 
     private fun deleteNotice() {

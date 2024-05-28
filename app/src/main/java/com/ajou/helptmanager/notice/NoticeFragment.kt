@@ -108,20 +108,41 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
             noticeAdapter.submitList(it)
         }
     }
-    override fun onMoreButtonClicked(noticeId: Int) {
+    override fun onMoreButtonClicked(
+        noticeId: Int,
+        title: String,
+        content: String,
+        createAt: String
+    ) {
         // TODO : noticeId에 해당하는 notice 수정/삭제 페이지로 이동
         Log.d("NoticeFragment", "onMoreButtonClicked: $noticeId")
-        showMoreDialog(noticeId, viewModel)
+        showMoreDialog(noticeId,title,content,createAt, viewModel)
     }
 
-    override fun onDetailButtonClicked(noticeId: Int) {
-        // TODO : noticeId에 해당하는 notice 상세 페이지로 이동
-        Log.d("NoticeFragment", "onDetailButtonClicked: $noticeId")
+    override fun onDetailButtonClicked(
+        noticeId: Int,
+        title: String,
+        content: String,
+        createAt: String
+    ) {
+        showDetailFragment(noticeId, title, content, createAt)
     }
 
-    private fun showMoreDialog(id: Int, viewModel: NoticeViewModel) {
-        val dialog = NoticeMoreDialog(id, viewModel)
+    private fun showMoreDialog(id: Int,title: String, content: String, createAt: String, viewModel: NoticeViewModel) {
+        val dialog = NoticeMoreDialog(id, title,content,createAt, viewModel)
         dialog.show(parentFragmentManager, "MoreDialog")
+    }
+
+    private fun showDetailFragment(id: Int, title: String, content: String, createAt: String) {
+        val bundle = Bundle().apply {
+            putInt("noticeId", id)
+            putString("title", title)
+            putString("content", content)
+            putString("createAt", createAt)
+        }
+
+        findNavController().navigate(R.id.action_noticeFragment_to_noticeDetailFragment, bundle)
+
     }
 
 }

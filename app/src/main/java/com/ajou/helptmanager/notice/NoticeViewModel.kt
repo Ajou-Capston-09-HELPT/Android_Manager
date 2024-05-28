@@ -12,7 +12,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class NoticeViewModel : ViewModel() {
-    private val dataStore = UserDataStore()
     private val noticeService = RetrofitInstance.getInstance().create(NoticeService::class.java)
 
     private val _noticeList = MutableLiveData<List<NoticeResponse>>()
@@ -31,27 +30,6 @@ class NoticeViewModel : ViewModel() {
         }
     }
 
-    fun uploadNotice(accessToken: String, noticeUploadRequest: NoticeUploadRequest) {
-        viewModelScope.launch {
-            val noticeListDeferred = async { noticeService.uploadNotice(accessToken, noticeUploadRequest) }
-            val noticeListResponse = noticeListDeferred.await()
-            if (noticeListResponse.isSuccessful) {
-                Log.d("NoticeViewModel", noticeListResponse.body().toString())
-                getNoticeList(accessToken, noticeUploadRequest.gymId)
-            }
-        }
-    }
-
-    fun modifyNotice(accessToken: String, noticeId: Int, noticeModifyRequest: NoticeModifyRequest) {
-        viewModelScope.launch {
-            val noticeListDeferred = async { noticeService.modifyNotice(accessToken, noticeId, noticeModifyRequest) }
-            val noticeListResponse = noticeListDeferred.await()
-            if (noticeListResponse.isSuccessful) {
-                getNoticeList(accessToken, noticeModifyRequest.gymId)
-            }
-        }
-    }
-
     fun deleteNotice(accessToken: String, noticeId: Int, gymId: Int) {
         viewModelScope.launch {
             val noticeListDeferred = async { noticeService.deleteNotice(accessToken, noticeId) }
@@ -64,3 +42,34 @@ class NoticeViewModel : ViewModel() {
     }
 
 }
+
+
+/*
+    fun uploadNotice(accessToken: String, noticeUploadRequest: NoticeUploadRequest) {
+        viewModelScope.launch {
+            val noticeListDeferred = async { noticeService.uploadNotice(accessToken, noticeUploadRequest) }
+            val noticeListResponse = noticeListDeferred.await()
+            if (noticeListResponse.isSuccessful) {
+                Log.d("NoticeViewModel", noticeListResponse.body().toString())
+                getNoticeList(accessToken, noticeUploadRequest.gymId)
+            }
+            else {
+                Log.d("NoticeViewModel", noticeListResponse.errorBody().toString())
+            }
+        }
+    }
+
+    fun modifyNotice(accessToken: String, noticeId: Int, noticeModifyRequest: NoticeModifyRequest) {
+        viewModelScope.launch {
+            val noticeListDeferred = async { noticeService.modifyNotice(accessToken, noticeId, noticeModifyRequest) }
+            val noticeListResponse = noticeListDeferred.await()
+            if (noticeListResponse.isSuccessful) {
+                Log.d("NoticeViewModel", noticeListResponse.body().toString())
+                getNoticeList(accessToken, noticeModifyRequest.gymId)
+            }
+            else{
+                Log.d("NoticeViewModel", noticeListResponse.errorBody().toString())
+            }
+        }
+    }
+ */
