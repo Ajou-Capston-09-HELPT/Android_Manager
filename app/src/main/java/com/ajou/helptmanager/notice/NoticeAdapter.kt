@@ -3,6 +3,7 @@ package com.ajou.helptmanager.notice
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,11 +16,13 @@ class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeRespon
 ) {
     interface  OnItemClickListener {
         fun onMoreButtonClicked(noticeId: Int)
+        fun onDetailButtonClicked(noticeId: Int)
     }
 
     class NoticeViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val title: TextView = view.findViewById(R.id.noticeTitleTV)
         val createAt: TextView = view.findViewById(R.id.noticeCreateDateTV)
+        val moreButton: ImageView = view.findViewById(R.id.noticeMoreButtonIV)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
@@ -32,9 +35,13 @@ class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeRespon
         val notice = getItem(position)
         holder.title.text = notice.title
         holder.createAt.text = notice.createAt
-        holder.itemView.setOnClickListener {
+        holder.moreButton.setOnClickListener {
             listener.onMoreButtonClicked(notice.noticeId)
         }
+        holder.itemView.setOnClickListener {
+            listener.onDetailButtonClicked(notice.noticeId)
+        }
+
     }
 
     companion object NoticeDiffCallback : DiffUtil.ItemCallback<NoticeResponse>() {

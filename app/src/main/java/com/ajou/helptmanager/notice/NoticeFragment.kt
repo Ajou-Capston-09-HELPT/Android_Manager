@@ -78,8 +78,7 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
 
     private fun pressBackButton() {
         binding.noticeToolbar.noticeBackButton.setOnClickListener {
-            // TODO : 뒤로가기 버튼 클릭 시 이전 화면으로 이동
-            Log.d("NoticeFragment", "backButton Clicked")
+            findNavController().popBackStack()
         }
     }
 
@@ -113,6 +112,11 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         // TODO : noticeId에 해당하는 notice 수정/삭제 페이지로 이동
         Log.d("NoticeFragment", "onMoreButtonClicked: $noticeId")
         showMoreDialog(noticeId, viewModel)
+    }
+
+    override fun onDetailButtonClicked(noticeId: Int) {
+        // TODO : noticeId에 해당하는 notice 상세 페이지로 이동
+        Log.d("NoticeFragment", "onDetailButtonClicked: $noticeId")
     }
 
     private fun showMoreDialog(id: Int, viewModel: NoticeViewModel) {
