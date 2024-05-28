@@ -76,7 +76,7 @@
     <string name="home_greet_msg">안녕하세요!\n%s 사장님</string>
 
     <string name="equip_set">%1$dkg %2$d회 %3$d세트</string>
-
+    <string name="stringMembershipMonthTitleTV">월</string>
 
 
 </resources>
