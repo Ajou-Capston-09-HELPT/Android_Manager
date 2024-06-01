@@ -122,6 +122,10 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
         binding.drawer.train.setTextColor(resources.getColor(R.color.primary))
         binding.drawer.train.setTypeface(binding.drawer.user.typeface, Typeface.BOLD)
 
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.hamburger.setOnClickListener {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
