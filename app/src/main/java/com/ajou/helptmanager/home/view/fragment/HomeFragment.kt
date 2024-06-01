@@ -71,22 +71,23 @@ class HomeFragment : Fragment() {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
         }
         binding.drawer.ticket.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
-            // TODO 이용권으로 이동
         }
         binding.drawer.qr.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             qrScan()
-            // TODO QR스캔으로 이동
         }
         binding.drawer.train.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
         }
         binding.drawer.user.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
-            // TODO 회원으로 이동
         }
         binding.drawer.notice.setOnClickListener {
-            // TODO 공지사항으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_noticeFragment)
         }
         binding.drawer.chat.setOnClickListener {
@@ -95,13 +96,13 @@ class HomeFragment : Fragment() {
             dialog.show(requireActivity().supportFragmentManager, "link")
         }
         binding.drawer.home.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             val intent = Intent(mContext, HomeActivity::class.java)
             startActivity(intent)
         }
 
         binding.ticketBg.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
-            // TODO 이용권으로 이동
         }
 
         binding.noticeBg.setOnClickListener {
