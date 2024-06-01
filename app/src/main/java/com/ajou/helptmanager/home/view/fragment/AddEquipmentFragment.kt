@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.DialogToFragment
@@ -22,6 +23,7 @@ import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
@@ -44,6 +46,8 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
     private lateinit var accessToken: String
     private var gymId : Int? = null
     private lateinit var viewModel : UserInfoViewModel
+    private lateinit var dialog : ChatLinkSettingDialog
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -83,6 +87,17 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        pressBackButton()
+        pressHamburgerButton()
+        pressHamburgerCloseButton()
+        pressHamburgerHomeButton()
+        pressHamburgerMembershipButton()
+        pressHamburgerQrButton()
+        pressHamburgerEquipmentButton()
+        pressHamburegerUserButton()
+        pressHamburegerNoticeButton()
+        pressHamburgerChatButton()
+
         binding.equip.setOnEditorActionListener { view, i, keyEvent ->
             if (i == EditorInfo.IME_ACTION_SEARCH){
                 val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -91,6 +106,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
                 return@setOnEditorActionListener true
             }else return@setOnEditorActionListener false
         }
+
 
         viewModel.equipment.observe(viewLifecycleOwner, Observer {
             if (viewModel.equipment.value != null) {
@@ -144,4 +160,75 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
     override fun getSetting(data: List<Int>) {
 
     }
+
+    private fun pressBackButton(){
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun pressHamburgerButton(){
+        binding.hamburger.setOnClickListener {
+            binding.drawerLayout.openDrawer(binding.drawer.drawer)
+        }
+    }
+
+    private fun pressHamburgerCloseButton(){
+        binding.drawer.closeBtn.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+        }
+    }
+
+    private fun pressHamburgerHomeButton(){
+        binding.drawer.home.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_addEquipmentFragment_to_homeFragment)
+        }
+    }
+
+    private fun pressHamburgerMembershipButton(){
+        binding.drawer.ticket.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_addEquipmentFragment_to_membershipFragment)
+        }
+    }
+
+    private fun pressHamburgerQrButton(){
+        binding.drawer.qr.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            // TODO QR 스캔
+        }
+    }
+
+    private fun pressHamburgerEquipmentButton(){
+        binding.drawer.train.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_addEquipmentFragment_self)
+        }
+    }
+
+    private fun pressHamburegerUserButton(){
+        binding.drawer.user.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_addEquipmentFragment_to_searchUserFragment)
+        }
+    }
+
+    private fun pressHamburegerNoticeButton(){
+        binding.drawer.notice.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_addEquipmentFragment_to_noticeFragment)
+        }
+    }
+
+    private fun pressHamburgerChatButton(){
+        binding.drawer.chat.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "link")
+        }
+    }
+
+
+
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentNoticeBinding
+import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
 
     private lateinit var noticeAdapter: NoticeAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var dialog: ChatLinkSettingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,14 +65,19 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         pressBackButton()
         pressHamburgerButton()
         pressHamburgerCloseButton()
+        pressHamburgerHomeButton()
+        pressHamburgerMembershipButton()
+        pressHamburgerQrButton()
+        pressHamburgerEquipmentButton()
+        pressHamburegerUserButton()
+        pressHamburegerNoticeButton()
+        pressHamburgerChatButton()
 
         return binding.root
     }
 
     private fun pressUploadButton() {
         binding.noticeRegisterButton.setOnClickListener {
-            // TODO : 공지사항 등록 프래그먼트 이동
-            Log.d("NoticeFragment", "noticeRegisterButton Clicked")
             findNavController().navigate(R.id.action_noticeFragment_to_noticeCreateFragment)
 
         }
@@ -91,6 +98,56 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
     private fun pressHamburgerCloseButton(){
         binding.noticeDrawer.closeBtn.setOnClickListener {
             binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+        }
+    }
+
+    private fun pressHamburgerHomeButton(){
+        binding.noticeDrawer.home.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            findNavController().navigate(R.id.action_noticeFragment_to_homeFragment)
+        }
+    }
+
+    private fun pressHamburgerMembershipButton(){
+        binding.noticeDrawer.ticket.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            findNavController().navigate(R.id.action_noticeFragment_to_membershipFragment)
+        }
+    }
+
+    private fun pressHamburgerQrButton(){
+        binding.noticeDrawer.qr.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            // TODO QR 스캔
+        }
+    }
+
+    private fun pressHamburgerEquipmentButton(){
+        binding.noticeDrawer.train.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            findNavController().navigate(R.id.action_noticeFragment_to_equipmentListFragment)
+        }
+    }
+
+    private fun pressHamburegerUserButton(){
+        binding.noticeDrawer.user.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            findNavController().navigate(R.id.action_noticeFragment_to_searchUserFragment)
+        }
+    }
+
+    private fun pressHamburegerNoticeButton(){
+        binding.noticeDrawer.notice.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            findNavController().navigate(R.id.action_noticeFragment_self)
+        }
+    }
+
+    private fun pressHamburgerChatButton(){
+        binding.noticeDrawer.chat.setOnClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "link")
         }
     }
 

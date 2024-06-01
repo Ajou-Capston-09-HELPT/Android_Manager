@@ -18,6 +18,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentMembershipBinding
 import com.ajou.helptmanager.home.adapter.MembershipAdapter
+import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
 import com.ajou.helptmanager.home.view.dialog.RegisterMembershipDialog
 import com.ajou.helptmanager.home.view.dialog.RegisterMoreDialog
@@ -34,6 +35,7 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
     private val dataStroe = UserDataStore()
     private lateinit var accessToken: String
     private var gymId: Int? = null
+    private lateinit var dialog: ChatLinkSettingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +66,14 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         pressBackButton()
         pressHamburgerButton()
         pressHamburgerCloseButton()
+        pressHamburgerHomeButton()
+        pressHamburgerMembershipButton()
+        pressHamburgerQrButton()
+        pressHamburgerEquipmentButton()
+        pressHamburegerUserButton()
+        pressHamburegerNoticeButton()
+        pressHamburgerChatButton()
+
 
         binding.membershipDrawer.ticket.setOnClickListener {
             //findNavController().navigate(R.id.action_membershipFragment_to_membershipFragment)
@@ -71,17 +81,69 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         return binding.root
     }
 
-    private fun pressHamburgerCloseButton() {
-        binding.membershipDrawer.closeBtn.setOnClickListener {
-            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
-        }
-    }
+
 
     private fun pressHamburgerButton() {
         binding.membershipToolbar.membershipHamburgerButton.setOnClickListener {
             binding.membershipDrawerLayout.openDrawer(binding.membershipDrawer.drawer)
         }
     }
+    private fun pressHamburgerCloseButton() {
+        binding.membershipDrawer.closeBtn.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+        }
+    }
+
+    private fun pressHamburgerHomeButton() {
+        binding.membershipDrawer.home.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            findNavController().navigate(R.id.action_membershipFragment_to_homeFragment)
+        }
+    }
+
+    private fun pressHamburgerMembershipButton() {
+        binding.membershipDrawer.ticket.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            findNavController().navigate(R.id.action_membershipFragment_self)
+        }
+    }
+
+    private fun pressHamburgerQrButton() {
+        binding.membershipDrawer.qr.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            // TODO QR 스캔
+        }
+    }
+
+    private fun pressHamburgerEquipmentButton() {
+        binding.membershipDrawer.train.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            findNavController().navigate(R.id.action_membershipFragment_to_equipmentListFragment)
+        }
+    }
+
+    private fun pressHamburegerUserButton() {
+        binding.membershipDrawer.user.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            findNavController().navigate(R.id.action_membershipFragment_to_searchUserFragment)
+        }
+    }
+
+    private fun pressHamburegerNoticeButton() {
+        binding.membershipDrawer.notice.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            findNavController().navigate(R.id.action_membershipFragment_to_noticeFragment)
+        }
+    }
+
+    private fun pressHamburgerChatButton() {
+        binding.membershipDrawer.chat.setOnClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "chatLinkSetting")
+        }
+    }
+
 
     private fun pressBackButton() {
         binding.membershipToolbar.membershipBackButton.setOnClickListener {

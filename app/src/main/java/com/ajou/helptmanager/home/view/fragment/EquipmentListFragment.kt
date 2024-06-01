@@ -21,6 +21,7 @@ import com.ajou.helptmanager.home.adapter.GymEquipmentRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
@@ -44,6 +45,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     private val dataStore = UserDataStore()
     private lateinit var viewModel : UserInfoViewModel
     private var selectedTmp : Equipment? = null
+    private lateinit var dialog : ChatLinkSettingDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -124,27 +126,33 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
         binding.drawer.ticket.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_membershipFragment)
-            // 이용권으로 이동
         }
         binding.drawer.qr.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             // TODO QR스캔으로 이동
         }
         binding.drawer.train.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_self)
         }
         binding.drawer.user.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_searchUserFragment)
         }
         binding.drawer.notice.setOnClickListener {
-            // TODO 공지사항으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_equipmentListFragment_to_noticeFragment)
         }
         binding.drawer.chat.setOnClickListener {
-            // TODO 채팅으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "link")
         }
         binding.drawer.home.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_homeFragment)
-            // 메인화면으로 이동
         }
     }
 

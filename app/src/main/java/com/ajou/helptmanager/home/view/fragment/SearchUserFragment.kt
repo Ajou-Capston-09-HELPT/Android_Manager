@@ -20,6 +20,7 @@ import com.ajou.helptmanager.databinding.FragmentSearchUserBinding
 import com.ajou.helptmanager.home.adapter.UserListViewPagerAdapter
 import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.HomeActivity
+import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kakao.sdk.user.model.User
@@ -30,6 +31,7 @@ class SearchUserFragment : Fragment(){
     private var mContext: Context? = null
     private lateinit var viewModel : UserInfoViewModel
     private val TAG = SearchUserFragment::class.java.simpleName
+    private lateinit var dialog : ChatLinkSettingDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -69,32 +71,44 @@ class SearchUserFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.hamburger.setOnClickListener {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
+        binding.drawer.closeBtn.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+        }
         binding.drawer.ticket.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_membershipFragment)
-            // 이용권으로 이동
         }
         binding.drawer.qr.setOnClickListener {
-            // TODO QR스캔으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            // TODO QR 스캔
         }
         binding.drawer.train.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_equipmentListFragment)
         }
         binding.drawer.user.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_self)
-            // 회원으로 이동
         }
         binding.drawer.notice.setOnClickListener {
-            // TODO 공지사항으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_searchUserFragment_to_noticeFragment)
         }
         binding.drawer.chat.setOnClickListener {
-            // TODO 채팅으로 이동
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            dialog = ChatLinkSettingDialog()
+            dialog.show(requireActivity().supportFragmentManager, "chatLinkSetting")
         }
         binding.drawer.home.setOnClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_homeFragment)
-            // 메인화면으로 이동
         }
 
         binding.drawer.userIcon.setImageResource(R.drawable.menu_user_on)
