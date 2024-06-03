@@ -17,6 +17,7 @@ import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.GymAdmissionService
 import com.ajou.helptmanager.network.api.MemberService
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.util.*
@@ -60,6 +61,9 @@ class AddUserFragment : Fragment() {
                     "MAN" -> binding.sex.text = "남성"
                     "WOMEN" -> binding.sex.text = "여성"
                 }
+
+//                Glide.with(mContext)
+//                    .load(body.)
                 binding.height.text = body.height.toString()
                 binding.weight.text = body.weight.toString()
             }else{
@@ -76,7 +80,6 @@ class AddUserFragment : Fragment() {
         var endDate : LocalDate? = null
 
         binding.period.setOnClickListener {
-
             val cal = Calendar.getInstance()
             val data = DatePickerDialog.OnDateSetListener { view, year, month, day ->
                 val period = "${today.year}/${today.monthValue}/${today.dayOfMonth} ~ ${year}/${month+1}/${day}"
@@ -99,11 +102,9 @@ class AddUserFragment : Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
-            // TODO 회원추가 api 연동
             callUserApi("approve",endDate!!)
         }
         binding.removeBtn.setOnClickListener {
-            // TODO 승인거절 api 연동
             callUserApi("reject",null)
       }
 //        viewModel.setRegisteredUserInfo(null)

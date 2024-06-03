@@ -2,6 +2,8 @@ package com.ajou.helptmanager.home.view.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.auth.view.LogOutDialog
+import com.ajou.helptmanager.auth.view.QuitDialog
 import com.ajou.helptmanager.databinding.FragmentHomeBinding
 import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
@@ -34,6 +38,8 @@ class HomeFragment : Fragment() {
     private val qrService = RetrofitInstance.getInstance().create(QrService::class.java)
     private lateinit var viewModel : UserInfoViewModel
     private lateinit var dialog : ChatLinkSettingDialog
+    private lateinit var quitDialog: QuitDialog
+    private lateinit var logOutDialog: LogOutDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -126,6 +132,18 @@ class HomeFragment : Fragment() {
             dialog.show(requireActivity().supportFragmentManager, "link")
         }
 
+        binding.logout.setOnClickListener {
+            logOutDialog = LogOutDialog(mContext!!)
+            logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            logOutDialog.show()
+        }
+
+        binding.withdrawal.setOnClickListener {
+            quitDialog = QuitDialog(mContext!!)
+            quitDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            quitDialog.show()
+        }
+
         viewModel.chatLink.observe(viewLifecycleOwner, Observer {
             Log.d("chatLink",viewModel.chatLink.value.toString())
 
@@ -154,10 +172,22 @@ class HomeFragment : Fragment() {
             val qrValidResponse = qrValidDeferred.await()
             if (qrValidResponse.isSuccessful){
                 Log.d("qrValidResponse ",qrValidResponse.body().toString())
+                withContext(Dispatchers.Main){
+                    Toast.makeText(mContext, "어서오세요 오늘도 득근합시다",Toast.LENGTH_SHORT).show()
+                }
             }else{
-                Toast.makeText(mContext, "QR스캔에 실패하였습니다.",Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main){
+                    Toast.makeText(mContext, "QR스캔에 실패하였습니다.",Toast.LENGTH_SHORT).show()
+                }
                 Log.d("qrValieResponse fail",qrValidResponse.errorBody()?.string().toString())
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(::logOutDialog.isInitialized) logOutDialog.dismiss()
+        if(::quitDialog.isInitialized) quitDialog.dismiss()
+        if(::dialog.isInitialized) dialog.dismiss()
     }
 }

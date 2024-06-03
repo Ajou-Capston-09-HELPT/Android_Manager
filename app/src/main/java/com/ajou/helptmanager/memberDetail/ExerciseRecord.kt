@@ -1,8 +1,15 @@
 package com.ajou.helptmanager.memberDetail
 
+import java.time.LocalDate
+
 data class ExerciseRecord(
-    val exerciseName: String,
-    val reps: Int,
-    val sets: Int,
-    val time: String
+    val equipmentName: String,
+    val count: Int,
+    val setNumber: Int,
+    val weight: Int,
+    val recordTime: String,
+    val recordDate: LocalDate,
+    val successRate: Int,
+    val comment: String,
+    val snapshotFile: String
 )

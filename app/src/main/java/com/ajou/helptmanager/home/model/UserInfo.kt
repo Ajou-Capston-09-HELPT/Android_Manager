@@ -6,5 +6,6 @@ data class UserInfo(
     val height : Int,
     val weight : Int,
     var startDate : String?,
-    var endDate : String?
+    var endDate : String?,
+    val membershipId : Int
 )

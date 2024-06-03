@@ -31,23 +31,29 @@ class SplashActivity : AppCompatActivity() {
                 val accessToken = dataStore.getAccessToken()
                 val gymStatus = dataStore.getGymStatus()
                 val gymId = dataStore.getGymId()
-                if (gymId == null && accessToken != null){
+                if (gymId == null && accessToken != null) {
                     val idDeferred = async { managerService.getGymId(accessToken) }
                     val idResponse = idDeferred.await()
                     if (idResponse.isSuccessful) {
                         val gymIdBody = JSONObject(idResponse.body()?.string())
-                        val infoDeferred = async { gymService.getGymInfo(accessToken, gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt()) }
+                        val infoDeferred = async {
+                            gymService.getGymInfo(
+                                accessToken,
+                                gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId")
+                                    .toInt()
+                            )
+                        }
                         val infoResponse = infoDeferred.await()
-                        if (infoResponse.isSuccessful){
+                        if (infoResponse.isSuccessful) {
                             dataStore.saveUserName(infoResponse.body()!!.data.gymName)
                         }
-                        dataStore.saveGymId(gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId").toInt())
-                        Log.d("infoResponse  body",gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId"))
-                    } else{
-                        Log.d("infoResponse faill",idResponse.errorBody()?.string().toString())
+                        dataStore.saveGymId(
+                            gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId")
+                                .toInt()
+                        )
+                    } else {
+                        Log.d("infoResponse faill", idResponse.errorBody()?.string().toString())
                     }
-                }else{
-                    Log.d("gymId  accessToken","$gymId  $accessToken")
                 }
                 if (gymStatus != "Approved" && accessToken != null){
                     val gymStatusDeferred = async { gymService.getGymStatus(accessToken) }
@@ -55,12 +61,9 @@ class SplashActivity : AppCompatActivity() {
                     if (gymStatusResponse.isSuccessful) {
                         val gymStatus = JSONObject(gymStatusResponse.body()?.string()).getJSONObject("data").getString("status")
                         dataStore.saveGymStatus(gymStatus)
-                        Log.d("gymStatus body",gymStatus)
                     }else{
                         Log.d("gymStatus faill",gymStatusResponse.errorBody()?.string().toString())
                     }
-                } else{
-                    Log.d("gymStatus accesToken",gymStatus.toString())
                 }
                 withContext(Dispatchers.Main){
                     if (accessToken == null){

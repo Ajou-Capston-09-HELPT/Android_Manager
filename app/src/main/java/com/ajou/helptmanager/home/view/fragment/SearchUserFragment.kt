@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.auth.view.AuthInfoViewModel
 import com.ajou.helptmanager.databinding.FragmentSearchUserBinding
@@ -24,6 +25,10 @@ import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kakao.sdk.user.model.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchUserFragment : Fragment(){
     private var _binding : FragmentSearchUserBinding? = null
@@ -32,6 +37,8 @@ class SearchUserFragment : Fragment(){
     private lateinit var viewModel : UserInfoViewModel
     private val TAG = SearchUserFragment::class.java.simpleName
     private lateinit var dialog : ChatLinkSettingDialog
+    private var userName : String? = null
+    private val dataStore = UserDataStore()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,6 +57,12 @@ class SearchUserFragment : Fragment(){
         viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         _binding = FragmentSearchUserBinding.inflate(layoutInflater, container, false)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            userName = dataStore.getUserName()
+            withContext(Dispatchers.Main){
+                binding.drawer.name.text = userName
+            }
+        }
         viewModel.userId.observe(viewLifecycleOwner, Observer {
             if (viewModel.check.value == null || viewModel.check.value == false){
                 if (viewModel.admissionId.value == null) {
@@ -87,7 +100,7 @@ class SearchUserFragment : Fragment(){
         }
         binding.drawer.qr.setOnClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
-            // TODO QR 스캔
+            findNavController().navigate(R.id.action_searchUserFragment_to_homeFragment)
         }
         binding.drawer.train.setOnClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)

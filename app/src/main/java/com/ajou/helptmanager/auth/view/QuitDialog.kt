@@ -26,7 +26,6 @@ class QuitDialog(@NonNull context : Context) : Dialog(context) {
         var accessToken: String? = null
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken()
-            Log.d("탈퇴하기, datastore",accessToken.toString())
         }
         signOutBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {

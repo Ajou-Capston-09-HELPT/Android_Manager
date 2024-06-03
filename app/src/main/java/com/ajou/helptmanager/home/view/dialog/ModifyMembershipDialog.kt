@@ -27,7 +27,7 @@ class ModifyMembershipDialog(
     private val viewModel: MembershipViewModel
     ) : DialogFragment() {
 
-    private val dataStroe = UserDataStore()
+    private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId: Int? = null
 
@@ -121,8 +121,8 @@ class ModifyMembershipDialog(
         val membershipPrice = etMembershipPrice.text.toString().trim().replace(",".toRegex(), "").toIntOrNull()
         if (membershipTitle.isNotEmpty() && membershipPrice != null) {
             CoroutineScope(Dispatchers.IO).launch {
-                accessToken = dataStroe.getAccessToken().toString()
-                gymId = dataStroe.getGymId()
+                accessToken = dataStore.getAccessToken().toString()
+                gymId = dataStore.getGymId()
                 viewModel.modifyProduct(accessToken, gymId, productId, ProductRequest(membershipTitle.toInt(), membershipPrice.toInt()))
             }
             dismiss()

@@ -196,7 +196,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
     private fun pressHamburgerQrButton(){
         binding.drawer.qr.setOnClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
-            // TODO QR 스캔
+            findNavController().navigate(R.id.action_addEquipmentFragment_to_homeFragment)
         }
     }
 
