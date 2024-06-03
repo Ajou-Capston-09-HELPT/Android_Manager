@@ -19,8 +19,7 @@ import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.MemberService
 import com.ajou.helptmanager.network.api.MembershipControllerService
-import com.ajou.helptmanager.network.model.MembershipExtensionResponse
-import com.google.gson.Gson
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -106,6 +105,13 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val showExerciseRecord: ConstraintLayout = view.findViewById(R.id.btnShowExerciseRecord)
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
+
+        //TODO 프로필 이미지 변경
+        val profileImage: ImageView = view.findViewById(R.id.memberDetailImage)
+        //val imageUrl = "https://helpt.s3.ap-northeast-2.amazonaws.com/profileFile/e356cc50-eda4-471c-9c1b-348f7674a992_Screenshot_20240601_180342_Samsung_Internet.jpg"
+        //Glide.with(this).load(imageUrl).into(profileImage)
+        // TODO
+
 
         memberInfo.observe(viewLifecycleOwner) { info ->
             updateMemberInfoUI(view, info)
