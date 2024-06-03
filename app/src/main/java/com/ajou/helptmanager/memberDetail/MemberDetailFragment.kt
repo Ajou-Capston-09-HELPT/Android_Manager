@@ -176,7 +176,6 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment, bundle)
     }
     private fun editMemberMembershipPeriod(){
-        //TODO 회원권 기간 수정
         showDatePicker()
 
     }
