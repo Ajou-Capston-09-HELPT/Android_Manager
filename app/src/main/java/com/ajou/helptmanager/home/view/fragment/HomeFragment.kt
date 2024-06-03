@@ -172,11 +172,13 @@ class HomeFragment : Fragment() {
             val qrValidResponse = qrValidDeferred.await()
             if (qrValidResponse.isSuccessful){
                 Log.d("qrValidResponse ",qrValidResponse.body().toString())
-                withContext(Dispatchers.Main){
+                requireActivity().runOnUiThread{
                     Toast.makeText(mContext, "어서오세요 오늘도 득근합시다",Toast.LENGTH_SHORT).show()
                 }
+
+
             }else{
-                withContext(Dispatchers.Main){
+                requireActivity().runOnUiThread{
                     Toast.makeText(mContext, "QR스캔에 실패하였습니다.",Toast.LENGTH_SHORT).show()
                 }
                 Log.d("qrValieResponse fail",qrValidResponse.errorBody()?.string().toString())
