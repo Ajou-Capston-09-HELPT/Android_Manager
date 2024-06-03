@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -75,8 +76,11 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         translatedGender,
                         memberInfoBody.getJSONObject("data").getString("height"),
                         memberInfoBody.getJSONObject("data").getString("weight"),
+                        memberInfoBody.getJSONObject("data").getInt("membershipId"),
                         memberInfoBody.getJSONObject("data").getString("startDate"),
-                        memberInfoBody.getJSONObject("data").getString("endDate")
+                        memberInfoBody.getJSONObject("data").getString("endDate"),
+                        memberInfoBody.getJSONObject("data").getString("profileImage"),
+                        memberInfoBody.getJSONObject("data").getString("birthDate")
                     )
 
                     Log.d("MemberDetail", "Member info: $memberInfo")
@@ -106,8 +110,6 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
-        //TODO 프로필 이미지 변경
-        val profileImage: ImageView = view.findViewById(R.id.memberDetailImage)
         //val imageUrl = "https://helpt.s3.ap-northeast-2.amazonaws.com/profileFile/e356cc50-eda4-471c-9c1b-348f7674a992_Screenshot_20240601_180342_Samsung_Internet.jpg"
         //Glide.with(this).load(imageUrl).into(profileImage)
         // TODO
@@ -166,12 +168,16 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val tvMemberDetailHeight: TextView = view.findViewById(R.id.tvMemberDetailHeight)
         val tvMemberDetailWeight: TextView = view.findViewById(R.id.tvMemberDetailWeight)
         val tvMemberDetailMembershipPeriod: TextView = view.findViewById(R.id.tvMemberDetailMembershipPeriod)
+        val ivMemberProfileImage: ImageView = view.findViewById(R.id.memberDetailImage)
 
         tvMemberDetailName.text = memberInfo.userName
         tvMemberDetailGender.text = memberInfo.gender
         tvMemberDetailHeight.text = memberInfo.height
         tvMemberDetailWeight.text = memberInfo.weight
         tvMemberDetailMembershipPeriod.text = "${memberInfo.startDate} ~ ${memberInfo.endDate}"
+        if(memberInfo.profileImage != "null"){
+            Glide.with(this).load(memberInfo.profileImage).into(ivMemberProfileImage)
+        }
     }
 
     private fun showMemberExerciseRecord(membershipId: Int){
@@ -238,10 +244,12 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     withContext(Dispatchers.Main) {
                         val tvMemberDetailMembershipPeriod: TextView = view?.findViewById(R.id.tvMemberDetailMembershipPeriod)!!
                         tvMemberDetailMembershipPeriod.text = "$startDate ~ $endDate"
+                        Toast.makeText(context, "멤버십 기간이 연장되었습니다.", Toast.LENGTH_SHORT).show()
                         Log.d("ExtendMembership", "Membership extended successfully")
                     }
                 } else {
                     withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "멤버십 기간 연장에 실패했습니다.", Toast.LENGTH_SHORT).show()
                         Log.d("ExtendMembership", "Failed to extend membership. HTTP status code: ${extendMembershipResponse.code()}, accessToken:$accessToken, membershipId:$membershipId, endDate:$endDate ${extendMembershipResponse.errorBody()?.string()}")
                     }
                 }
