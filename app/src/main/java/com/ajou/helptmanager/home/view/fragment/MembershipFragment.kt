@@ -77,6 +77,7 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         pressHamburegerUserButton()
         pressHamburegerNoticeButton()
         pressHamburgerChatButton()
+        binding.membershipDrawer.ticketIcon.setImageResource(R.drawable.menu_ticket_on)
 
         binding.membershipDrawer.ticketIcon.setImageResource(R.drawable.menu_ticket_on)
 

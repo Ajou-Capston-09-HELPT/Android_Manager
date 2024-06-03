@@ -69,6 +69,7 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         pressUploadButton()
 
 
+        binding.noticeDrawer.noticeIcon.setImageResource(R.drawable.menu_notice_on)
         pressBackButton()
         pressHamburgerButton()
         pressHamburgerCloseButton()
