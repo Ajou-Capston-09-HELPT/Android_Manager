@@ -77,6 +77,8 @@
 
     <string name="equip_set">%1$dkg %2$d회 %3$d세트</string>
     <string name="stringMembershipMonthTitleTV">월</string>
+    <string name="stringMemberDetailCm">cm</string>
+    <string name="stringMemberDetailKg">kg</string>
 
 
 </resources>
