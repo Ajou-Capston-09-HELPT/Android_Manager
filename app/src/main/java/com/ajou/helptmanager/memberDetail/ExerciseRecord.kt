@@ -8,8 +8,8 @@ data class ExerciseRecord(
     val setNumber: Int,
     val weight: Int,
     val recordTime: String,
-    val recordDate: LocalDate,
-    val successRate: Int,
+    val recordDate: String,
+    val successRate: Float,
     val comment: String,
     val snapshotFile: String
 )
