@@ -43,7 +43,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/memberDetailImage"
-        android:src="@drawable/member_detail_sample_image"
+        android:src="@drawable/home_logo"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentStart="true"
@@ -217,7 +217,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:text="cm"
+            android:text="@string/stringMemberDetailCm"
             android:textAppearance="@style/styleMembershipPrice"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvMemberDetailHeight"
@@ -271,7 +271,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:text="kg"
+            android:text="@string/stringMemberDetailKg"
             android:textAppearance="@style/styleMembershipPrice"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvMemberDetailWeight"
@@ -326,6 +326,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:src="@drawable/edit"
+            android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
