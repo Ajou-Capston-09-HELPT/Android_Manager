@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.ImageView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.ajou.helptmanager.auth.view.AuthActivity
 import com.ajou.helptmanager.home.view.HomeActivity
@@ -26,19 +27,43 @@ class SplashActivity : AppCompatActivity() {
         val gifDrawable =
             pl.droidsonroids.gif.GifDrawable(resources, R.drawable.splash_logo)
         logoGif.setImageDrawable(gifDrawable)
-        Handler().postDelayed({
-            CoroutineScope(Dispatchers.IO).launch {
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                delay(2000)
                 val accessToken = dataStore.getAccessToken()
+                val refreshToken = dataStore.getRefreshToken()
                 val gymStatus = dataStore.getGymStatus()
                 val gymId = dataStore.getGymId()
-                if (gymId == null && accessToken != null) {
-                    val idDeferred = async { managerService.getGymId(accessToken) }
+                var finalAccessToken = accessToken
+                var finalRefreshToken = refreshToken
+
+                if (accessToken != null){
+                    val tokenDeferred = async { managerService.getGymId(accessToken) }
+                    val tokenResponse = tokenDeferred.await()
+                    if (!tokenResponse.isSuccessful){
+                        Log.d("tokenResponse fail",tokenResponse.errorBody()?.string().toString())
+                        val newTokenDeferred = async { managerService.getNewToken(refreshToken!!) }
+                        val newTokenResponse = newTokenDeferred.await()
+                        if (newTokenResponse.isSuccessful){
+                            val tokenBody = JSONObject(newTokenResponse.body()?.string())
+                            finalAccessToken = "Bearer " + tokenBody.getJSONObject("data").getString("accessToken").toString()
+                            finalRefreshToken = "Bearer " + tokenBody.getJSONObject("data").getString("refreshToken").toString()
+
+                            dataStore.saveAccessToken(finalAccessToken)
+                            dataStore.saveRefreshToken(finalRefreshToken)
+                        }
+                    }else{
+                        Log.d("tokenResponse success?","")
+                    }
+                }
+                if (gymId == null && finalAccessToken != null) {
+                    val idDeferred = async { managerService.getGymId(finalAccessToken!!) }
                     val idResponse = idDeferred.await()
                     if (idResponse.isSuccessful) {
                         val gymIdBody = JSONObject(idResponse.body()?.string())
                         val infoDeferred = async {
                             gymService.getGymInfo(
-                                accessToken,
+                                finalAccessToken,
                                 gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId")
                                     .toInt()
                             )
@@ -55,8 +80,8 @@ class SplashActivity : AppCompatActivity() {
                         Log.d("infoResponse faill", idResponse.errorBody()?.string().toString())
                     }
                 }
-                if (gymStatus != "Approved" && accessToken != null){
-                    val gymStatusDeferred = async { gymService.getGymStatus(accessToken) }
+                if (gymStatus != "Approved" && finalAccessToken != null){
+                    val gymStatusDeferred = async { gymService.getGymStatus(finalAccessToken) }
                     val gymStatusResponse = gymStatusDeferred.await()
                     if (gymStatusResponse.isSuccessful) {
                         val gymStatus = JSONObject(gymStatusResponse.body()?.string()).getJSONObject("data").getString("status")
@@ -66,7 +91,7 @@ class SplashActivity : AppCompatActivity() {
                     }
                 }
                 withContext(Dispatchers.Main){
-                    if (accessToken == null){
+                    if (finalAccessToken == null){
                         val intent = Intent(this@SplashActivity, AuthActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
@@ -81,7 +106,6 @@ class SplashActivity : AppCompatActivity() {
                     }
                 }
             }
-        }, 2000)
 
 
 

@@ -37,4 +37,9 @@ interface ManagerService {
     suspend fun quit(
         @Header("Authorization") accessToken: String
     ): Response<ResponseBody>
+
+    @POST("api/auth/token/refresh")
+    suspend fun getNewToken(
+        @Header("Authorization") refreshToken : String
+    ): Response<ResponseBody>
 }
