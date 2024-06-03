@@ -42,6 +42,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     private val gymService = RetrofitInstance.getInstance().create(GymService::class.java)
     private var accessToken : String? = null
     private var gymId : Int? = null
+    private var userName : String? = null
     private val dataStore = UserDataStore()
     private lateinit var viewModel : UserInfoViewModel
     private var selectedTmp : Equipment? = null
@@ -65,6 +66,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken()
             gymId = dataStore.getGymId()
+            userName = dataStore.getUserName()
             Log.d("check list","accessToken $accessToken  gymId  $gymId")
             val equipDeferred = async { gymService.getAllGymEquipments(accessToken!!,gymId!!) }
             val equipResponse = equipDeferred.await()
@@ -73,7 +75,10 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
                 Log.d("list",list.toString())
                 withContext(Dispatchers.Main){
                     adapter.updateList(list)
+                    binding.drawer.name.text = userName
                 }
+            }else{
+                Log.d("equipResponse fail",equipResponse.errorBody()?.string().toString())
             }
         }
         return binding.root
@@ -89,6 +94,9 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
         binding.btn.setOnClickListener {
             findNavController().navigate(R.id.action_equipmentListFragment_to_addEquipmentFragment)
         }
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewModel.equipment.observe(viewLifecycleOwner, Observer {
             if(viewModel.equipment.value != null && viewModel.equipment.value != selectedTmp) {
@@ -96,8 +104,8 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
                 if(viewModel.equipment.value!!.customWeight == -1 && viewModel.position.value != null) {
                     deleteEquipmentApi(viewModel.equipment.value!!.equipmentId)
                     val position = viewModel.position.value!!
-                        list.removeAt(position)
-                        adapter.notifyItemRemoved(position)
+                    list.removeAt(position)
+                    adapter.notifyItemRemoved(position)
                     Log.d("viewModel is called","deleteapi called ${viewModel.position.value}")
                 } else if (viewModel.equipment.value!!.customWeight != -1 && viewModel.position.value != null){
 
@@ -131,7 +139,7 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
         }
         binding.drawer.qr.setOnClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
-            // TODO QR스캔으로 이동
+            findNavController().navigate(R.id.action_equipmentListFragment_to_homeFragment)
         }
         binding.drawer.train.setOnClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)

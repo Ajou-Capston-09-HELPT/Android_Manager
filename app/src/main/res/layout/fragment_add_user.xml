@@ -138,25 +138,29 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-                    <!--                    <Spinner-->
-                    <!--                        android:id="@+id/sex"-->
-                    <!--                        style="@style/Widget.My.Spinner"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="4dp"-->
-                    <!--                        android:spinnerMode="dropdown"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView13"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:text="생년월일"-->
+<!--                        android:textColor="@color/gray_text"-->
+<!--                        android:textSize="16sp"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toBottomOf="@+id/sex" />-->
 
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginEnd="16dp"-->
-                    <!--                        android:src="@drawable/spinner_arrow"-->
-                    <!--                        app:layout_constraintBottom_toBottomOf="@+id/sex"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="@+id/sex"-->
-                    <!--                        app:layout_constraintTop_toTopOf="@+id/sex" />-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/birth"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="4dp"-->
+<!--                        android:background="@drawable/auth_textfield"-->
+<!--                        android:padding="16dp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
 
                     <TextView
                         android:id="@+id/textView4"
@@ -182,22 +186,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-                    <!--                    <EditText-->
-                    <!--                        android:id="@+id/height"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="4dp"-->
-                    <!--                        android:background="@drawable/auth_textfield"-->
-                    <!--                        android:hint="키를 입력해주세요"-->
-                    <!--                        android:inputType="text"-->
-                    <!--                        android:padding="16dp"-->
-                    <!--                        android:textColor="@color/black"-->
-                    <!--                        android:textColorHint="@color/gray_text"-->
-                    <!--                        android:textSize="16sp"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView4" />-->
-
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="0dp"
@@ -221,20 +209,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-                    <!--                    <EditText-->
-                    <!--                        android:id="@+id/weight"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="4dp"-->
-                    <!--                        android:background="@drawable/auth_textfield"-->
-                    <!--                        android:padding="16dp"-->
-                    <!--                        android:text="몸무게를 입력해주세요"-->
-                    <!--                        android:textColor="@color/gray_text"-->
-                    <!--                        android:textSize="16sp"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView5" />-->
 
                     <TextView
                         android:id="@+id/textView11"

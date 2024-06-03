@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class RegisterMoreDialog(private val productId: Int, private val viewModel: MembershipViewModel) : BottomSheetDialogFragment() {
 
-    private val dataStroe = UserDataStore()
+    private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId: Int? = null
 
@@ -60,8 +60,8 @@ class RegisterMoreDialog(private val productId: Int, private val viewModel: Memb
     }
     private fun deleteMembership() {
         CoroutineScope(Dispatchers.IO).launch {
-            accessToken = dataStroe.getAccessToken().toString()
-            gymId = dataStroe.getGymId()
+            accessToken = dataStore.getAccessToken().toString()
+            gymId = dataStore.getGymId()
             viewModel.removeProduct(accessToken, gymId, productId)
         }
         dismiss()

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
-import com.ajou.helpt.auth.view.LogOutDialog
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
@@ -48,7 +47,6 @@ class LoginFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val gymStatus = dataStore.getGymStatus()
             if (gymStatus == "Pending"){
-                Log.d("gymStatus","Pending")
                 withContext(Dispatchers.Main){
                     findNavController().navigate(R.id.action_loginFragment_to_pendingFragment)
                 }
@@ -69,18 +67,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.imageView3.setOnClickListener {
-            val intent = Intent(mContext, HomeActivity::class.java)
-            startActivity(intent)
-//            logOutDialog = LogOutDialog(mContext!!)
-//            logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            logOutDialog.show()
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val token = dataStore.getAccessToken()
-//                Log.d("userToken",token.toString())
-//                dataStore.deleteAll()
-//            }
-        }
         binding.nextBtn.setOnClickListener {
             // 카카오톡 설치 확인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext!!)) {
@@ -111,15 +97,9 @@ class LoginFragment : Fragment() {
                                 Log.d(
                                     ContentValues.TAG,
                                     "${user?.id}"
-                                ) // accessToken, user.id 추후에 보내면 됨.
-                                Log.d(
-                                    ContentValues.TAG,
-                                    "${user?.kakaoAccount?.email} ${user?.kakaoAccount?.profile?.nickname}"
                                 )
-
 //                                dataStore.saveUserName(user?.kakaoAccount?.profile?.nickname.toString())
                                 withContext(Dispatchers.Main) {
-                                    Log.d("user Id",user?.id.toString())
                                     callLoginApi(user?.id.toString())
                                 }
                             }
@@ -184,7 +164,6 @@ class LoginFragment : Fragment() {
             if (loginResponse.isSuccessful) {
                 val tokenBody = JSONObject(loginResponse.body()?.string())
                 val accessToken = "Bearer "+tokenBody.getJSONObject("data").getString("accessToken")
-                Log.d("tokenBody",tokenBody.toString())
                 dataStore.saveAccessToken(accessToken)
                 dataStore.saveRefreshToken("Bearer "+tokenBody.getJSONObject("data").getString("refreshToken"))
                 val checkGymDeferred = async { gymService.getGymStatus(accessToken) }
@@ -197,12 +176,10 @@ class LoginFragment : Fragment() {
                         val idResponse = idDeferred.await()
                         if (idResponse.isSuccessful){
                             val idBody = JSONObject(idResponse.body()?.string())
-                            Log.d("idBody success",idBody.toString())
                             dataStore.saveGymId(idBody.getJSONObject("data").getString("gymId").toInt())
                             val infoDeferred = async { gymService.getGymInfo(accessToken, idBody.getJSONObject("data").getString("gymId").toInt()) }
                             val infoResponse = infoDeferred.await()
                             if (infoResponse.isSuccessful){
-                                Log.d("infoBody success",infoResponse.body().toString())
                                 dataStore.saveUserName(infoResponse.body()!!.data.gymName)
                             }
                         }else{

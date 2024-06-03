@@ -28,10 +28,10 @@ class ExerciseRecordAdapter() : ListAdapter<ExerciseRecord,ExerciseRecordAdapter
 
     override fun onBindViewHolder(holder: ExerciseRecordViewHolder, position: Int) {
         val exerciseRecord = getItem(position)
-        holder.name.text = "${exerciseRecord.exerciseName}"
-        holder.reps.text = holder.itemView.context.getString(R.string.reps_format, exerciseRecord.reps)
-        holder.sets.text = holder.itemView.context.getString(R.string.sets_format, exerciseRecord.sets)
-        holder.time.text = exerciseRecord.time
+        holder.name.text = "${exerciseRecord.equipmentName}"
+        holder.reps.text = holder.itemView.context.getString(R.string.reps_format, exerciseRecord.count)
+        holder.sets.text = holder.itemView.context.getString(R.string.sets_format, exerciseRecord.setNumber)
+        holder.time.text = exerciseRecord.recordTime
     }
 
     companion object ExerciseRecordDiffCallback : DiffUtil.ItemCallback<ExerciseRecord>() {

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.databinding.FragmentMemberDetailExerciseRecordBinding
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
 import com.ajou.helptmanager.network.api.RecordService
@@ -29,7 +30,8 @@ import java.util.Calendar
 import java.util.Locale
 
 class MemberDetailExerciseRecordFragment : Fragment() {
-
+    private var _binding : FragmentMemberDetailExerciseRecordBinding? = null
+    private val binding get() = _binding!!
 
     private val recordService = RetrofitInstance.getInstance().create(RecordService::class.java)
     private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
@@ -50,31 +52,20 @@ class MemberDetailExerciseRecordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_member_detail_exercise_record, container, false)
-        val backButton: ImageView = view.findViewById(R.id.memberDetailExerciseRecordBackButton)
-        val exerciseDate: MaterialCalendarView = view.findViewById(R.id.memberDetailExerciseRecordDate)
-        val tvExerciseDate: TextView = view.findViewById(R.id.exerciseRecordDate)
+        _binding = FragmentMemberDetailExerciseRecordBinding.inflate(layoutInflater, container, false)
+//        val backButton: ImageView = view.findViewById(R.id.memberDetailExerciseRecordBackButton)
+//        val exerciseDate: MaterialCalendarView = view.findViewById(R.id.memberDetailExerciseRecordDate)
+//        val tvExerciseDate: TextView = view.findViewById(R.id.exerciseRecordDate)
 
-        setupRecyclerView(view)
-        getMemberName(view)
+        setupRecyclerView(binding.root)
+        getMemberName(binding.root)
         getMemberId()
-        tvExerciseDate.visibility = View.INVISIBLE
+        binding.exerciseRecordDate.visibility = View.INVISIBLE
 
-        clickBackButton(backButton)
-        clickCalenderDate(exerciseDate, tvExerciseDate)
+        clickBackButton(binding.memberDetailExerciseRecordBackButton)
+        clickCalenderDate(binding.memberDetailExerciseRecordDate, binding.exerciseRecordDate)
 
-        // 임시 데이터 생성 (추후 API 연결)
-        /*
-        exerciseRecords = mutableListOf(
-            ExerciseRecord("풀 업", "상체 가슴", 20, 3, "00:10:10"),
-            ExerciseRecord("랫 풀 다운", "상체 등", 15, 3, "00:12:20"),
-            ExerciseRecord("스쿼트", "하체 허벅지", 25, 4, "00:15:50"),
-            ExerciseRecord("스쿼트", "하체 허벅지", 25, 4, "00:15:50"),
-            ExerciseRecord("스쿼트", "하체 허벅지", 25, 4, "00:15:50")
-        )
-        */
-        // 추후 삭제 예정
-        return view
+        return binding.root
     }
 
     private fun setupRecyclerView(view: View) {
@@ -100,7 +91,6 @@ class MemberDetailExerciseRecordFragment : Fragment() {
                 date.month,
                 date.day
             )
-            Log.d("FormattedDate", "Formatted date string: $resourceFormattedDate")
             tvExerciseDate.text = resourceFormattedDate
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -130,54 +120,23 @@ class MemberDetailExerciseRecordFragment : Fragment() {
 
                 val getExerciseRecordResponse = getExerciseRecordDeferred.await()
 
-
-
-
                 Log.d("ExerciseRecord", "Response: $getExerciseRecordResponse , ${getExerciseRecordResponse.errorBody()?.string()} ")
 
                 if (getExerciseRecordResponse.isSuccessful) {
-                    val exerciseRecordResponse =
-                        JSONObject(getExerciseRecordResponse.body()?.string())
-
-                    Log.d("ExerciseRecord", "Exercise Record Response: ${exerciseRecordResponse}")
-                    //  TODO 수정 예정
-                    if (!exerciseRecordResponse.isNull("data")) {
-                        val jsonArray = exerciseRecordResponse.getJSONArray("data")
-                        val exerciseRecords = if (jsonArray != null) {
-                            List(jsonArray.length()) { i ->
-                                val jsonObject = jsonArray.getJSONObject(i)
-                                val equipmentResponse = equipmentService.getEquipment(accessToken, jsonObject.getInt("equipmentId"))
-                                val equipmentResponseBody = equipmentResponse.body()?.string()
-                                val equipmentName = if (equipmentResponseBody != null) {
-                                    val equipmentJSONObject = JSONObject(equipmentResponseBody)
-                                    Log.d("ExerciseRecord2", "Equipment Response: $equipmentJSONObject")
-                                    equipmentJSONObject.getJSONObject("data").getString("equipmentName")
-                                } else {
-                                    "장비 이름 없음" // 또는 적절한 기본값 설정
-                                }
-
-                                val startTime = jsonObject.getString("startTime")
-                                val endTime = jsonObject.getString("endTime")
-
-                                val duration = calculateDuration(startTime, endTime)
-
-
-                                ExerciseRecord(
-                                    equipmentName,
-                                    jsonObject.getInt("count"),
-                                    jsonObject.getInt("setNumber"),
-                                    duration
-                                )
-                            }
-                        } else {
-                            emptyList()
-                        }
+                    val recordBody = getExerciseRecordResponse.body()!!.data
+                    if (recordBody.isEmpty()) {
                         withContext(Dispatchers.Main) {
-                            exerciseRecordAdapter.submitList(exerciseRecords)
+                            binding.noRecordBg.visibility = View.VISIBLE
+                            binding.noRecordText.visibility = View.VISIBLE
+                            binding.rvExerciseRecords.visibility = View.GONE
                         }
                     } else {
-                        Log.d("ExerciseRecord", "No data in response")
-                        // TODO 'data'가 없는 경우에 대한 처리
+                        withContext(Dispatchers.Main) {
+                            binding.rvExerciseRecords.visibility = View.VISIBLE
+                            exerciseRecordAdapter.submitList(recordBody)
+                            binding.noRecordBg.visibility = View.GONE
+                            binding.noRecordText.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -195,7 +154,6 @@ class MemberDetailExerciseRecordFragment : Fragment() {
 
     private fun getMemberId() {
         val memberId = arguments?.getInt("memberId")
-        Log.d("ExerciseRecord", "Member ID: $memberId")
     }
 
     private fun getMemberName(view: View) {

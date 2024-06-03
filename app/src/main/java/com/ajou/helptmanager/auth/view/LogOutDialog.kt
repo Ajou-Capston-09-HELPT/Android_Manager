@@ -1,4 +1,4 @@
-package com.ajou.helpt.auth.view
+package com.ajou.helptmanager.auth.view
 
 import android.app.Dialog
 import android.content.Context

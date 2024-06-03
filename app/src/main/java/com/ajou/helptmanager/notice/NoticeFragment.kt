@@ -1,6 +1,7 @@
 package com.ajou.helptmanager.notice
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
 
@@ -29,6 +31,7 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
     private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId: Int? = null
+    private var userName : String? = null
 
     private lateinit var noticeAdapter: NoticeAdapter
     private lateinit var recyclerView: RecyclerView
@@ -51,7 +54,11 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken().toString()
             gymId = dataStore.getGymId()
-            viewModel.getNoticeList(accessToken, gymId!!)
+            userName = dataStore.getUserName()
+            withContext(Dispatchers.Main){
+                binding.noticeDrawer.name.text = userName
+                viewModel.getNoticeList(accessToken, gymId!!)
+            }
         }
 
         binding.noticeRegisterButton.setOnClickListener {
@@ -74,6 +81,10 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         pressHamburegerNoticeButton()
         pressHamburgerChatButton()
 
+        binding.noticeDrawer.noticeIcon.setImageResource(R.drawable.menu_notice_on)
+
+        binding.noticeDrawer.notice.setTextColor(resources.getColor(R.color.primary))
+        binding.noticeDrawer.notice.setTypeface(binding.noticeDrawer.user.typeface, Typeface.BOLD)
         return binding.root
     }
 
@@ -119,7 +130,7 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
     private fun pressHamburgerQrButton(){
         binding.noticeDrawer.qr.setOnClickListener {
             binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
-            // TODO QR 스캔
+            findNavController().navigate(R.id.action_noticeFragment_to_homeFragment)
         }
     }
 

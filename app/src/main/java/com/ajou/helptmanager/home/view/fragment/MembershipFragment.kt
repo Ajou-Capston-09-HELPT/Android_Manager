@@ -1,6 +1,7 @@
 package com.ajou.helptmanager.home.view.fragment
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -32,9 +33,10 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
     private var mContext : Context? = null
 
     private lateinit var viewModel: MembershipViewModel
-    private val dataStroe = UserDataStore()
+    private val dataStore = UserDataStore()
     private lateinit var accessToken: String
     private var gymId: Int? = null
+    private var userName : String? = null
     private lateinit var dialog: ChatLinkSettingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +55,11 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         observeViewModel()
 
         CoroutineScope(Dispatchers.IO).launch {
-            accessToken = dataStroe.getAccessToken().toString()
-            gymId = dataStroe.getGymId()
+            accessToken = dataStore.getAccessToken().toString()
+            gymId = dataStore.getGymId()
+            userName = dataStore.getUserName()
             viewModel.getProductList(accessToken, gymId)
+            binding.membershipDrawer.name.text = userName
         }
 
         // 버튼 초기화
@@ -75,10 +79,10 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         pressHamburgerChatButton()
         binding.membershipDrawer.ticketIcon.setImageResource(R.drawable.menu_ticket_on)
 
+        binding.membershipDrawer.ticketIcon.setImageResource(R.drawable.menu_ticket_on)
 
-        binding.membershipDrawer.ticket.setOnClickListener {
-            //findNavController().navigate(R.id.action_membershipFragment_to_membershipFragment)
-        }
+        binding.membershipDrawer.ticket.setTextColor(resources.getColor(R.color.primary))
+        binding.membershipDrawer.ticket.setTypeface(binding.membershipDrawer.user.typeface, Typeface.BOLD)
         return binding.root
     }
 
@@ -112,7 +116,7 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
     private fun pressHamburgerQrButton() {
         binding.membershipDrawer.qr.setOnClickListener {
             binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
-            // TODO QR 스캔
+            findNavController().navigate(R.id.action_membershipFragment_to_homeFragment)
         }
     }
 
