@@ -14,6 +14,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.databinding.DialogTrainSettingBinding
 import com.ajou.helptmanager.getWindowSize
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
+import com.ajou.helptmanager.setOnSingleClickListener
 
 class TrainSettingDialog() :
     DialogFragment() {
@@ -76,14 +77,14 @@ class TrainSettingDialog() :
         binding.count.wrapSelectorWheel = false
         binding.count.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
-        binding.posBtn.setOnClickListener {
+        binding.posBtn.setOnSingleClickListener {
             val list = listOf<Int>(binding.weight.value, binding.count.value, binding.set.value)
             viewModel.setEquipmentSetting(list)
 //            Log.d("viewmodel is called from traindialog",list.toString())
             dialog?.dismiss()
         }
 
-        binding.closeBtn.setOnClickListener {
+        binding.closeBtn.setOnSingleClickListener {
             dialog?.dismiss()
             viewModel.setEquipment(null)
             viewModel.setPositionNull()

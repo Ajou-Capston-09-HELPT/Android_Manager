@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.home.model.Membership
+import com.ajou.helptmanager.setOnSingleClickListener
 
 
 class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Membership, MembershipAdapter.MembershipViewHolder>(
@@ -39,7 +40,7 @@ class MembershipAdapter(val listener : OnItemClickListener): ListAdapter<Members
         holder.title.text = membership.months
         holder.price.text = membership.price
         holder.month_price.text = membership.month_price
-        holder.moreButton.setOnClickListener{
+        holder.moreButton.setOnSingleClickListener{
             listener.onMoreButtonClicked(membership.product_id)
         }
     }

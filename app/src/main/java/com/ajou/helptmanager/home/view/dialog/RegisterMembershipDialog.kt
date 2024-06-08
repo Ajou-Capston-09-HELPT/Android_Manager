@@ -20,6 +20,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.home.model.ProductRequest
 import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,12 +52,12 @@ class RegisterMembershipDialog(
         etMembershipPrice.addTextChangedListener(priceTextWatcher)
 
         val registerMembership = view.findViewById<ConstraintLayout>(R.id.registerMembershipRegisterButton)
-        registerMembership.setOnClickListener {
+        registerMembership.setOnSingleClickListener {
             registerMembership()
         }
 
         val btnRegisterClose = view.findViewById<ImageButton>(R.id.btnRegisterClose)
-        btnRegisterClose.setOnClickListener {
+        btnRegisterClose.setOnSingleClickListener {
             dismiss() // 다이얼로그 닫기
         }
     }

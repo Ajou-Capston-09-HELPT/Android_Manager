@@ -18,6 +18,7 @@ import com.ajou.helptmanager.databinding.FragmentLoginBinding
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.GymService
 import com.ajou.helptmanager.network.api.ManagerService
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.gson.JsonObject
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -35,7 +36,6 @@ class LoginFragment : Fragment() {
     private val dataStore = UserDataStore()
     private val managerService = RetrofitInstance.getInstance().create(ManagerService::class.java)
     private val gymService = RetrofitInstance.getInstance().create(GymService::class.java)
-    private lateinit var logOutDialog : LogOutDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,7 +67,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.nextBtn.setOnClickListener {
+        binding.nextBtn.setOnSingleClickListener {
             // 카카오톡 설치 확인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext!!)) {
                 Log.d(ContentValues.TAG, "유저가 카카오톡 설치했음")

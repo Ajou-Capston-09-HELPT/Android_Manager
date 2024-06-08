@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class AllEquipmentsResponse(
     @SerializedName("status") val status : String,
-    @SerializedName("data") val data : List<Equipment>
+    @SerializedName("data") val data: List<Equipment>
 )

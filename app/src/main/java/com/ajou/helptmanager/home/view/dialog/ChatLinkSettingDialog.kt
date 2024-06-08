@@ -20,6 +20,7 @@ import com.ajou.helptmanager.getWindowSize
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.GymService
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -98,13 +99,13 @@ class ChatLinkSettingDialog() : DialogFragment() {
                 binding.posBtn.isEnabled = str!!.isNotEmpty()
             }
         })
-        binding.posBtn.setOnClickListener {
+        binding.posBtn.setOnSingleClickListener {
 //            viewModel.setChatLink(binding.link.text.toString())
             putChatLink(binding.link.text.toString())
             dialog?.dismiss()
         }
 
-        binding.closeBtn.setOnClickListener {
+        binding.closeBtn.setOnSingleClickListener {
             dialog?.dismiss()
         }
     }

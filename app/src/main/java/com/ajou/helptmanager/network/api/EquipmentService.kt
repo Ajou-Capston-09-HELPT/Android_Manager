@@ -1,9 +1,7 @@
 package com.ajou.helptmanager.network.api
 
-import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.network.model.AllEquipmentsResponse
-import com.ajou.helptmanager.network.model.OneEquipmentResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body

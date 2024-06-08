@@ -12,6 +12,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.databinding.ItemEquipmentBinding
 import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.view.dialog.QRCreateDialogFragment
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
@@ -27,17 +28,17 @@ class GymEquipmentRVAdapter(val context: Context, var list: List<GymEquipment>, 
                     val exerciseInfo = String.format(context.resources.getString(R.string.equip_set),item.customWeight,item.customCount,item.customSet)
                     binding.exerciseInfo.text = exerciseInfo
 
-                    binding.more.setOnClickListener {
+                    binding.more.setOnSingleClickListener {
                         link.getSelectedItem(item, position)
                     }
-                    binding.item.setOnClickListener {
+                    binding.item.setOnSingleClickListener {
                         qrCodeCreate(item.gymEquipmentId.toString())
                     }
                 }
                 "add" -> {
                     binding.addBtn.visibility = View.VISIBLE
                     binding.name.text = item.equipmentName
-                    binding.addBtn.setOnClickListener {
+                    binding.addBtn.setOnSingleClickListener {
                         link.getSelectedItem(item, position)
                     }
                 }

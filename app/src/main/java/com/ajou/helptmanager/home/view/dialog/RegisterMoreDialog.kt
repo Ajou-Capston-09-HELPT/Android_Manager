@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,12 +36,12 @@ class RegisterMoreDialog(private val productId: Int, private val viewModel: Memb
         deleteClick()
     }
     private fun modifyClick() {
-        view?.findViewById<TextView>(R.id.btnMembershipModify)?.setOnClickListener {
+        view?.findViewById<TextView>(R.id.btnMembershipModify)?.setOnSingleClickListener {
             modifyMembership()
         }
     }
     private fun deleteClick() {
-        view?.findViewById<TextView>(R.id.btnMembershipDelete)?.setOnClickListener {
+        view?.findViewById<TextView>(R.id.btnMembershipDelete)?.setOnSingleClickListener {
             deleteMembership()
         }
     }

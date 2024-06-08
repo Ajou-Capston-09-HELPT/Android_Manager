@@ -1,6 +1,7 @@
 package com.ajou.helptmanager.memberDetail
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,23 +11,32 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.home.model.RegisteredUserInfo
+import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.MemberService
 import com.ajou.helptmanager.network.api.MembershipControllerService
 import com.ajou.helptmanager.network.model.MembershipExtensionResponse
+import com.ajou.helptmanager.setOnSingleClickListener
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -34,67 +44,32 @@ import java.util.Locale
 
 class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
-    private val memberService = RetrofitInstance.getInstance().create(MemberService::class.java)
     private val membershipService = RetrofitInstance.getInstance().create(MembershipControllerService::class.java)
 
+    private var mContext : Context? = null
     private val dataStore = UserDataStore()
-
 
     private var memberId: Int? = null //선택한 유저 ID
     private var membershipId: Int = 0 //선택한 유저의 membership ID
-
-    private val _memberInfo = MutableLiveData<MemberDetail>()
-    val memberInfo: LiveData<MemberDetail> = _memberInfo
+    private lateinit var viewModel : UserInfoViewModel
 
     private var selectedDateString: String = ""
+    private lateinit var callback: OnBackPressedCallback
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        memberId = arguments?.getInt("userId")
-
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val accessToken = dataStore.getAccessToken()
-
-            if (accessToken != null) {
-                val memberInfoDeferred =
-                    async { memberService.getMemberInfo(accessToken, memberId.toString()) }
-                val memberInfoResponse = memberInfoDeferred.await()
-                if (memberInfoResponse.isSuccessful) {
-                    val memberInfoBody = JSONObject(memberInfoResponse.body()?.string())
-
-                    val translatedGender = when (val gender = memberInfoBody.getJSONObject("data").getString("gender")){
-                        "WOMEN" -> "여성"
-                        "MAN" -> "남성"
-                        else -> gender
-                    }
-
-
-                    val memberInfo = MemberDetail(
-                        memberInfoBody.getJSONObject("data").getString("userName"),
-                        translatedGender,
-                        memberInfoBody.getJSONObject("data").getString("height"),
-                        memberInfoBody.getJSONObject("data").getString("weight"),
-                        memberInfoBody.getJSONObject("data").getString("startDate"),
-                        memberInfoBody.getJSONObject("data").getString("endDate")
-                    )
-
-                    Log.d("MemberDetail", "Member info: $memberInfo")
-
-                    _memberInfo.postValue(memberInfo)
-                    membershipId = memberInfoBody.getJSONObject("data").getInt("membershipId")
-
-                } else {
-                    Log.d(
-                        "MemberDetail",
-                        "Failed to get member info. HTTP status code: ${memberInfoResponse.code()}, accessToken:$accessToken, memberId:$memberId ${
-                            memberInfoResponse.errorBody()?.string()
-                        }"
-                    )
-                }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.setCheck(true)
+                viewModel.setRegisteredUserInfo(null)
+                findNavController().popBackStack()
             }
         }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -102,15 +77,15 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_member_detail, container, false)
+        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
 
         val showExerciseRecord: ConstraintLayout = view.findViewById(R.id.btnShowExerciseRecord)
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
-        memberInfo.observe(viewLifecycleOwner) { info ->
-            updateMemberInfoUI(view, info)
+        viewModel.registeredUserInfo.observe(viewLifecycleOwner) { info ->
+            if (info != null) updateMemberInfoUI(view, info)
         }
-
 
         showMemberDetailExerciseRecord(showExerciseRecord)
 
@@ -122,7 +97,9 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun btnMemberDetailBack(backButton: ImageView) {
-        backButton.setOnClickListener {
+        backButton.setOnSingleClickListener {
+            viewModel.setCheck(true)
+            viewModel.setRegisteredUserInfo(null)
             backButton.alpha = 0.5f
             backButton.postDelayed({
                 backButton.alpha = 1.0f
@@ -135,7 +112,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun editMemberDetailMembershipPeriod(editMembershipPeriod: ImageView) {
-        editMembershipPeriod.setOnClickListener {
+        editMembershipPeriod.setOnSingleClickListener {
             editMembershipPeriod.alpha = 0.5f
             editMembershipPeriod.postDelayed({
                 editMembershipPeriod.alpha = 1.0f
@@ -145,7 +122,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun showMemberDetailExerciseRecord(showExerciseRecord: ConstraintLayout) {
-        showExerciseRecord.setOnClickListener {
+        showExerciseRecord.setOnSingleClickListener {
             showExerciseRecord.alpha = 0.5f
             showExerciseRecord.postDelayed({
                 showExerciseRecord.alpha = 1.0f
@@ -154,24 +131,35 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-    private fun updateMemberInfoUI(view: View, memberInfo: MemberDetail) {
+    private fun updateMemberInfoUI(view: View, memberInfo: RegisteredUserInfo) {
         val tvMemberDetailName: TextView = view.findViewById(R.id.tvMemberDetailNameContent)
         val tvMemberDetailGender: TextView = view.findViewById(R.id.tvMemberDetailGenderContent)
         val tvMemberDetailHeight: TextView = view.findViewById(R.id.tvMemberDetailHeight)
         val tvMemberDetailWeight: TextView = view.findViewById(R.id.tvMemberDetailWeight)
         val tvMemberDetailMembershipPeriod: TextView = view.findViewById(R.id.tvMemberDetailMembershipPeriod)
+        val birth : TextView = view.findViewById(R.id.birth)
+        val memberDetailImage : CircleImageView = view.findViewById(R.id.memberDetailImage)
 
         tvMemberDetailName.text = memberInfo.userName
-        tvMemberDetailGender.text = memberInfo.gender
-        tvMemberDetailHeight.text = memberInfo.height
-        tvMemberDetailWeight.text = memberInfo.weight
+        when(memberInfo.gender){
+            "MAN" -> tvMemberDetailGender.text = "남성"
+            "WOMEN" -> tvMemberDetailGender.text = "여성"
+        }
+        tvMemberDetailHeight.text = String.format(getString(R.string.stringMemberDetailCm),memberInfo.height)
+        tvMemberDetailWeight.text = String.format(getString(R.string.stringMemberDetailKg),memberInfo.weight)
         tvMemberDetailMembershipPeriod.text = "${memberInfo.startDate} ~ ${memberInfo.endDate}"
+        birth.text = memberInfo.birthDate
+        Glide.with(mContext!!)
+            .load(memberInfo.profileImage)
+            .centerCrop()
+            .into(memberDetailImage)
+
     }
 
     private fun showMemberExerciseRecord(membershipId: Int){
         val bundle = Bundle().apply {
-            putInt("memberId", memberId!!)
-            putString("memberName", _memberInfo.value?.userName)
+            putInt("memberId", viewModel.registeredUserInfo.value!!.userId)
+            putString("memberName", viewModel.registeredUserInfo.value!!.userName)
         }
         findNavController().navigate(R.id.action_memberDetailFragment_to_memberDetailExerciseRecordFragment, bundle)
     }
@@ -208,26 +196,17 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         CoroutineScope(Dispatchers.IO).launch {
             val accessToken = dataStore.getAccessToken()
 
-
-
             if (accessToken != null) {
                 val extendMembershipDeferred =
                     async { membershipService.extendMembership(accessToken, membershipId!!, endDate) }
                 val extendMembershipResponse = extendMembershipDeferred.await()
                 if (extendMembershipResponse.isSuccessful) {
-
-                    Log.d("ExtendMembership", "Membership extended successfully")
-
                     val responseBody = extendMembershipResponse.body()?.string()
-
-                    Log.d("ExtendMembership", "Response body: $responseBody")
 
                     val responseBodyJson = JSONObject(responseBody)
                     val dataJson = responseBodyJson.getJSONObject("data")
                     val startDate = dataJson.getString("startDate")
                     val endDate = dataJson.getString("endDate")
-                    Log.d("ExtendMembership", "Response body: $responseBody")
-
 
                     withContext(Dispatchers.Main) {
                         val tvMemberDetailMembershipPeriod: TextView = view?.findViewById(R.id.tvMemberDetailMembershipPeriod)!!

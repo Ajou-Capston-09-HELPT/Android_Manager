@@ -19,10 +19,12 @@ import com.ajou.helptmanager.databinding.FragmentRegisteredUserBinding
 import com.ajou.helptmanager.home.adapter.RegisteredUserInfoRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
+import com.ajou.helptmanager.home.model.PendingUserInfo
 import com.ajou.helptmanager.home.model.RegisteredUserInfo
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.MemberService
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.*
 
 class RegisteredUserFragment : Fragment(), AdapterToFragment{
@@ -37,13 +39,13 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
     private var gymId : Int? = null
     private lateinit var adapter : RegisteredUserInfoRVAdapter
     private lateinit var callback: OnBackPressedCallback
+    private var originList = emptyList<RegisteredUserInfo>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("backpressed","")
                 viewModel.setCheck(true)
                 findNavController().popBackStack()
             }
@@ -68,11 +70,24 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
             val registeredMemberDeferred = async { memberService.getRegisteredMembers(accessToken,gymId!!,"") }
             val registeredMemberResponse = registeredMemberDeferred.await()
             if (registeredMemberResponse.isSuccessful){
-                val list = registeredMemberResponse.body()!!.data
-                Log.d("registered",list.toString())
+                val results = registeredMemberResponse.body()!!.data.map { body ->
+                    async {
+                        try {
+                            val response = memberService.getOneMemberInfo(accessToken,body.userId)
+                            if (response.isSuccessful) {
+                                RegisteredUserInfo(body.userId, body.userName, response.body()!!.data.gender, response.body()!!.data.height, response.body()!!.data.weight, response.body()!!.data.startDate, response.body()!!.data.endDate, response.body()!!.data.membershipId, response.body()!!.data.profileImage, response.body()!!.data.birthDate)
+                            } else {
+                                null
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }.awaitAll().filterNotNull()
                 withContext(Dispatchers.Main){
                     binding.loadingBar.hide()
-                    adapter.updateList(list)
+                    originList = results
+                    adapter.updateList(results)
                 }
             }
 
@@ -92,15 +107,23 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
             if (i == EditorInfo.IME_ACTION_SEARCH){
                 val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(requireActivity().window.decorView.applicationWindowToken, 0)
-                adapter.filterList(binding.user.text.toString())
+                Log.d("before filtered Regist list",originList.toString())
+                adapter.filterList(originList, binding.user.text.toString())
                 return@setOnEditorActionListener true
         }else return@setOnEditorActionListener false
         }
+        binding.removeBtn.setOnSingleClickListener {
+            binding.user.setText("")
+            adapter.updateList(originList)
+        }
     }
 
-    override fun getSelectedItem(userId: Int, admissionId: Int?) {
-        viewModel.setUserId(userId)
+    override fun getSelectedItem(data: PendingUserInfo?) {
+    }
+
+    override fun getSelectedItem(data: RegisteredUserInfo?) {
         viewModel.setCheck(true)
+        viewModel.setRegisteredUserInfo(data)
     }
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {

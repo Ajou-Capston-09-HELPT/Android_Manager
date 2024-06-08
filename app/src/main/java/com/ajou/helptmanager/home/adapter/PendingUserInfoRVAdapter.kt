@@ -1,12 +1,15 @@
 package com.ajou.helptmanager.home.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.AdapterToFragment
 import com.ajou.helptmanager.home.model.PendingUserInfo
 import com.ajou.helptmanager.databinding.ItemUserInfoBinding
+import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.setOnSingleClickListener
 
 class PendingUserInfoRVAdapter(val context: Context, var list: List<PendingUserInfo>, val link: AdapterToFragment) :
  RecyclerView.Adapter<PendingUserInfoRVAdapter.ViewHolder>() {
@@ -15,9 +18,10 @@ class PendingUserInfoRVAdapter(val context: Context, var list: List<PendingUserI
              RecyclerView.ViewHolder(binding.root) {
                  fun bind(item: PendingUserInfo) {
                      binding.name.text = item.userName
+                     binding.birth.text = item.birthDate
 
-                     binding.item.setOnClickListener {
-                         link.getSelectedItem(item.memberId,item.gymAdmissionId)
+                     binding.item.setOnSingleClickListener {
+                         link.getSelectedItem(item)
                      }
                  }
              }
@@ -40,8 +44,9 @@ class PendingUserInfoRVAdapter(val context: Context, var list: List<PendingUserI
         notifyDataSetChanged()
     }
 
-    fun filterList(keyword:String){
-        list = list.filter { it.userName.contains(keyword)  }
+    fun filterList(originList: List<PendingUserInfo>, keyword:String){
+        list = originList.filter { it.userName.contains(keyword) }
+        Log.d("filteredList",list.toString())
         notifyDataSetChanged()
     }
 }

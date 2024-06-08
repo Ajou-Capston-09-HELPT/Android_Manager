@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.auth.view.SearchGymDialog
 import com.ajou.helptmanager.databinding.ItemSearchGymBinding
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.skt.Tmap.poi_item.TMapPOIItem
 
 class SearchGymRVAdapter(val context: Context, var list : ArrayList<TMapPOIItem>, val link : SearchGymDialog.AdapterToFragment):RecyclerView.Adapter<SearchGymRVAdapter.ViewHolder>() {
@@ -16,7 +17,7 @@ class SearchGymRVAdapter(val context: Context, var list : ArrayList<TMapPOIItem>
             binding.name.text = item.name
             binding.address.text = item.newAddressList[0].fullAddressRoad
 
-            binding.item.setOnClickListener {
+            binding.item.setOnSingleClickListener {
                 link.getSelectedItem(Gym(item.name, item.newAddressList[0].fullAddressRoad,null, item.poiPoint.latitude.toString(), item.poiPoint.longitude.toString()))
             }
         }

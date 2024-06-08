@@ -4,20 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ajou.helptmanager.home.model.Equipment
-import com.ajou.helptmanager.home.model.GymEquipment
-import com.ajou.helptmanager.home.model.RegisteredUserInfo
-import com.ajou.helptmanager.home.model.UserMembership
+import com.ajou.helptmanager.home.model.*
 
 class UserInfoViewModel : ViewModel() {
 
-    private val _userId = MutableLiveData<Int>()
-    val userId : LiveData<Int>
-        get() = _userId
+//    private val _userId = MutableLiveData<Int>()
+//    val userId : LiveData<Int>
+//        get() = _userId
+//
+//    private val _admissionId = MutableLiveData<Int?>()
+//    val admissionId : LiveData<Int?>
+//        get() = _admissionId
+    private val _pendingUserInfo = MutableLiveData<PendingUserInfo?>()
+    val pendingUserInfo : LiveData<PendingUserInfo?>
+        get() = _pendingUserInfo
 
-    private val _admissionId = MutableLiveData<Int>()
-    val admissionId : LiveData<Int>
-        get() = _admissionId
+    private val _registeredUserInfo = MutableLiveData<RegisteredUserInfo?>()
+    val registeredUserInfo : LiveData<RegisteredUserInfo?>
+        get() = _registeredUserInfo
 
     private val _check = MutableLiveData<Boolean>()
     val check : LiveData<Boolean>
@@ -35,12 +39,20 @@ class UserInfoViewModel : ViewModel() {
     val position : LiveData<Int?>
     get() = _position
 
-    fun setUserId(data: Int) {
-        _userId.postValue(data)
+//    fun setUserId(data: Int) {
+//        _userId.postValue(data)
+//    }
+//
+//    fun setAdmissionId(data: Int?){
+//        _admissionId.postValue(data)
+//    }
+
+    fun setPendingUserInfo(data: PendingUserInfo?) {
+        _pendingUserInfo.postValue(data)
     }
 
-    fun setAdmissionId(data: Int){
-        _admissionId.postValue(data)
+    fun setRegisteredUserInfo(data: RegisteredUserInfo?) {
+        _registeredUserInfo.postValue(data)
     }
 
     fun setCheck(data: Boolean){

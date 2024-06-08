@@ -1,6 +1,6 @@
 package com.ajou.helptmanager.network.api
 
-import com.ajou.helptmanager.home.view.fragment.OneMemberResponse
+import com.ajou.helptmanager.network.model.OneMemberResponse
 import com.ajou.helptmanager.network.model.AllRegisteredUserResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -22,11 +22,5 @@ interface MemberService {
         @Header("Authorization") accessToken : String,
         @Path("memberId") id : Int
     ):Response<OneMemberResponse>
-
-    @GET("members/{memberId}")
-    suspend fun getMemberInfo(
-        @Header("Authorization") accessToken : String,
-        @Path("memberId") memberId : String
-    ) : Response<ResponseBody>
 
 }

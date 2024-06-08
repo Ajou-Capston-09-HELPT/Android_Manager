@@ -1,4 +1,4 @@
-package com.ajou.helptmanager.home.view.fragment
+package com.ajou.helptmanager.network.model
 
 import com.ajou.helptmanager.home.model.UserInfo
 import com.google.gson.annotations.SerializedName

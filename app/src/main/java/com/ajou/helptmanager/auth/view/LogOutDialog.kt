@@ -8,6 +8,7 @@ import androidx.annotation.NonNull
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.auth.view.AuthActivity
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class LogOutDialog(@NonNull context : Context) : Dialog(context) {
         val stayBtn = findViewById<Button>(R.id.stayBtn)
         val signOutBtn = findViewById<Button>(R.id.exitBtn)
 
-        signOutBtn.setOnClickListener {
+        signOutBtn.setOnSingleClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 UserDataStore().deleteAll() // 유저 데이터 삭제
             }
@@ -29,7 +30,7 @@ class LogOutDialog(@NonNull context : Context) : Dialog(context) {
             dismiss()
         }
 
-        stayBtn.setOnClickListener {
+        stayBtn.setOnSingleClickListener {
             dismiss()
         }
 

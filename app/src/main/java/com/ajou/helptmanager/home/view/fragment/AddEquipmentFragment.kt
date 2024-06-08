@@ -9,20 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ajou.helptmanager.AdapterToFragment
-import com.ajou.helptmanager.DialogToFragment
-import com.ajou.helptmanager.R
-import com.ajou.helptmanager.UserDataStore
+import com.ajou.helptmanager.*
 import com.ajou.helptmanager.auth.model.Gym
 import com.ajou.helptmanager.databinding.FragmentAddEquipmentBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
-import com.ajou.helptmanager.home.model.Equipment
-import com.ajou.helptmanager.home.model.GymEquipment
-import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.model.*
 import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
@@ -67,7 +63,7 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken().toString()
             gymId = dataStore.getGymId()
-            val equipDeferred = async { equipmentService.getAllEquipments(accessToken!!) }
+            val equipDeferred = async { gymEquipmentService.getUnlinkedEquipments(accessToken,gymId!!) }
             val equipResponse = equipDeferred.await()
             if (equipResponse.isSuccessful) {
                 Log.d("equipResponse",equipResponse.body()?.data.toString())
@@ -112,14 +108,16 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
             if (viewModel.equipment.value != null) {
                 if (viewModel.equipment.value!!.customWeight != 0 || viewModel.equipment.value!!.customCount != 0 || viewModel.equipment.value!!.customSet != 0) {
                     postEquipmentApi(viewModel.equipment.value!!)
-                    Log.d("viewModel is called","addequipmentfragment")
                     viewModel.setEquipment(null)
                 }
             }
         })
     }
 
-    override fun getSelectedItem(userId: Int, admissionId: Int?) {
+    override fun getSelectedItem(data: PendingUserInfo?) {
+    }
+
+    override fun getSelectedItem(data: RegisteredUserInfo?) {
     }
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {
@@ -135,8 +133,6 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
 
     private fun postEquipmentApi(data: Equipment){
         CoroutineScope(Dispatchers.IO).launch {
-            Log.d("gymId",gymId.toString())
-            Log.d("gym data",data.toString())
             val jsonObject = JsonObject().apply {
                 addProperty("equipmentId", data.equipmentId)
                 addProperty("gymId",gymId)
@@ -144,15 +140,19 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
                 addProperty("customSet",data.customSet)
                 addProperty("customWeight",data.customWeight)
             }
-            Log.d("kakaoid",id.toString())
             val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
             val postEquipDeferred = async { gymEquipmentService.postGymEquipment(accessToken, requestBody) }
             val postEquipResponse = postEquipDeferred.await()
             if (postEquipResponse.isSuccessful){
-                Log.d("postEquipResponse","")
                 viewModel.setEquipment(null)
+                requireActivity().runOnUiThread{
+                    Toast.makeText(mContext, "기구 등록이 완료되었습니다", Toast.LENGTH_SHORT).show()
+                }
             }else {
                 Log.d("postEquipResponse faill",postEquipResponse.errorBody()?.string().toString())
+                requireActivity().runOnUiThread{
+                    Toast.makeText(mContext, "기구 등록이 실패하였습니다", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -162,67 +162,67 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
     }
 
     private fun pressBackButton(){
-        binding.backBtn.setOnClickListener {
+        binding.backBtn.setOnSingleClickListener {
             findNavController().popBackStack()
         }
     }
 
     private fun pressHamburgerButton(){
-        binding.hamburger.setOnClickListener {
+        binding.hamburger.setOnSingleClickListener {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
     }
 
     private fun pressHamburgerCloseButton(){
-        binding.drawer.closeBtn.setOnClickListener {
+        binding.drawer.closeBtn.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
         }
     }
 
     private fun pressHamburgerHomeButton(){
-        binding.drawer.home.setOnClickListener {
+        binding.drawer.home.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_addEquipmentFragment_to_homeFragment)
         }
     }
 
     private fun pressHamburgerMembershipButton(){
-        binding.drawer.ticket.setOnClickListener {
+        binding.drawer.ticket.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_addEquipmentFragment_to_membershipFragment)
         }
     }
 
     private fun pressHamburgerQrButton(){
-        binding.drawer.qr.setOnClickListener {
+        binding.drawer.qr.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_addEquipmentFragment_to_homeFragment)
         }
     }
 
     private fun pressHamburgerEquipmentButton(){
-        binding.drawer.train.setOnClickListener {
+        binding.drawer.train.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_addEquipmentFragment_self)
         }
     }
 
     private fun pressHamburegerUserButton(){
-        binding.drawer.user.setOnClickListener {
+        binding.drawer.user.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_addEquipmentFragment_to_searchUserFragment)
         }
     }
 
     private fun pressHamburegerNoticeButton(){
-        binding.drawer.notice.setOnClickListener {
+        binding.drawer.notice.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_addEquipmentFragment_to_noticeFragment)
         }
     }
 
     private fun pressHamburgerChatButton(){
-        binding.drawer.chat.setOnClickListener {
+        binding.drawer.chat.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "link")

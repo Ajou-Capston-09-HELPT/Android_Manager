@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.ajou.helptmanager.databinding.FragmentQRCreateDialogBinding
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
@@ -46,7 +47,7 @@ class QRCreateDialogFragment(val data:String) : DialogFragment() {
         val bitmap = barcodeEncoder.encodeBitmap(content, BarcodeFormat.QR_CODE, 400, 400)
         binding.qrCode.setImageBitmap(bitmap)
 
-        binding.exitBtn.setOnClickListener {
+        binding.exitBtn.setOnSingleClickListener {
             dismiss()
         }
     }

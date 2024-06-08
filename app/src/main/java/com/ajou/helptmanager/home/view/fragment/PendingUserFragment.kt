@@ -20,9 +20,12 @@ import com.ajou.helptmanager.databinding.FragmentPendingUserBinding
 import com.ajou.helptmanager.home.adapter.PendingUserInfoRVAdapter
 import com.ajou.helptmanager.home.model.Equipment
 import com.ajou.helptmanager.home.model.GymEquipment
+import com.ajou.helptmanager.home.model.RegisteredUserInfo
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.GymAdmissionService
+import com.ajou.helptmanager.network.api.MemberService
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.*
 
 class PendingUserFragment : Fragment(), AdapterToFragment {
@@ -30,12 +33,14 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
     private val binding get() = _binding!!
     private var mContext : Context? = null
     private lateinit var viewModel : UserInfoViewModel
+    private val memberService = RetrofitInstance.getInstance().create(MemberService::class.java)
     private val gymAdmissionService = RetrofitInstance.getInstance().create(GymAdmissionService::class.java)
     private lateinit var accessToken : String
     private val dataStore = UserDataStore()
     private var gymId : Int? = null
     private lateinit var adapter : PendingUserInfoRVAdapter
     private lateinit var callback: OnBackPressedCallback
+    private var originList = emptyList<PendingUserInfo>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,6 +49,7 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             override fun handleOnBackPressed() {
                 Log.d("backpressed","")
                 viewModel.setCheck(true)
+                viewModel.setPendingUserInfo(null)
                 findNavController().popBackStack()
             }
         }
@@ -67,9 +73,25 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             val admissionDeferred = async { gymAdmissionService.getAllAdmissionUsers(accessToken,gymId!!) }
             val admissionResponse = admissionDeferred.await()
             if (admissionResponse.isSuccessful) {
+                val results = admissionResponse.body()!!.data.map { body ->
+                        async {
+                            try {
+                                val response = memberService.getOneMemberInfo(accessToken,body.memberId)
+                                if (response.isSuccessful) {
+                                    PendingUserInfo(body.memberId, body.gymAdmissionId, body.userName, response.body()!!.data.gender, response.body()!!.data.height, response.body()!!.data.weight, response.body()!!.data.startDate, response.body()!!.data.endDate, response.body()!!.data.membershipId, response.body()!!.data.profileImage, response.body()!!.data.birthDate)
+                                } else {
+                                    null
+                                }
+                            } catch (e: Exception) {
+                                null
+                            }
+                        }
+                    }.awaitAll().filterNotNull()
+
                 withContext(Dispatchers.Main){
                     binding.loadingBar.hide()
-                    adapter.updateList(admissionResponse.body()!!.data)
+                    originList = results
+                    adapter.updateList(results)
                 }
             }else{
                 Log.d("admissionResponse faill",admissionResponse.errorBody()?.string().toString())
@@ -90,17 +112,23 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             if (i == EditorInfo.IME_ACTION_SEARCH){
                 val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(requireActivity().window.decorView.applicationWindowToken, 0)
-                adapter.filterList(binding.user.text.toString())
+                adapter.filterList(originList, binding.user.text.toString())
                 return@setOnEditorActionListener true
             }else return@setOnEditorActionListener false
         }
 
+        binding.removeBtn.setOnSingleClickListener {
+            binding.user.setText("")
+            adapter.updateList(originList)
+        }
     }
 
-    override fun getSelectedItem(userId: Int, admissionId: Int?) {
-        viewModel.setAdmissionId(admissionId!!)
-        viewModel.setUserId(userId)
+    override fun getSelectedItem(data: PendingUserInfo?) {
+        viewModel.setPendingUserInfo(data)
         viewModel.setCheck(true)
+    }
+
+    override fun getSelectedItem(data: RegisteredUserInfo?) {
     }
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {
