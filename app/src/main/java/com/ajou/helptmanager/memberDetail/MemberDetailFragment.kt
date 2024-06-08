@@ -12,6 +12,7 @@ import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -83,6 +84,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val editMembershipPeriod: ImageView = view.findViewById(R.id.ivEditMembershipPeriod)
         val backButton: ImageView = view.findViewById(R.id.memberDetailBackButton)
 
+
         viewModel.registeredUserInfo.observe(viewLifecycleOwner) { info ->
             if (info != null) updateMemberInfoUI(view, info)
         }
@@ -140,6 +142,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val birth : TextView = view.findViewById(R.id.birth)
         val memberDetailImage : CircleImageView = view.findViewById(R.id.memberDetailImage)
 
+
         tvMemberDetailName.text = memberInfo.userName
         when(memberInfo.gender){
             "MAN" -> tvMemberDetailGender.text = "남성"
@@ -148,6 +151,7 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         tvMemberDetailHeight.text = String.format(getString(R.string.stringMemberDetailCm),memberInfo.height)
         tvMemberDetailWeight.text = String.format(getString(R.string.stringMemberDetailKg),memberInfo.weight)
         tvMemberDetailMembershipPeriod.text = "${memberInfo.startDate} ~ ${memberInfo.endDate}"
+
         birth.text = memberInfo.birthDate
         Glide.with(mContext!!)
             .load(memberInfo.profileImage)
@@ -211,10 +215,12 @@ class MemberDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     withContext(Dispatchers.Main) {
                         val tvMemberDetailMembershipPeriod: TextView = view?.findViewById(R.id.tvMemberDetailMembershipPeriod)!!
                         tvMemberDetailMembershipPeriod.text = "$startDate ~ $endDate"
+                        Toast.makeText(context, "멤버십 기간이 연장되었습니다.", Toast.LENGTH_SHORT).show()
                         Log.d("ExtendMembership", "Membership extended successfully")
                     }
                 } else {
                     withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "멤버십 기간 연장에 실패했습니다.", Toast.LENGTH_SHORT).show()
                         Log.d("ExtendMembership", "Failed to extend membership. HTTP status code: ${extendMembershipResponse.code()}, accessToken:$accessToken, membershipId:$membershipId, endDate:$endDate ${extendMembershipResponse.errorBody()?.string()}")
                     }
                 }

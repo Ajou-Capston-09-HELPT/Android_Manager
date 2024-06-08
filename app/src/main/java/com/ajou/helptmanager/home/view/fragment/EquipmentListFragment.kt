@@ -172,27 +172,8 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
     override fun getSelectedItem(data: GymEquipment, position: Int) {
         val setting = listOf<Int>(data.customWeight, data.customCount, data.customSet)
         selectedTmp = Equipment(data.gymEquipmentId,data.equipmentName, data.customCount, data.customSet, data.customWeight)
-        Log.d("viewmodel is called tmp changed",selectedTmp.toString())
         val tmp = selectedTmp
         viewModel.setEquipment(tmp!!, position)
-//        val dialog = EquipmentEditBottomSheetFragment(setting){value ->
-//            if(value[0]==-1){
-//                deleteEquipmentApi(data.gymEquipmentId)
-//                list.removeAt(position)
-//                adapter.notifyItemRemoved(position)
-//            }else{
-//                list[position].customWeight = value[0]
-//                list[position].customCount = value[1]
-//                list[position].customSet = value[2]
-//                adapter.notifyItemChanged(position)
-//                val jsonObject = JsonObject().apply {
-//                    addProperty("customCount", value[1])
-//                    addProperty("customSet",value[2])
-//                    addProperty("customWeight",value[0])
-//                }
-//                val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
-//                editSettingApi(requestBody,data.gymEquipmentId)
-//            }
 
         val dialog = EquipmentEditBottomSheetFragment()
         dialog.show(parentFragmentManager,dialog.tag)
