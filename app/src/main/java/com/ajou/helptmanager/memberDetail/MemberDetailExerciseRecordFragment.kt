@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentMemberDetailExerciseRecordBinding
+import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
 import com.ajou.helptmanager.network.api.RecordService
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,32 +37,28 @@ class MemberDetailExerciseRecordFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val recordService = RetrofitInstance.getInstance().create(RecordService::class.java)
-    private val equipmentService = RetrofitInstance.getInstance().create(EquipmentService::class.java)
 
     private val dataStore = UserDataStore()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var exerciseRecordAdapter: ExerciseRecordAdapter
-//    private var exerciseRecords: MutableList<ExerciseRecord>? = null
+
+    private lateinit var viewModel : UserInfoViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         _binding = FragmentMemberDetailExerciseRecordBinding.inflate(layoutInflater, container, false)
-//        val backButton: ImageView = view.findViewById(R.id.memberDetailExerciseRecordBackButton)
-//        val exerciseDate: MaterialCalendarView = view.findViewById(R.id.memberDetailExerciseRecordDate)
-//        val tvExerciseDate: TextView = view.findViewById(R.id.exerciseRecordDate)
 
         setupRecyclerView(binding.root)
         getMemberName(binding.root)
-        getMemberId()
+//        getMemberId()
         binding.exerciseRecordDate.visibility = View.INVISIBLE
 
         clickBackButton(binding.memberDetailExerciseRecordBackButton)
@@ -143,7 +142,7 @@ class MemberDetailExerciseRecordFragment : Fragment() {
         }
 }
     private fun clickBackButton(backButton: ImageView) {
-        backButton.setOnClickListener {
+        backButton.setOnSingleClickListener {
             backButton.alpha = 0.5f
             backButton.postDelayed({
                 backButton.alpha = 1.0f
@@ -153,13 +152,13 @@ class MemberDetailExerciseRecordFragment : Fragment() {
     }
 
     private fun getMemberId() {
-        val memberId = arguments?.getInt("memberId")
+        val memberId = viewModel.registeredUserInfo.value!!.userId
     }
 
     private fun getMemberName(view: View) {
         val tvMemberDetailExerciseRecordName: TextView =
             view.findViewById(R.id.memberDetailExerciseRecordName)
-        tvMemberDetailExerciseRecordName.text = arguments?.getString("memberName")
+        tvMemberDetailExerciseRecordName.text = viewModel.registeredUserInfo.value!!.userName
     }
 
     private fun calculateDuration(startTime: String, endTime: String): String {

@@ -57,15 +57,14 @@ class SplashActivity : AppCompatActivity() {
                     }
                 }
                 if (gymId == null && finalAccessToken != null) {
-                    val idDeferred = async { managerService.getGymId(finalAccessToken!!) }
+                    val idDeferred = async { managerService.getGymId(finalAccessToken) }
                     val idResponse = idDeferred.await()
                     if (idResponse.isSuccessful) {
                         val gymIdBody = JSONObject(idResponse.body()?.string())
                         val infoDeferred = async {
                             gymService.getGymInfo(
                                 finalAccessToken,
-                                gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId")
-                                    .toInt()
+                                gymIdBody.getJSONObject("data").getString("gymId").toInt()
                             )
                         }
                         val infoResponse = infoDeferred.await()
@@ -73,8 +72,7 @@ class SplashActivity : AppCompatActivity() {
                             dataStore.saveUserName(infoResponse.body()!!.data.gymName)
                         }
                         dataStore.saveGymId(
-                            gymIdBody.getJSONArray("data").getJSONObject(0).getString("gymId")
-                                .toInt()
+                            gymIdBody.getJSONObject("data").getString("gymId").toInt()
                         )
                     } else {
                         Log.d("infoResponse faill", idResponse.errorBody()?.string().toString())

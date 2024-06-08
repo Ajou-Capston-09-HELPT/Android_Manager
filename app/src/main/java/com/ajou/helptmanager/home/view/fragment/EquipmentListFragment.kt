@@ -18,15 +18,14 @@ import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentEquipmentListBinding
 import com.ajou.helptmanager.home.adapter.EquipmentRVAdapter
 import com.ajou.helptmanager.home.adapter.GymEquipmentRVAdapter
-import com.ajou.helptmanager.home.model.Equipment
-import com.ajou.helptmanager.home.model.GymEquipment
-import com.ajou.helptmanager.home.model.UserInfo
+import com.ajou.helptmanager.home.model.*
 import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.EquipmentService
 import com.ajou.helptmanager.network.api.GymEquipmentService
 import com.ajou.helptmanager.network.api.GymService
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -91,10 +90,10 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
         binding.equipRV.adapter = adapter
         binding.equipRV.layoutManager = LinearLayoutManager(mContext)
 
-        binding.btn.setOnClickListener {
+        binding.btn.setOnSingleClickListener {
             findNavController().navigate(R.id.action_equipmentListFragment_to_addEquipmentFragment)
         }
-        binding.backBtn.setOnClickListener {
+        binding.backBtn.setOnSingleClickListener {
             findNavController().popBackStack()
         }
 
@@ -130,71 +129,51 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
         binding.drawer.train.setTextColor(resources.getColor(R.color.primary))
         binding.drawer.train.setTypeface(binding.drawer.user.typeface, Typeface.BOLD)
 
-        binding.backBtn.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.hamburger.setOnClickListener {
+        binding.hamburger.setOnSingleClickListener {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
-        binding.drawer.ticket.setOnClickListener {
+        binding.drawer.ticket.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_membershipFragment)
         }
-        binding.drawer.qr.setOnClickListener {
+        binding.drawer.qr.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_homeFragment)
         }
-        binding.drawer.train.setOnClickListener {
+        binding.drawer.train.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_self)
         }
-        binding.drawer.user.setOnClickListener {
+        binding.drawer.user.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_searchUserFragment)
         }
-        binding.drawer.notice.setOnClickListener {
+        binding.drawer.notice.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_noticeFragment)
         }
-        binding.drawer.chat.setOnClickListener {
+        binding.drawer.chat.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "link")
         }
-        binding.drawer.home.setOnClickListener {
+        binding.drawer.home.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_homeFragment)
         }
     }
 
-    override fun getSelectedItem(userId: Int, admissionId: Int?) {
+    override fun getSelectedItem(data: PendingUserInfo?) {
+    }
+
+    override fun getSelectedItem(data: RegisteredUserInfo?) {
     }
 
     override fun getSelectedItem(data: GymEquipment, position: Int) {
         val setting = listOf<Int>(data.customWeight, data.customCount, data.customSet)
         selectedTmp = Equipment(data.gymEquipmentId,data.equipmentName, data.customCount, data.customSet, data.customWeight)
-        Log.d("viewmodel is called tmp changed",selectedTmp.toString())
         val tmp = selectedTmp
         viewModel.setEquipment(tmp!!, position)
-//        val dialog = EquipmentEditBottomSheetFragment(setting){value ->
-//            if(value[0]==-1){
-//                deleteEquipmentApi(data.gymEquipmentId)
-//                list.removeAt(position)
-//                adapter.notifyItemRemoved(position)
-//            }else{
-//                list[position].customWeight = value[0]
-//                list[position].customCount = value[1]
-//                list[position].customSet = value[2]
-//                adapter.notifyItemChanged(position)
-//                val jsonObject = JsonObject().apply {
-//                    addProperty("customCount", value[1])
-//                    addProperty("customSet",value[2])
-//                    addProperty("customWeight",value[0])
-//                }
-//                val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
-//                editSettingApi(requestBody,data.gymEquipmentId)
-//            }
 
         val dialog = EquipmentEditBottomSheetFragment()
         dialog.show(parentFragmentManager,dialog.tag)

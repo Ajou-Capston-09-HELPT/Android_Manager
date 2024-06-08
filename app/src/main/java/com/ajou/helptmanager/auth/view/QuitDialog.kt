@@ -10,6 +10,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.ManagerService
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -27,7 +28,7 @@ class QuitDialog(@NonNull context : Context) : Dialog(context) {
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken()
         }
-        signOutBtn.setOnClickListener {
+        signOutBtn.setOnSingleClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 Log.d("탈퇴하기",accessToken.toString())
                 val quitDeferred = async { memberService.quit(accessToken!!) }
@@ -45,7 +46,7 @@ class QuitDialog(@NonNull context : Context) : Dialog(context) {
             dismiss()
         }
 
-        stayBtn.setOnClickListener {
+        stayBtn.setOnSingleClickListener {
             dismiss()
         }
 

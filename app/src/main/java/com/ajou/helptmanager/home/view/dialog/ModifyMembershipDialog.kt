@@ -18,6 +18,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.home.model.ProductRequest
 import com.ajou.helptmanager.home.viewmodel.MembershipViewModel
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,12 +51,12 @@ class ModifyMembershipDialog(
         etMembershipPrice.addTextChangedListener(priceTextWatcher)
 
         val modifyMembership = view.findViewById<ConstraintLayout>(R.id.modifyMembershipRegisterButton)
-        modifyMembership.setOnClickListener{
+        modifyMembership.setOnSingleClickListener{
             modifyMembership()
         }
 
         val btnModifyClose = view.findViewById<ImageButton>(R.id.btnModifyClose)
-        btnModifyClose.setOnClickListener{
+        btnModifyClose.setOnSingleClickListener{
             dismiss()
         }
     }

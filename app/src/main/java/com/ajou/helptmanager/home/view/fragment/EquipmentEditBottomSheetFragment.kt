@@ -16,6 +16,7 @@ import com.ajou.helptmanager.databinding.FragmentEquipmentEditBottomSheetBinding
 import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.dialog.TrainSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -59,14 +60,14 @@ class EquipmentEditBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.edit.setOnClickListener {
+        binding.edit.setOnSingleClickListener {
             settingDialog = TrainSettingDialog()
             settingDialog.show(requireActivity().supportFragmentManager, "setting")
             dialog?.hide()
 
         }
 
-        binding.delete.setOnClickListener {
+        binding.delete.setOnSingleClickListener {
             val value = listOf<Int>(-1,-1,-1)
             viewModel.setEquipmentSetting(value)
             dismiss()

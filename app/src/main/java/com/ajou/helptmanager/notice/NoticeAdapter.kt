@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ajou.helptmanager.R
+import com.ajou.helptmanager.setOnSingleClickListener
 
 class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeResponse, NoticeAdapter.NoticeViewHolder>(
     NoticeDiffCallback
@@ -34,10 +35,10 @@ class NoticeAdapter(val listener: OnItemClickListener): ListAdapter<NoticeRespon
         val notice = getItem(position)
         holder.title.text = notice.title
         holder.createAt.text = notice.createAt
-        holder.moreButton.setOnClickListener {
+        holder.moreButton.setOnSingleClickListener {
             listener.onMoreButtonClicked(notice.noticeId, notice.title, notice.content, notice.createAt)
         }
-        holder.itemView.setOnClickListener {
+        holder.itemView.setOnSingleClickListener {
             listener.onDetailButtonClicked(notice.noticeId, notice.title, notice.content, notice.createAt)
         }
 

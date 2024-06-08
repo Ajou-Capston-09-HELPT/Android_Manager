@@ -23,6 +23,7 @@ import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.HomeActivity
 import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kakao.sdk.user.model.User
 import kotlinx.coroutines.CoroutineScope
@@ -63,17 +64,22 @@ class SearchUserFragment : Fragment(){
                 binding.drawer.name.text = userName
             }
         }
-        viewModel.userId.observe(viewLifecycleOwner, Observer {
+        viewModel.check.observe(viewLifecycleOwner, Observer {
             if (viewModel.check.value == null || viewModel.check.value == false){
-                if (viewModel.admissionId.value == null) {
-                    val bundle = Bundle().apply {
-                        putInt("userId", viewModel.userId.value!!)
-                    }
-
-                    findNavController().navigate(R.id.action_searchUserFragment_to_memberDetailFragment, bundle)
-                } else {
+                if (viewModel.pendingUserInfo.value != null){
                     findNavController().navigate(R.id.action_searchUserFragment_to_addUserFragment)
                 }
+                else if (viewModel.registeredUserInfo.value != null) {
+                    findNavController().navigate(R.id.action_searchUserFragment_to_memberDetailFragment)
+                }
+//                if (viewModel.admissionId.value == null) {
+//                    val bundle = Bundle().apply {
+//                        putInt("userId", viewModel.userId.value!!)
+//                    }
+//                    findNavController().navigate(R.id.action_searchUserFragment_to_memberDetailFragment, bundle)
+//                } else {
+//
+//                }
             }else{
                 viewModel.setCheck(false)
             }
@@ -84,42 +90,42 @@ class SearchUserFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.backBtn.setOnClickListener {
+        binding.backBtn.setOnSingleClickListener {
             findNavController().popBackStack()
         }
 
-        binding.hamburger.setOnClickListener {
+        binding.hamburger.setOnSingleClickListener {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
-        binding.drawer.closeBtn.setOnClickListener {
+        binding.drawer.closeBtn.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
         }
-        binding.drawer.ticket.setOnClickListener {
+        binding.drawer.ticket.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_membershipFragment)
         }
-        binding.drawer.qr.setOnClickListener {
+        binding.drawer.qr.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_homeFragment)
         }
-        binding.drawer.train.setOnClickListener {
+        binding.drawer.train.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_equipmentListFragment)
         }
-        binding.drawer.user.setOnClickListener {
+        binding.drawer.user.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_self)
         }
-        binding.drawer.notice.setOnClickListener {
+        binding.drawer.notice.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_noticeFragment)
         }
-        binding.drawer.chat.setOnClickListener {
+        binding.drawer.chat.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "chatLinkSetting")
         }
-        binding.drawer.home.setOnClickListener {
+        binding.drawer.home.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_homeFragment)
         }

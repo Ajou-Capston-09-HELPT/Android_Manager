@@ -20,6 +20,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentSetBizInfoBinding
 import com.ajou.helptmanager.getFileName
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -115,7 +116,7 @@ class SetBizInfoFragment : Fragment() {
             }
         }
 
-        binding.bizImg.setOnClickListener {
+        binding.bizImg.setOnSingleClickListener {
             val intent = Intent().also { intent ->
                 intent.type = "image/"
                 intent.action = Intent.ACTION_GET_CONTENT
@@ -123,7 +124,7 @@ class SetBizInfoFragment : Fragment() {
             launcher.launch(intent)
         }
 
-        binding.bizImgIconRemove.setOnClickListener {
+        binding.bizImgIconRemove.setOnSingleClickListener {
             viewModel.setBizImg(null)
             viewModel.setDone(false)
 
@@ -182,7 +183,7 @@ class SetBizInfoFragment : Fragment() {
             binding.nextBtn.isEnabled = viewModel.bizImg.value != null && viewModel.bizName.value != null && viewModel.bizNum.value != null && viewModel.division.value != null
         }
 
-        binding.nextBtn.setOnClickListener {
+        binding.nextBtn.setOnSingleClickListener {
             findNavController().navigate(R.id.action_setBizInfoFragment_to_setGymInfoFragment)
         }
     }

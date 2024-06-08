@@ -63,7 +63,7 @@ class SetGymInfoFragment : Fragment() {
         var latitude : String? = null
         var longitude : String? = null
 
-        binding.gymAddress.setOnClickListener {
+        binding.gymAddress.setOnSingleClickListener {
             dialog = SearchGymDialog() { value ->
                 binding.gymAddress.text = value.address
                 binding.gymAddress.isSelected = true

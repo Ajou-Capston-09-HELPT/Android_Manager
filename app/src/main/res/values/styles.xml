@@ -11,25 +11,21 @@
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
     <style name="styleMembershipMonthPrice">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#828282</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleMembershipRegisterButton">
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleRegisterMembershipTitle">
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
 
     <style name="styleEtRegisterMembershipTitle">
@@ -37,14 +33,12 @@
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
         <item name="android:textColorHint">#C9C9C9</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleEtRegisterMembershipPrice">
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
         <item name="android:textColorHint">#C9C9C9</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleMembershipModify">
         <item name="android:textSize">18sp</item>
@@ -64,43 +58,36 @@
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#828282</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleMemberDetailShowExerciseRecord">
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleExerciseRecordDate">
         <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
     <style name="styleExerciseRecordName">
         <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
     <style name="styleExerciseRecordPart">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#828282</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleExerciseRecordReps">
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
     <style name="styleExerciseRecordTime">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#828282</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
 
     <!-- Notice Style -->
@@ -108,13 +95,11 @@
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
     <style name="styleNoticeCreateDate">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#828282</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleNoticeCreateButton">
         <item name="android:textSize">16sp</item>
@@ -132,7 +117,6 @@
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#828282</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
     <style name="styleNoticeCreateContentTV">
         <item name="android:textSize">16sp</item>
@@ -149,7 +133,6 @@
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textColor">#000000</item>
-        <item name="android:fontFamily">@font/pretendard</item>
     </style>
 
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.ajou.helptmanager.databinding.FragmentNoticeDetailBinding
+import com.ajou.helptmanager.setOnSingleClickListener
 
 
 class NoticeDetailFragment : Fragment() {
@@ -51,7 +52,7 @@ class NoticeDetailFragment : Fragment() {
     }
 
     private fun pressBackButton() {
-        binding.noticeDetailToolbar.noticeDetailBackButton.setOnClickListener {
+        binding.noticeDetailToolbar.noticeDetailBackButton.setOnSingleClickListener {
             findNavController().popBackStack()
         }
     }

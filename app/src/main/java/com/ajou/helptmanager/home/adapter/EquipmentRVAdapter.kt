@@ -14,6 +14,7 @@ import com.ajou.helptmanager.home.model.GymEquipment
 import com.ajou.helptmanager.home.model.UserInfo
 import com.ajou.helptmanager.home.view.fragment.EquipmentEditBottomSheetFragment
 import com.ajou.helptmanager.home.view.fragment.EquipmentListFragment
+import com.ajou.helptmanager.setOnSingleClickListener
 
 class EquipmentRVAdapter(val context: Context, var list: List<Equipment>, val type : String, val link: AdapterToFragment): RecyclerView.Adapter<EquipmentRVAdapter.ViewHolder>(){
 
@@ -27,14 +28,14 @@ class EquipmentRVAdapter(val context: Context, var list: List<Equipment>, val ty
                     val exerciseInfo = String.format(context.resources.getString(R.string.equip_set),item.customWeight,item.customCount,item.customSet)
                     binding.exerciseInfo.text = exerciseInfo
 
-                    binding.more.setOnClickListener {
+                    binding.more.setOnSingleClickListener {
                         link.getSelectedItem(item, position)
                     }
                 }
                 "add" -> {
                     binding.addBtn.visibility = View.VISIBLE
                     binding.name.text = item.equipmentName
-                    binding.addBtn.setOnClickListener {
+                    binding.addBtn.setOnSingleClickListener {
                         link.getSelectedItem(item, position)
                     }
                 }

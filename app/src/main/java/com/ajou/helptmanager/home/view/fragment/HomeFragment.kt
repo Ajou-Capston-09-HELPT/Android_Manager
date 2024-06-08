@@ -24,10 +24,12 @@ import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
 import com.ajou.helptmanager.home.viewmodel.UserInfoViewModel
 import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.QrService
+import com.ajou.helptmanager.setOnSingleClickListener
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.*
+import org.json.JSONObject
 
 class HomeFragment : Fragment() {
     private var _binding : FragmentHomeBinding? = null
@@ -59,6 +61,9 @@ class HomeFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             userName = dataStore.getUserName()
+            val gymId = dataStore.getGymId()
+            Log.d("gymId",gymId.toString())
+
             withContext(Dispatchers.Main) {
                 binding.greetMsg.text = String.format(mContext!!.resources.getString(R.string.home_greet_msg),userName)
                 binding.drawer.name.text = userName
@@ -69,76 +74,76 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.hamburger.setOnClickListener {
+        binding.hamburger.setOnSingleClickListener {
             binding.drawerLayout.openDrawer(binding.drawer.drawer)
         }
 
-        binding.drawer.closeBtn.setOnClickListener {
+        binding.drawer.closeBtn.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
         }
-        binding.drawer.ticket.setOnClickListener {
+        binding.drawer.ticket.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
         }
-        binding.drawer.qr.setOnClickListener {
+        binding.drawer.qr.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             qrScan()
         }
-        binding.drawer.train.setOnClickListener {
+        binding.drawer.train.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
         }
-        binding.drawer.user.setOnClickListener {
+        binding.drawer.user.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
         }
-        binding.drawer.notice.setOnClickListener {
+        binding.drawer.notice.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_homeFragment_to_noticeFragment)
         }
-        binding.drawer.chat.setOnClickListener {
+        binding.drawer.chat.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "link")
         }
-        binding.drawer.home.setOnClickListener {
+        binding.drawer.home.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             val intent = Intent(mContext, HomeActivity::class.java)
             startActivity(intent)
         }
 
-        binding.ticketBg.setOnClickListener {
+        binding.ticketBg.setOnSingleClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
         }
 
-        binding.noticeBg.setOnClickListener {
+        binding.noticeBg.setOnSingleClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_noticeFragment)
         }
 
-        binding.userBg.setOnClickListener {
+        binding.userBg.setOnSingleClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_searchUserFragment)
         }
 
-        binding.machineBg.setOnClickListener {
+        binding.machineBg.setOnSingleClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_equipmentListFragment)
         }
 
-        binding.qrBg.setOnClickListener {
+        binding.qrBg.setOnSingleClickListener {
             qrScan()
         }
 
-        binding.chatBg.setOnClickListener {
+        binding.chatBg.setOnSingleClickListener {
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "link")
         }
 
-        binding.logout.setOnClickListener {
+        binding.logout.setOnSingleClickListener {
             logOutDialog = LogOutDialog(mContext!!)
             logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             logOutDialog.show()
         }
 
-        binding.withdrawal.setOnClickListener {
+        binding.withdrawal.setOnSingleClickListener {
             quitDialog = QuitDialog(mContext!!)
             quitDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             quitDialog.show()
@@ -168,20 +173,20 @@ class HomeFragment : Fragment() {
     private fun checkValidation(contents: String){
         CoroutineScope(Dispatchers.IO).launch {
             val gymId = dataStore.getGymId()
+            Log.d("gymId check",gymId.toString())
             val qrValidDeferred = async { qrService.validateQr(contents,gymId!!) }
             val qrValidResponse = qrValidDeferred.await()
             if (qrValidResponse.isSuccessful){
-                Log.d("qrValidResponse ",qrValidResponse.body().toString())
+                val qrBody = JSONObject(qrValidResponse.body()?.string())
+
                 requireActivity().runOnUiThread{
-                    Toast.makeText(mContext, "어서오세요 오늘도 득근합시다",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContext, "어서오세요 ${qrBody.getJSONObject("data").getString("userName")}님 오늘도 득근합시다",Toast.LENGTH_SHORT).show()
                 }
-
-
             }else{
                 requireActivity().runOnUiThread{
-                    Toast.makeText(mContext, "QR스캔에 실패하였습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContext, "만료된 QR이거나 등록되지 않은 회원입니다..",Toast.LENGTH_SHORT).show()
                 }
-                Log.d("qrValieResponse fail",qrValidResponse.errorBody()?.string().toString())
+                Log.d("qrValidateResponse fail",qrValidResponse.errorBody()?.string().toString())
             }
         }
     }
