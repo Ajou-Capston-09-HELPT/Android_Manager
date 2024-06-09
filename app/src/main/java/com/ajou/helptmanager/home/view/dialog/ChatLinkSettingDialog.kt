@@ -110,6 +110,10 @@ class ChatLinkSettingDialog() : DialogFragment() {
         })
         binding.posBtn.setOnSingleClickListener {
 //            viewModel.setChatLink(binding.link.text.toString())
+            if(!binding.link.text.toString().startsWith("https://open.kakao.com/")){
+                Toast.makeText(mContext, "오픈 카톡 채팅 링크가 아닙니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnSingleClickListener
+            }
             putChatLink(binding.link.text.toString())
             Toast.makeText(mContext, "채팅 링크가 ${binding.posBtn.text}되었습니다.", Toast.LENGTH_SHORT).show()
             dialog?.dismiss()
