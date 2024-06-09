@@ -47,4 +47,18 @@ interface GymService {
         @Path("gymId") gymId : Int,
         @Body body : RequestBody
     ): Response<ResponseBody>
+
+    @GET("gyms/{gymId}/chat-link")
+    suspend fun getChatLink(
+        @Header("Authorization") accessToken : String,
+        @Path("gymId") gymId : Int
+    ): Response<ResponseBody>
+
+    @DELETE("gyms/{gymId}/chat-link")
+    suspend fun deleteChatLink(
+        @Header("Authorization") accessToken : String,
+        @Path("gymId") gymId : Int
+    ): Response<ResponseBody>
+
+
 }

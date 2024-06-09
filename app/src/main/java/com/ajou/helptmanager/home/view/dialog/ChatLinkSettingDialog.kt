@@ -1,5 +1,6 @@
 package com.ajou.helptmanager.home.view.dialog
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.ajou.helptmanager.R
@@ -22,13 +24,14 @@ import com.ajou.helptmanager.network.RetrofitInstance
 import com.ajou.helptmanager.network.api.GymService
 import com.ajou.helptmanager.setOnSingleClickListener
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
-import java.io.Serializable
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class ChatLinkSettingDialog() : DialogFragment() {
     private var _binding: DialogSetChatLinkBinding? = null
@@ -55,6 +58,9 @@ class ChatLinkSettingDialog() : DialogFragment() {
     ): View? {
         _binding = DialogSetChatLinkBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
+
+        getChatLink()
+
         isCancelable = true
         return binding.root
     }
@@ -70,6 +76,9 @@ class ChatLinkSettingDialog() : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
 
         binding.link.setOnEditorActionListener { view, id, keyEvent ->
             if (id == EditorInfo.IME_ACTION_DONE) {
@@ -102,6 +111,13 @@ class ChatLinkSettingDialog() : DialogFragment() {
         binding.posBtn.setOnSingleClickListener {
 //            viewModel.setChatLink(binding.link.text.toString())
             putChatLink(binding.link.text.toString())
+            Toast.makeText(mContext, "채팅 링크가 ${binding.posBtn.text}되었습니다.", Toast.LENGTH_SHORT).show()
+            dialog?.dismiss()
+        }
+
+        binding.delBtn.setOnSingleClickListener {
+            delChatLink()
+            Toast.makeText(mContext, "채팅 링크가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
             dialog?.dismiss()
         }
 
@@ -117,7 +133,8 @@ class ChatLinkSettingDialog() : DialogFragment() {
             val jsonObject = JsonObject().apply {
                 addProperty("chatLink", url)
             }
-            val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+            val requestBody =
+                jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
             val chatLinkDeferred = async{gymService.putChatLink(accessToken, gymId!!, requestBody) }
             val chatLinkResponse = chatLinkDeferred.await()
             if(chatLinkResponse.isSuccessful) {
@@ -128,4 +145,60 @@ class ChatLinkSettingDialog() : DialogFragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun getChatLink(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val accessToken = dataStore.getAccessToken().toString()
+            val gymId = dataStore.getGymId()
+            val chatLinkDeferred = async{gymService.getChatLink(accessToken, gymId!!) }
+            val chatLinkResponse = chatLinkDeferred.await()
+            if(chatLinkResponse.isSuccessful) {
+                val chatLinkResponse = chatLinkResponse.body()?.string()
+                val jsonObject = JsonParser.parseString(chatLinkResponse).asJsonObject
+                val dataObject = jsonObject.getAsJsonObject("data")
+                if (dataObject.get("chatLink").isJsonNull){
+                    CoroutineScope(Dispatchers.Main).launch {
+                        binding.currentLink.text = "현재 링크 : 없음"
+                        binding.posBtn.text = "등록"
+                        binding.delBtn.visibility = View.GONE
+                    }
+                    return@launch
+                }
+                val chatLink = dataObject.get("chatLink").asString
+                CoroutineScope(Dispatchers.Main).launch {
+                    if(chatLink != null){
+                        binding.currentLink.text = "현재 링크 : $chatLink"
+                        binding.posBtn.text = "수정"
+                        binding.delBtn.visibility = View.VISIBLE
+                        binding.delBtn.isEnabled = true
+                        binding.delBtn.setOnSingleClickListener {
+                            delChatLink()
+                            Toast.makeText(mContext, "채팅 링크가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            dialog?.dismiss()
+                        }
+                    }
+                }
+            }else{
+                Log.d("chatLinkResponse fail",chatLinkResponse.errorBody()?.string().toString())
+            }
+        }
+    }
+
+    private fun delChatLink() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val accessToken = dataStore.getAccessToken().toString()
+            val gymId = dataStore.getGymId()
+            val chatLinkDeferred = async { gymService.deleteChatLink(accessToken, gymId!!) }
+            val chatLinkResponse = chatLinkDeferred.await()
+            if (chatLinkResponse.isSuccessful) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.currentLink.text = "현재 링크 : 없음"
+                    binding.posBtn.text = "등록"
+                    binding.delBtn.visibility = View.GONE
+                }
+            } else {
+                Log.d("chatLinkResponse fail", chatLinkResponse.errorBody()?.string().toString())
+            }
+        }
+    }
 }

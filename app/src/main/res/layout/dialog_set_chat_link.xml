@@ -19,6 +19,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/currentLink"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="현재 링크 : 없음"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView7"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintBottom_toTopOf="@+id/link" />
+
+
     <ImageView
         android:id="@+id/closeBtn"
         android:layout_width="wrap_content"
@@ -46,7 +63,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/textView7"
         app:layout_constraintStart_toStartOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/currentLink" />
 
 
     <Button
@@ -56,11 +73,26 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/all_long_btn"
         android:enabled="false"
-        android:text="등록 완료"
+        android:text="등록"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/link"
         app:layout_constraintStart_toStartOf="@+id/link"
         app:layout_constraintTop_toBottomOf="@+id/link" />
+
+    <Button
+        android:id="@+id/delBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/del_btn"
+        android:enabled="false"
+        android:text="삭제"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/link"
+        app:layout_constraintStart_toStartOf="@+id/link"
+        app:layout_constraintTop_toBottomOf="@+id/posBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
