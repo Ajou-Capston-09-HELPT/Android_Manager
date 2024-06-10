@@ -76,9 +76,10 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         pressHamburgerMembershipButton()
         pressHamburgerQrButton()
         pressHamburgerEquipmentButton()
-        pressHamburegerUserButton()
-        pressHamburegerNoticeButton()
+        pressHamburgerUserButton()
+        pressHamburgerNoticeButton()
         pressHamburgerChatButton()
+        pressHamburgerEntryLogButton()
         binding.membershipDrawer.ticketIcon.setImageResource(R.drawable.menu_ticket_on)
 
         binding.membershipDrawer.ticketIcon.setImageResource(R.drawable.menu_ticket_on)
@@ -129,14 +130,14 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
         }
     }
 
-    private fun pressHamburegerUserButton() {
+    private fun pressHamburgerUserButton() {
         binding.membershipDrawer.user.setOnSingleClickListener {
             binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
             findNavController().navigate(R.id.action_membershipFragment_to_searchUserFragment)
         }
     }
 
-    private fun pressHamburegerNoticeButton() {
+    private fun pressHamburgerNoticeButton() {
         binding.membershipDrawer.notice.setOnSingleClickListener {
             binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
             findNavController().navigate(R.id.action_membershipFragment_to_noticeFragment)
@@ -148,6 +149,12 @@ class MembershipFragment : Fragment(), MembershipAdapter.OnItemClickListener {
             binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "chatLinkSetting")
+        }
+    }
+    private fun pressHamburgerEntryLogButton() {
+        binding.membershipDrawer.entryLog.setOnSingleClickListener {
+            binding.membershipDrawerLayout.closeDrawer(binding.membershipDrawer.drawer)
+            findNavController().navigate(R.id.action_membershipFragment_to_entryLogFragment)
         }
     }
 

@@ -2,6 +2,8 @@ package com.ajou.helptmanager.network
 
 import ProductService
 import com.ajou.helptmanager.BuildConfig
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Converter
@@ -22,6 +24,10 @@ object RetrofitInstance {
         .readTimeout(50, TimeUnit.SECONDS)
         .writeTimeout(50, TimeUnit.SECONDS)
         .build()
+//
+//    val gson : Gson = GsonBuilder()
+//        .setLenient()
+//        .create()
 
     val client = Retrofit
         .Builder()

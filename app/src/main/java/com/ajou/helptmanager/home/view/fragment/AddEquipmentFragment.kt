@@ -66,7 +66,6 @@ class AddEquipmentFragment : Fragment(), AdapterToFragment, DialogToFragment {
             val equipDeferred = async { gymEquipmentService.getUnlinkedEquipments(accessToken,gymId!!) }
             val equipResponse = equipDeferred.await()
             if (equipResponse.isSuccessful) {
-                Log.d("equipResponse",equipResponse.body()?.data.toString())
                 list = equipResponse.body()?.data!!
                 withContext(Dispatchers.Main){
                     adapter = EquipmentRVAdapter(mContext!!, list, "add", this@AddEquipmentFragment)

@@ -98,22 +98,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-                    <!--                    <EditText-->
-                    <!--                        android:id="@+id/name"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="4dp"-->
-                    <!--                        android:background="@drawable/auth_textfield"-->
-                    <!--                        android:hint="이름을 입력해주세요"-->
-                    <!--                        android:inputType="number"-->
-                    <!--                        android:padding="16dp"-->
-                    <!--                        android:textColor="@color/black"-->
-                    <!--                        android:textColorHint="@color/gray_text"-->
-                    <!--                        android:textSize="16sp"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@+id/textView3" />-->
-
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="0dp"

@@ -230,10 +230,11 @@
             <ImageView
                 android:id="@+id/machineBg"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/home_menu_bg"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toStartOf="@+id/chatBg"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -245,6 +246,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/menu_machine_on"
                 app:layout_constraintBottom_toTopOf="@+id/machineTxt"
                 app:layout_constraintDimensionRatio="1:1"
@@ -257,7 +259,6 @@
                 android:id="@+id/machineTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
                 android:text="기구 관리"
@@ -273,9 +274,11 @@
             <ImageView
                 android:id="@+id/chatBg"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/home_menu_bg"
-                app:layout_constraintEnd_toEndOf="@+id/ticketBg"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/entryLogBg"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/machineBg"
                 app:layout_constraintTop_toTopOf="@+id/machineBg" />
@@ -286,6 +289,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/menu_chat_on"
                 app:layout_constraintBottom_toTopOf="@+id/chatTxt"
                 app:layout_constraintDimensionRatio="1:1"
@@ -297,17 +301,56 @@
                 android:id="@+id/chatTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="채팅방 등록"
+                android:text="채팅방 관리"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/chatBg"
                 app:layout_constraintEnd_toEndOf="@+id/chatBg"
                 app:layout_constraintStart_toStartOf="@+id/chatBg"
                 app:layout_constraintTop_toBottomOf="@+id/chatIcon" />
+
+            <ImageView
+                android:id="@+id/entryLogBg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/home_menu_bg"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@+id/ticketBg"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/chatBg"
+                app:layout_constraintTop_toTopOf="@+id/chatBg" />
+
+            <ImageView
+                android:id="@+id/entryLogIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/home_entry_on"
+                app:layout_constraintBottom_toTopOf="@+id/entryLogTxt"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@+id/entryLogBg"
+                app:layout_constraintStart_toStartOf="@+id/entryLogBg"
+                app:layout_constraintTop_toTopOf="@+id/entryLogBg" />
+
+            <TextView
+                android:id="@+id/entryLogTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:text="출입관리"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/entryLogBg"
+                app:layout_constraintEnd_toEndOf="@+id/entryLogBg"
+                app:layout_constraintStart_toStartOf="@+id/entryLogBg"
+                app:layout_constraintTop_toBottomOf="@+id/entryLogIcon" />
 
             <TextView
                 android:id="@+id/logout"
@@ -331,8 +374,8 @@
                 android:textSize="16sp"
                 android:paddingBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-                app:layout_constraintEnd_toEndOf="@+id/chatBg"
-                app:layout_constraintTop_toBottomOf="@+id/chatBg" />
+                app:layout_constraintEnd_toEndOf="@+id/entryLogBg"
+                app:layout_constraintTop_toBottomOf="@+id/entryLogBg" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

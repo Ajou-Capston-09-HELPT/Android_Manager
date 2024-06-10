@@ -161,6 +161,10 @@ class EquipmentListFragment : Fragment(), AdapterToFragment {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_equipmentListFragment_to_homeFragment)
         }
+        binding.drawer.entryLog.setOnSingleClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_equipmentListFragment_to_entryLogFragment)
+        }
     }
 
     override fun getSelectedItem(data: PendingUserInfo?) {

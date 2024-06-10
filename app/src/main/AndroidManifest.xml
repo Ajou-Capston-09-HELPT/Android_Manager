@@ -18,9 +18,13 @@
         android:theme="@style/Theme.HELPTManager"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".notice.TestNoticeActivity"
-            android:exported="false" />
+<!--        <service-->
+<!--            android:name=".java.MyFirebaseMessagingService"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
         <activity
             android:name=".home.view.HomeActivity"
             android:exported="false" />
