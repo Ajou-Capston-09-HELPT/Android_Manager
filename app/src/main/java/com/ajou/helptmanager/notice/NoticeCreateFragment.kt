@@ -103,6 +103,7 @@ class NoticeCreateFragment : Fragment() {
                         findNavController().popBackStack()
                     }
                 } else {
+                    Log.d("noticeresponse fail",response.errorBody()?.string().toString())
                     withContext(Dispatchers.Main) {
                         Log.d("NoticeCreateFragment", "uploadNotice Fail")
                     }

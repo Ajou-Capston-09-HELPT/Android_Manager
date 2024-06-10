@@ -72,14 +72,6 @@ class SearchUserFragment : Fragment(){
                 else if (viewModel.registeredUserInfo.value != null) {
                     findNavController().navigate(R.id.action_searchUserFragment_to_memberDetailFragment)
                 }
-//                if (viewModel.admissionId.value == null) {
-//                    val bundle = Bundle().apply {
-//                        putInt("userId", viewModel.userId.value!!)
-//                    }
-//                    findNavController().navigate(R.id.action_searchUserFragment_to_memberDetailFragment, bundle)
-//                } else {
-//
-//                }
             }else{
                 viewModel.setCheck(false)
             }
@@ -128,6 +120,10 @@ class SearchUserFragment : Fragment(){
         binding.drawer.home.setOnSingleClickListener {
             binding.drawerLayout.closeDrawer(binding.drawer.drawer)
             findNavController().navigate(R.id.action_searchUserFragment_to_homeFragment)
+        }
+        binding.drawer.entryLog.setOnSingleClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_searchUserFragment_to_entryLogFragment)
         }
 
         binding.drawer.userIcon.setImageResource(R.drawable.menu_user_on)

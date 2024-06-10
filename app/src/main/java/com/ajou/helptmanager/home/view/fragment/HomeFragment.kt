@@ -112,6 +112,11 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.drawer.entryLog.setOnSingleClickListener {
+            binding.drawerLayout.closeDrawer(binding.drawer.drawer)
+            findNavController().navigate(R.id.action_homeFragment_to_entryLogFragment)
+        }
+
         binding.ticketBg.setOnSingleClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_membershipFragment)
         }
@@ -137,6 +142,10 @@ class HomeFragment : Fragment() {
             dialog.show(requireActivity().supportFragmentManager, "link")
         }
 
+        binding.entryLogBg.setOnSingleClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_entryLogFragment)
+        }
+
         binding.logout.setOnSingleClickListener {
             logOutDialog = LogOutDialog(mContext!!)
             logOutDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -148,12 +157,6 @@ class HomeFragment : Fragment() {
             quitDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             quitDialog.show()
         }
-
-        viewModel.chatLink.observe(viewLifecycleOwner, Observer {
-            Log.d("chatLink",viewModel.chatLink.value.toString())
-
-        })
-
     }
 
     private val barcodeLauncher = registerForActivityResult<ScanOptions, ScanIntentResult>(

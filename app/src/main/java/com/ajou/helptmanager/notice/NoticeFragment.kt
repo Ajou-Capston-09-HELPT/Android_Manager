@@ -16,6 +16,7 @@ import com.ajou.helptmanager.R
 import com.ajou.helptmanager.UserDataStore
 import com.ajou.helptmanager.databinding.FragmentNoticeBinding
 import com.ajou.helptmanager.home.view.dialog.ChatLinkSettingDialog
+import com.ajou.helptmanager.setOnSingleClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,15 +62,8 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
             }
         }
 
-        binding.noticeRegisterButton.setOnClickListener {
-            // TODO : 공지사항 등록 프래그먼트 이동
-            Log.d("NoticeFragment", "noticeRegisterButton Clicked")
-        }
-
         pressUploadButton()
 
-
-        binding.noticeDrawer.noticeIcon.setImageResource(R.drawable.menu_notice_on)
         pressBackButton()
         pressHamburgerButton()
         pressHamburgerCloseButton()
@@ -77,9 +71,10 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         pressHamburgerMembershipButton()
         pressHamburgerQrButton()
         pressHamburgerEquipmentButton()
-        pressHamburegerUserButton()
-        pressHamburegerNoticeButton()
+        pressHamburgerUserButton()
+        pressHamburgerNoticeButton()
         pressHamburgerChatButton()
+        pressHamburgerEntryLogButton()
 
         binding.noticeDrawer.noticeIcon.setImageResource(R.drawable.menu_notice_on)
 
@@ -141,14 +136,14 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
         }
     }
 
-    private fun pressHamburegerUserButton(){
+    private fun pressHamburgerUserButton(){
         binding.noticeDrawer.user.setOnClickListener {
             binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
             findNavController().navigate(R.id.action_noticeFragment_to_searchUserFragment)
         }
     }
 
-    private fun pressHamburegerNoticeButton(){
+    private fun pressHamburgerNoticeButton(){
         binding.noticeDrawer.notice.setOnClickListener {
             binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
             findNavController().navigate(R.id.action_noticeFragment_self)
@@ -160,6 +155,13 @@ class NoticeFragment : Fragment(), NoticeAdapter.OnItemClickListener {
             binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
             dialog = ChatLinkSettingDialog()
             dialog.show(requireActivity().supportFragmentManager, "link")
+        }
+    }
+
+    private fun pressHamburgerEntryLogButton() {
+        binding.noticeDrawer.entryLog.setOnSingleClickListener {
+            binding.noticeDrawerLayout.closeDrawer(binding.noticeDrawer.drawer)
+            findNavController().navigate(R.id.action_noticeFragment_to_entryLogFragment)
         }
     }
 
