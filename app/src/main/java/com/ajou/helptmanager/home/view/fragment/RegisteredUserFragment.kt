@@ -62,6 +62,7 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Log.d("RegisteredUserFragment","Oncreateview")
         viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         _binding = FragmentRegisteredUserBinding.inflate(layoutInflater, container, false)
         CoroutineScope(Dispatchers.IO).launch {
@@ -135,4 +136,5 @@ class RegisteredUserFragment : Fragment(), AdapterToFragment{
         super.onDetach()
         callback.remove()
     }
+
 }

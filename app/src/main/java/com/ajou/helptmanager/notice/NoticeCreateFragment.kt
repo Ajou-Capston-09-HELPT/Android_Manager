@@ -93,7 +93,7 @@ class NoticeCreateFragment : Fragment() {
 
     @SuppressLint("SuspiciousIndentation")
     private fun uploadNotice(title: String, content: String) {
-        val notice = NoticeUploadRequest(gymId!!, title, content, dateString)
+        val notice = NoticeUploadRequest(gymId!!, title, content)
         CoroutineScope(Dispatchers.IO).launch {
             if (accessToken != null) {
                 val response = noticeService.uploadNotice(accessToken, notice)

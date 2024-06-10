@@ -43,6 +43,7 @@ class AddUserFragment : Fragment() {
             override fun handleOnBackPressed() {
                 viewModel.setCheck(true)
                 viewModel.setPendingUserInfo(null)
+                viewModel.setUpdate(false)
                 findNavController().popBackStack()
             }
         }
@@ -74,41 +75,10 @@ class AddUserFragment : Fragment() {
             .centerCrop()
             .into(binding.profile)
 
-
-//                Glide.with(mContext)
-//                    .load(body.)
         binding.height.text = data.height.toString()
         binding.weight.text = data.weight.toString()
         CoroutineScope(Dispatchers.IO).launch {
             accessToken = dataStore.getAccessToken().toString()
-//            val userInfoDeferred = async { memberService.getOneMemberInfo(accessToken, viewModel.userId.value!!) }
-//            val userInfoResponse = userInfoDeferred.await()
-//            if (userInfoResponse.isSuccessful){
-//                Log.d("userInfoResponse",userInfoResponse.body()?.data.toString())
-//                val body = userInfoResponse.body()!!.data
-//                withContext(Dispatchers.Main){
-//                    binding.name.text = body.userName
-//                    when(body.gender){
-//                        "MAN" -> binding.sex.text = "남성"
-//                        "WOMEN" -> binding.sex.text = "여성"
-//                    }
-//
-//                binding.birth.text = body.birthDate.toString()
-//
-//                    Glide.with(mContext!!)
-//                        .load(body.profileImage)
-//                        .centerCrop()
-//                        .into(binding.profile)
-//
-//
-////                Glide.with(mContext)
-////                    .load(body.)
-//                    binding.height.text = body.height.toString()
-//                    binding.weight.text = body.weight.toString()
-//                }
-//            }else{
-//                Log.d("userInfoResponse faill",userInfoResponse.errorBody()?.string().toString())
-//            }
         }
         return binding.root
     }
@@ -139,7 +109,8 @@ class AddUserFragment : Fragment() {
         binding.backBtn.setOnSingleClickListener {
             viewModel.setCheck(true)
             viewModel.setPendingUserInfo(null)
-            findNavController().navigate(R.id.action_addUserFragment_to_searchUserFragment)
+            viewModel.setUpdate(false)
+            findNavController().popBackStack()
         }
 
         binding.nextBtn.setOnSingleClickListener {
@@ -148,7 +119,6 @@ class AddUserFragment : Fragment() {
         binding.removeBtn.setOnSingleClickListener {
             callUserApi("reject",null)
       }
-//        viewModel.setRegisteredUserInfo(null)
     }
 
     private fun callUserApi(type: String, endDate: LocalDate?){
@@ -158,8 +128,10 @@ class AddUserFragment : Fragment() {
                     val approveDeferred = async { gymAdmissionService.approveUser(accessToken,viewModel.pendingUserInfo.value!!.gymAdmissionId,endDate!!) }
                     val approveResponse = approveDeferred.await()
                     if (approveResponse.isSuccessful){
-                        Log.d("approveResponse ","")
                         withContext(Dispatchers.Main){
+                            viewModel.setCheck(true)
+                            viewModel.setPendingUserInfo(null)
+                            viewModel.setUpdate(true)
                             findNavController().popBackStack()
                         }
                     }else{
@@ -170,8 +142,10 @@ class AddUserFragment : Fragment() {
                     val rejectDeferred = async { gymAdmissionService.rejectUser(accessToken,viewModel.pendingUserInfo.value!!.gymAdmissionId) }
                     val rejectResponse = rejectDeferred.await()
                     if (rejectResponse.isSuccessful) {
-                        Log.d("rejectResponse ","")
                         withContext(Dispatchers.Main){
+                            viewModel.setCheck(true)
+                            viewModel.setPendingUserInfo(null)
+                            viewModel.setUpdate(true)
                             findNavController().popBackStack()
                         }
                     }else{
