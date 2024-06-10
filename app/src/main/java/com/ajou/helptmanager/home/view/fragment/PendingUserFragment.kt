@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,37 +67,15 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
         // Inflate the layout for this fragment
         viewModel = ViewModelProvider(requireActivity())[UserInfoViewModel::class.java]
         _binding = FragmentPendingUserBinding.inflate(layoutInflater, container, false)
-        CoroutineScope(Dispatchers.IO).launch {
-            accessToken = dataStore.getAccessToken().toString()
-            gymId = dataStore.getGymId()!!
+        getAdmissionList()
 
-            val admissionDeferred = async { gymAdmissionService.getAllAdmissionUsers(accessToken,gymId!!) }
-            val admissionResponse = admissionDeferred.await()
-            if (admissionResponse.isSuccessful) {
-                val results = admissionResponse.body()!!.data.map { body ->
-                        async {
-                            try {
-                                val response = memberService.getOneMemberInfo(accessToken,body.memberId)
-                                if (response.isSuccessful) {
-                                    PendingUserInfo(body.memberId, body.gymAdmissionId, body.userName, response.body()!!.data.gender, response.body()!!.data.height, response.body()!!.data.weight, response.body()!!.data.startDate, response.body()!!.data.endDate, response.body()!!.data.membershipId, response.body()!!.data.profileImage, response.body()!!.data.birthDate)
-                                } else {
-                                    null
-                                }
-                            } catch (e: Exception) {
-                                null
-                            }
-                        }
-                    }.awaitAll().filterNotNull()
-
-                withContext(Dispatchers.Main){
-                    binding.loadingBar.hide()
-                    originList = results
-                    adapter.updateList(results)
-                }
-            }else{
-                Log.d("admissionResponse faill",admissionResponse.errorBody()?.string().toString())
+        viewModel.update.observe(viewLifecycleOwner, Observer {
+            if(viewModel.update.value == true) {
+                getAdmissionList()
+                viewModel.setUpdate(false)
             }
-        }
+        })
+
         return binding.root
     }
 
@@ -121,6 +100,7 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
             binding.user.setText("")
             adapter.updateList(originList)
         }
+
     }
 
     override fun getSelectedItem(data: PendingUserInfo?) {
@@ -136,8 +116,43 @@ class PendingUserFragment : Fragment(), AdapterToFragment {
 
     override fun getSelectedItem(data: Equipment, position: Int) {
     }
+
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+    }
+
+    private fun getAdmissionList(){
+        CoroutineScope(Dispatchers.IO).launch {
+            accessToken = dataStore.getAccessToken().toString()
+            gymId = dataStore.getGymId()!!
+
+            val admissionDeferred = async { gymAdmissionService.getAllAdmissionUsers(accessToken,gymId!!) }
+            val admissionResponse = admissionDeferred.await()
+            if (admissionResponse.isSuccessful) {
+                val results = admissionResponse.body()!!.data.map { body ->
+                    async {
+                        try {
+                            val response = memberService.getOneMemberInfo(accessToken,body.memberId)
+                            if (response.isSuccessful) {
+                                PendingUserInfo(body.memberId, body.gymAdmissionId, body.userName, response.body()!!.data.gender, response.body()!!.data.height, response.body()!!.data.weight, response.body()!!.data.startDate, response.body()!!.data.endDate, response.body()!!.data.membershipId, response.body()!!.data.profileImage, response.body()!!.data.birthDate)
+                            } else {
+                                null
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }.awaitAll().filterNotNull()
+
+                withContext(Dispatchers.Main){
+                    binding.loadingBar.hide()
+                    originList = results
+                    adapter.updateList(results)
+                }
+            }else{
+                Log.d("admissionResponse faill",admissionResponse.errorBody()?.string().toString())
+            }
+        }
     }
 }

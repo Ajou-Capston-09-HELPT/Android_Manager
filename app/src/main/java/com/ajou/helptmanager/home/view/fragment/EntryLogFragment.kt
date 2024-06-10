@@ -168,9 +168,10 @@ class EntryLogFragment : Fragment() {
 
                     originList = body
                     binding.loadingBar.hide()
-
+                    Log.d("entryLog body",body.toString())
                     if (body.isNotEmpty()) {
                         adapter.updateList(body)
+                        binding.logRV.visibility = View.VISIBLE
                         binding.noDataTxt.visibility = View.GONE
                     }
                     else {

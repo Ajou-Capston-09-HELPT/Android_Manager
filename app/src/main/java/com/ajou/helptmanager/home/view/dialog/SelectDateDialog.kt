@@ -41,7 +41,7 @@ class SelectDateDialog(private val callback: (String) -> Unit) : DialogFragment(
         val today = LocalDate.now()
 
         binding.year.minValue = 1900
-        binding.year.maxValue = 2099
+        binding.year.maxValue = today.year
         binding.year.value = today.year
 
         binding.month.minValue = 1

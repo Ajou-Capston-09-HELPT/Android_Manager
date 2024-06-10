@@ -46,7 +46,6 @@ class PendingUserInfoRVAdapter(val context: Context, var list: List<PendingUserI
 
     fun filterList(originList: List<PendingUserInfo>, keyword:String){
         list = originList.filter { it.userName.contains(keyword) }
-        Log.d("filteredList",list.toString())
         notifyDataSetChanged()
     }
 }
